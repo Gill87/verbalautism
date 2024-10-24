@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "702843016698",
+    "project_id": "verbalautism-e8776",
+    "storage_bucket": "verbalautism-e8776.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702843016698:android:3048e8c369a6969e318043",
+        "android_client_info": {
+          "package_name": "com.example.verbalautism"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXZJcK6dBXVJg0z-cinXmiXYzX703x-f8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
