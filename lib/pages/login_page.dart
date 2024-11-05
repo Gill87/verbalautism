@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:verbalautism/components/my_button.dart';
 import 'package:verbalautism/components/text_field.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:verbalautism/services/auth_google.dart';
 
 class LoginPage extends StatefulWidget {
   
@@ -74,26 +76,37 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  const Color.fromARGB(255, 224, 206, 206),
+      backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height:50),
+                const SizedBox(height:25),
           
                 // logo
-                Image.asset('lib/images/logo-new.png'),
+                Image.asset(
+                  'lib/images/logo4.png',
+                  height: 250,
+                  width: 250,
+                ),
           
-                const SizedBox(height:50),
+                const SizedBox(height:15),
           
                 // welcome back
-                const Text(
-                  'Welcome Back!',
-                  style:TextStyle(
-                    color:Colors.black,
+                // const Text(
+                //   'Welcome Back!',
+                //   style: TextStyle(
+                //     color:Colors.white,
+                //     fontSize: 40,
+                //   ),
+                // ),
+                Text(
+                  'Welcome Back',
+                  style: GoogleFonts.ubuntu(
+                    color: Colors.white,
                     fontSize: 40,
-                  )
+                  ),
                 ),
           
                 const SizedBox(height:25),
@@ -117,9 +130,10 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height:15),
 
                 // forget password
-                const Text(
+                Text(
                   'Forgot Password?',
-                  style: TextStyle(color:Colors.black),
+                  
+                  style: GoogleFonts.ubuntu(color:Colors.white, fontSize: 18),
                 ),
           
                 const SizedBox(height: 20),
@@ -133,11 +147,11 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height:40),
           
                 // or continue with
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: Divider(
                           thickness: 0.5,
                           color: Colors.grey,
@@ -147,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                           'Or continue with',
-                          style: TextStyle(color: Colors.black),
+                          style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 18),
                         ),
                       ),
                       Expanded(child: 
@@ -161,19 +175,22 @@ class _LoginPageState extends State<LoginPage> {
                 ),
           
                 // google button
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Container(
+                GestureDetector(
+                  onTap: () => AuthService().signInWithGoogle(),
+                  child: Padding(
                     padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      border:Border.all(color:Colors.grey),
-                      borderRadius: BorderRadius.circular(16),
-                      color:Colors.white,
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        border:Border.all(color:Colors.grey),
+                        borderRadius: BorderRadius.circular(16),
+                        color:Colors.white,
+                      ),
+                      child: Image.asset(
+                        'lib/images/google.png',
+                        height:50,
+                      )
                     ),
-                    child: Image.asset(
-                      'lib/images/google.png',
-                      height:50,
-                    )
                   ),
                 ),
           
@@ -181,17 +198,19 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Not a member?'),
-                    SizedBox(width:4),
+                    Text(
+                      'Not a member?',
+                      style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 14),
+
+                    ),
+                    const SizedBox(width:4),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: Text(
                         'Register Now',
-                        style: TextStyle(
-                          color:Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        )
+                         style: GoogleFonts.ubuntu(color: Colors.black, fontSize: 14),
+                        
+
                       ),
                     )
                   ],
