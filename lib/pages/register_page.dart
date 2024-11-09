@@ -110,37 +110,49 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height:25),
           
                 // email textfield
-                MyTextField(
-                  controller: emailController,
-                  textBoxDetails: 'Username',
-                  hideText: false,
-                  ),
+                SizedBox(
+                  width: 400.0,
+                  child: MyTextField(
+                    controller: emailController,
+                    textBoxDetails: 'Username',
+                    hideText: false,
+                    ),
+                ),
           
                 const SizedBox(height: 15),
                 
                 // password textfield 
-                MyTextField(
-                  controller: passwordController,
-                  textBoxDetails: 'Password',
-                  hideText: true,
-                  
-                  ),
+                SizedBox(
+                  width:400.0,
+                  child: MyTextField(
+                    controller: passwordController,
+                    textBoxDetails: 'Password',
+                    hideText: true,
+                    
+                    ),
+                ),
 
                 const SizedBox(height:15),
 
                 // confirm password textfield 
-                MyTextField(
-                  controller: confirmPasswordController,
-                  textBoxDetails: 'Confirm Password',
-                  hideText: true,
+                SizedBox(
+                  width: 400,
+                  child: MyTextField(
+                    controller: confirmPasswordController,
+                    textBoxDetails: 'Confirm Password',
+                    hideText: true,
+                  ),
                 ),
                         
                 const SizedBox(height: 20),
           
                 // sign up button
-                MyButton(
-                  tapFunction: signUserUp,
-                  text: 'Sign Up',
+                SizedBox(
+                  width:425.0,
+                  child: MyButton(
+                    tapFunction: signUserUp,
+                    text: 'Sign Up',
+                  ),
                 ),
           
                 const SizedBox(height:40),
