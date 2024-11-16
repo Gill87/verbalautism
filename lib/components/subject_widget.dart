@@ -5,8 +5,9 @@ class SubjectWidget extends StatelessWidget{
 
 final Function()? tapFunction;
 final String text;
+final AssetImage image1;
 
-const SubjectWidget({super.key, required this.tapFunction, required this.text});
+const SubjectWidget({super.key, required this.tapFunction, required this.text, required this.image1});
 
   Widget build(BuildContext context){
     return GestureDetector(
@@ -21,7 +22,7 @@ const SubjectWidget({super.key, required this.tapFunction, required this.text});
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.blue,
-              image: const DecorationImage(image: AssetImage('lib/images/drake.jpg'), fit: BoxFit.cover),
+              image: DecorationImage(image: image1, fit: BoxFit.cover),
             ),
                 
                 
