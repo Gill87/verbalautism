@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:verbalautism/activities/activity1.dart';
+import 'package:verbalautism/components/sound_button.dart';
 import 'package:verbalautism/components/subject_widget.dart';
 
 class HomePage extends StatelessWidget {
@@ -55,14 +56,14 @@ class HomePage extends StatelessWidget {
                     crossAxisCount: 7,
                     childAspectRatio: 1,
                     children: [
-                      SubjectWidget(tapFunction: onToActivity, text: 'A B C', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Colors', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Shapes', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Objects', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Food', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: '1 2 3', image1: AssetImage('lib/images/drake.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'A B C', image1: AssetImage('lib/images/abc.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Colors', image1: AssetImage('lib/images/colors.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Shapes', image1: AssetImage('lib/images/shapes.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Objects', image1: AssetImage('lib/images/geography.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Food', image1: AssetImage('lib/images/food.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: '1 2 3', image1: AssetImage('lib/images/123.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Feeling', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Places',  image1: AssetImage('lib/images/drake.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Places',  image1: AssetImage('lib/images/places.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Questions', image1: AssetImage('lib/images/drake.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Prepositions', image1: AssetImage('lib/images/drake.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Sight Words', image1: AssetImage('lib/images/drake.jpg')),
@@ -71,7 +72,7 @@ class HomePage extends StatelessWidget {
                       SubjectWidget(tapFunction: onToActivity, text: 'Fill Color Game', image1: AssetImage('lib/images/drake.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Matching Games', image1: AssetImage('lib/images/drake.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Tracing Games', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Hoot Hoot', image1: AssetImage('lib/images/drake.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Hoot Hoot', image1: AssetImage('lib/images/birds.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Spelling Practice', image1: AssetImage('lib/images/drake.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Digital Books', image1: AssetImage('lib/images/drake.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Car Racing', image1: AssetImage('lib/images/drake.jpg')),
@@ -92,7 +93,15 @@ class HomePage extends StatelessWidget {
                     
               // Start Danny    
               Container(
-                child: Text('Danny'),
+                child: Row(
+                  children: [
+                    SoundButton(tapFunction: ()=> (), text: 'Help', desiredColor: Colors.orange),
+                    const SizedBox(width: 20),
+                    SoundButton(tapFunction: ()=> (), text: 'Yes', desiredColor: Colors.green),
+                    const SizedBox(width:20),
+                    SoundButton(tapFunction: ()=> (), text: 'No', desiredColor: Colors.red),
+                  ],
+                ),
               ),       
               // End Danny
             ],
