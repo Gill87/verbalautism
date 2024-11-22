@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:verbalautism/activities/activity1.dart';
 import 'package:verbalautism/components/sound_button.dart';
 import 'package:verbalautism/components/subject_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -25,17 +26,81 @@ class HomePage extends StatelessWidget {
       )
     );
   }
+
+
+  // Time
+  var time = DateTime.now();
+
     return Scaffold(
 
       // Start Katherine
       appBar: AppBar(
-        title: Text("Katherine"),
+
+        title: Text(
+          "Academic Support",
+          style: GoogleFonts.ubuntu(fontSize: 30, color: Colors.black, letterSpacing: 1),
+        ),
+
         toolbarHeight: 80,
+
         actions: [
+
+          IconButton(
+            icon: Icon(Icons.music_note),
+            onPressed: () => (),
+          ),
+          
+          const SizedBox(width: 30),     
+
+          IconButton(
+            icon: Icon(Icons.leaderboard),
+            onPressed: () => (),
+          ),
+
+          const SizedBox(width: 30),
+
+          DropdownMenu(
+            dropdownMenuEntries: <DropdownMenuEntry<String>>[
+              DropdownMenuEntry(value: '', label: 'Danny'),
+              DropdownMenuEntry(value: '', label: 'Guri'),
+              DropdownMenuEntry(value: '', label: 'Rohan'),
+              DropdownMenuEntry(value: '', label: 'Katherine'),
+            ]
+          ),
+
+          const SizedBox(width: 30),
+
+          GestureDetector(
+            onTap: () => (),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Text(
+                'Select Activity',
+                style: GoogleFonts.ubuntu(fontSize: 15, color: Colors.black, letterSpacing: 1),
+              ),
+            ),
+          ),
+          
+          const SizedBox(width: 30),
+
+          GestureDetector(
+            onTap: () => (),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Text(
+                'Reset',
+                style: GoogleFonts.ubuntu(fontSize: 15, color: Colors.black, letterSpacing: 1),
+              ),
+            ),
+          ),
+
+          const SizedBox(width: 30),
+
           IconButton(
             onPressed: signUserOut, 
             icon: Icon(Icons.logout)
-          )
+          ),
+
         ],
       ),
       // End Katherine
@@ -64,19 +129,19 @@ class HomePage extends StatelessWidget {
                       SubjectWidget(tapFunction: onToActivity, text: '1 2 3', image1: AssetImage('lib/images/123.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Feeling', image1: AssetImage('lib/images/drake.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Places',  image1: AssetImage('lib/images/places.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Questions', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Prepositions', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Sight Words', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Actions & Verbs', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Sequence', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Fill Color Game', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Matching Games', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Tracing Games', image1: AssetImage('lib/images/drake.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Questions', image1: AssetImage('lib/images/questions.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Prepositions', image1: AssetImage('lib/images/prepositions.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Sight Words', image1: AssetImage('lib/images/sight.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Actions & Verbs', image1: AssetImage('lib/images/verbs.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Sequence', image1: AssetImage('lib/images/sequence.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Fill Color Game', image1: AssetImage('lib/images/colorgame.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Matching Games', image1: AssetImage('lib/images/matching.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Tracing Games', image1: AssetImage('lib/images/tracing.jpg')),
                       SubjectWidget(tapFunction: onToActivity, text: 'Hoot Hoot', image1: AssetImage('lib/images/birds.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Spelling Practice', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Digital Books', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Car Racing', image1: AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Math Practice', image1: AssetImage('lib/images/drake.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Spelling Practice', image1: AssetImage('lib/images/spelling.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Digital Books', image1: AssetImage('lib/images/books.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Car Racing', image1: AssetImage('lib/images/car_racing.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Math Practice', image1: AssetImage('lib/images/math.jpg')),
 
                     ],
                   ),
@@ -109,8 +174,20 @@ class HomePage extends StatelessWidget {
 
         // Start Rohan
           Container(
-            padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).height * 0.15),
-            child: Text("Rohan"),
+            padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).height * 0.10),
+            // child: Text("Rohan"),
+            child: Column(
+              children: [
+                Text(
+                  '${time.hour}:${time.minute}',
+                  style: GoogleFonts.ubuntu(fontSize:40, color:Colors.black, letterSpacing: 2),
+                ),
+                SubjectWidget(tapFunction: onToActivity, text: 'Previous', image1: AssetImage('lib/images/drake.jpg')),
+                SubjectWidget(tapFunction: onToActivity, text: 'Current', image1: AssetImage('lib/images/drake.jpg')),
+                SubjectWidget(tapFunction: onToActivity, text: 'Next', image1: AssetImage('lib/images/drake.jpg')),
+
+              ],
+            )
           )
 
         // End Rohan
