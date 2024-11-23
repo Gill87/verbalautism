@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:verbalautism/activities/activity1.dart';
+import 'package:verbalautism/components/schedule_button.dart';
 import 'package:verbalautism/components/sound_button.dart';
 import 'package:verbalautism/components/subject_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +11,7 @@ class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final user = FirebaseAuth.instance.currentUser!;
+  final String menuUser = '';
 
   // Sign out method
   void signUserOut(){
@@ -36,14 +39,29 @@ class HomePage extends StatelessWidget {
       // Start Katherine
       appBar: AppBar(
 
-        title: Text(
-          "Academic Support",
-          style: GoogleFonts.ubuntu(fontSize: 30, color: Colors.black, letterSpacing: 1),
-        ),
+        // title: Text(
+        //   "Academic Support",
+        //   style: GoogleFonts.ubuntu(fontSize: 30, color: Colors.black, letterSpacing: 1),
+        // ),
+
+        title: Image(image: AssetImage('lib/images/appbarlogo.png'), height: 100,),
 
         toolbarHeight: 80,
 
         actions: [
+
+          const Image(image: AssetImage('lib/images/cash.jpg')),
+          Text(
+            '= \$200',  // Money Feature Needed
+            style: GoogleFonts.ubuntu(color: Colors.green[500], fontSize: 18),
+            ),
+
+          const SizedBox(width: 40,),
+          
+          ScheduleButton(tapFunction: () => ()),
+
+          const SizedBox(width: 30),     
+
 
           IconButton(
             icon: Icon(Icons.music_note),
@@ -182,9 +200,11 @@ class HomePage extends StatelessWidget {
                   '${time.hour}:${time.minute}',
                   style: GoogleFonts.ubuntu(fontSize:40, color:Colors.black, letterSpacing: 2),
                 ),
-                SubjectWidget(tapFunction: onToActivity, text: 'Previous', image1: AssetImage('lib/images/drake.jpg')),
-                SubjectWidget(tapFunction: onToActivity, text: 'Current', image1: AssetImage('lib/images/drake.jpg')),
-                SubjectWidget(tapFunction: onToActivity, text: 'Next', image1: AssetImage('lib/images/drake.jpg')),
+                SubjectWidget(tapFunction: onToActivity, text: 'Previous', image1: AssetImage('lib/images/places.jpg')),
+                const SizedBox(height: 20,),
+                SubjectWidget(tapFunction: onToActivity, text: 'Current', image1: AssetImage('lib/images/geography.jpg')),
+                const SizedBox(height: 20,),
+                SubjectWidget(tapFunction: onToActivity, text: 'Next', image1: AssetImage('lib/images/sight.jpg')),
 
               ],
             )

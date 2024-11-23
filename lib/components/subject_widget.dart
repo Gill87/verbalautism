@@ -23,6 +23,7 @@ const SubjectWidget({super.key, required this.tapFunction, required this.text, r
               borderRadius: BorderRadius.circular(10),
               color: Colors.blue,
               image: DecorationImage(image: image1, fit: BoxFit.cover),
+              border: Border.all(width: 1)
             ),
                 
                 
