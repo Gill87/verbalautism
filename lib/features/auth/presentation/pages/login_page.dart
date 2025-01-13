@@ -1,96 +1,68 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:verbalautism/components/my_button.dart';
 import 'package:verbalautism/components/text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:verbalautism/services/auth_google.dart';
+import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
 
-class RegisterPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   
   final Function()? onTap;
 
-  RegisterPage({super.key, required this.onTap});
+  const LoginPage({super.key, required this.onTap});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _LoginPageState extends State<LoginPage> {
 
   // username and password text controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
 
   // sign user in method
-  void signUserUp() async {
+  void signUserIn() async {
 
-    // show loading circle
-    showDialog(
-      context: context, 
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
+    // Prepare email and password
+    final String email = emailController.text;
+    final String password = passwordController.text;
+
+    // get auth cubit
+    final authCubit = context.read<AuthCubit>();
+
+    // Ensure fields are not empty
+    if(email.isNotEmpty && password.isNotEmpty){
+        // Login
+        authCubit.login(email, password);
+    } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text("Please enter an email and password"),
+            )
         );
-      },
-    );
-
-    if(passwordController.text != confirmPasswordController.text){
-      Navigator.pop(context);
-      errorMessage('Passwords do not match');
-    } 
-    else {
-      // try creating the user
-      try {
-        // check if password is confirmed
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text, 
-          password: passwordController.text,
-        );
-
-        // Pop Loading Circle
-        Navigator.pop(context);
-
-      } on FirebaseAuthException catch (e) {
-
-        // Pop Loading Circle
-        Navigator.pop(context);
-
-        // Wrong EMAIL
-        if(e.code == 'invalid-email') {
-          errorMessage('Invalid Email');
-        } 
-        // Wrong PASSWORD
-        else if (e.code == 'invalid-credential'){
-          errorMessage('Invalid Password');
-        }
-      }
     }
-
+        
   }
 
-  // Display Incorrect Credential Dialog
-  void errorMessage(String errorText){
-    showDialog(
-      context: context, 
-      builder: (context) {
-        return AlertDialog(
-          title: Text(errorText),
-        );
-      }
-    );
+  // Google Sign in
+  void googleSignIn(){
+    final authCubit = context.read<AuthCubit>();
+    authCubit.googleSignIn();
   }
+ 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  const Color.fromARGB(255, 33, 150, 243),
+      backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height:5),
+                const SizedBox(height:25),
           
                 // logo
                 Image.asset(
@@ -98,23 +70,25 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 250,
                   width: 250,
                 ),
-
+          
                 const SizedBox(height:15),
           
-                // Create an Account
                 Text(
-                  'Create Account',
-                  style:GoogleFonts.ubuntu(color: Colors.white, fontSize: 40),
+                  'Welcome Back',
+                  style: GoogleFonts.ubuntu(
+                    color: Colors.white,
+                    fontSize: 40,
+                  ),
                 ),
           
                 const SizedBox(height:25),
           
                 // email textfield
                 SizedBox(
-                  width: 400.0,
-                  child: MyTextField(
+                  width: 400,
+                  child: MyTextField( 
                     controller: emailController,
-                    textBoxDetails: 'Username',
+                    textBoxDetails: 'Email',
                     hideText: false,
                     ),
                 ),
@@ -123,35 +97,31 @@ class _RegisterPageState extends State<RegisterPage> {
                 
                 // password textfield 
                 SizedBox(
-                  width:400.0,
+                    width: 400,
                   child: MyTextField(
                     controller: passwordController,
                     textBoxDetails: 'Password',
                     hideText: true,
-                    
                     ),
                 ),
-
+          
                 const SizedBox(height:15),
 
-                // confirm password textfield 
-                SizedBox(
-                  width: 400,
-                  child: MyTextField(
-                    controller: confirmPasswordController,
-                    textBoxDetails: 'Confirm Password',
-                    hideText: true,
-                  ),
+                // forget password
+                Text(
+                  'Forgot Password?',
+                  
+                  style: GoogleFonts.ubuntu(color:Colors.white, fontSize: 18),
                 ),
-                        
+          
                 const SizedBox(height: 20),
           
-                // sign up button
+                // sign in button
                 SizedBox(
-                  width:425.0,
+                  width: 425.0,
                   child: MyButton(
-                    tapFunction: signUserUp,
-                    text: 'Sign Up',
+                    tapFunction: signUserIn,
+                    text: 'Sign In',
                   ),
                 ),
           
@@ -159,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
           
                 // or continue with
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
                     children: [
                       const Expanded(
@@ -169,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                           'Or continue with',
                           style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 18),
@@ -187,7 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
           
                 // google button
                 GestureDetector(
-                  onTap: () => AuthService().signInWithGoogle(),
+                  onTap: () => googleSignIn,
                   child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: Container(
@@ -205,23 +175,21 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
           
-                // already a member? login now
+                // not a member? register now
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Already a member?', 
+                      'Not a member?',
                       style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 14),
 
-                      ),
-
+                    ),
                     const SizedBox(width:4),
-
                     GestureDetector(
                       onTap: widget.onTap,
                       child: Text(
-                        'Login Now',
-                        style: GoogleFonts.ubuntu(color: Colors.black, fontSize: 14),
+                        'Register Now',
+                         style: GoogleFonts.ubuntu(color: Colors.black, fontSize: 14),
                       ),
                     )
                   ],
