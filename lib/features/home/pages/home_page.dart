@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:verbalautism/activities/activity1.dart';
+import 'package:verbalautism/activities/abc/abc.dart';
 import 'package:verbalautism/components/schedule_button.dart';
 import 'package:verbalautism/components/sound_button.dart';
 import 'package:verbalautism/components/subject_widget.dart';

@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SubjectWidget extends StatelessWidget{
+class LargeSubjectWidget extends StatelessWidget {
 
-final Function()? tapFunction;
-final String text;
-final AssetImage image1;
+    
+  final Function()? tapFunction;
+  final String text;
+  final AssetImage image1;
 
-const SubjectWidget({super.key, required this.tapFunction, required this.text, required this.image1});
+  const LargeSubjectWidget({
+    super.key,
+    required this.tapFunction,
+    required this.text,
+    required this.image1,
+  });
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: tapFunction,
       child: Padding(
@@ -18,29 +24,29 @@ const SubjectWidget({super.key, required this.tapFunction, required this.text, r
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Container(
-            height: 100,
-            width: 150,
+            height: 500,
+            width: 300,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.blue,
-              image: DecorationImage(image: image1, fit: BoxFit.cover),
+              image: DecorationImage(image: image1, fit: BoxFit.fitWidth),
               border: Border.all(width: 1)
             ),
                 
                 
             alignment: Alignment.bottomCenter,        
             child: Container(
-              width: 150,
+              width: 200,
               color: Colors.white38.withOpacity(0.9),      
               child: Text(
                 text,
-                style: GoogleFonts.ubuntu(fontSize: 15, color: Colors.black),
+                style: GoogleFonts.ubuntu(fontSize: 30, color: Colors.black),
                 textAlign: TextAlign.center,
               ),
             ),
           ),
         ),
       ),
-    ); 
+    );   
   }
 }

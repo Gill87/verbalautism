@@ -493,6 +493,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  whiteboard:
+    dependency: "direct main"
+    description:
+      name: whiteboard
+      sha256: fa3f51771eb60c9638b05b4e750079ece6dbca4fea95966ee327725ac371a3a5
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   xdg_directories:
     dependency: transitive
     description:
