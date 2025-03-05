@@ -10,6 +10,10 @@ class LowercaseActivity extends StatefulWidget {
 class _LowercaseActivityState extends State<LowercaseActivity> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Lowercase Letters"),
+      ),
+    );
   }
 }

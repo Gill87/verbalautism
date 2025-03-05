@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:verbalautism/activities/abc/abc.dart';
+import 'package:verbalautism/activities/abc/base_page/abc.dart';
 import 'package:verbalautism/components/schedule_button.dart';
 import 'package:verbalautism/components/sound_button.dart';
 import 'package:verbalautism/components/subject_widget.dart';
@@ -52,13 +52,13 @@ class _HomePageState extends State<HomePage> {
         //   style: GoogleFonts.ubuntu(fontSize: 30, color: Colors.black, letterSpacing: 1),
         // ),
 
-        title: const Image(image: AssetImage('lib/images/appbarlogo.png'), height: 100,),
+        title: const Image(image: AssetImage('lib/images/homepage_images/appbarlogo.png'), height: 100,),
 
         toolbarHeight: 80,
 
         actions: [
 
-          const Image(image: AssetImage('lib/images/cash.png')),
+          const Image(image: AssetImage('lib/images/homepage_images/cash.png')),
           Text(
             '= \$200',  // Money Feature Needed
             style: GoogleFonts.ubuntu(color: Colors.green[500], fontSize: 18),
@@ -153,27 +153,27 @@ class _HomePageState extends State<HomePage> {
                     crossAxisCount: 7,
                     childAspectRatio: 1,
                     children: [
-                      SubjectWidget(tapFunction: onToActivity, text: 'A B C', image1: const AssetImage('lib/images/abc.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Colors', image1: const AssetImage('lib/images/colors.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Shapes', image1: const AssetImage('lib/images/shapes.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Objects', image1: const AssetImage('lib/images/geography.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Food', image1: const AssetImage('lib/images/food.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: '1 2 3', image1: const AssetImage('lib/images/123.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Feeling', image1: const AssetImage('lib/images/drake.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Places',  image1: const AssetImage('lib/images/places.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Questions', image1: const AssetImage('lib/images/questions.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Prepositions', image1: const AssetImage('lib/images/prepositions.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Sight Words', image1: const AssetImage('lib/images/sight.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Actions & Verbs', image1: const AssetImage('lib/images/verbs.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Sequence', image1: const AssetImage('lib/images/sequence.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Fill Color Game', image1: const AssetImage('lib/images/colorgame.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Matching Games', image1: const AssetImage('lib/images/matching.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Tracing Games', image1: const AssetImage('lib/images/tracing.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Hoot Hoot', image1: const AssetImage('lib/images/birds.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Spelling Practice', image1: const AssetImage('lib/images/spelling.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Digital Books', image1: const AssetImage('lib/images/books.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Car Racing', image1: const AssetImage('lib/images/car_racing.jpg')),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Math Practice', image1: const AssetImage('lib/images/math.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'A B C', image1: const AssetImage('lib/images/homepage_images/abc.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Colors', image1: const AssetImage('lib/images/homepage_images/colors.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Shapes', image1: const AssetImage('lib/images/homepage_images/shapes.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Objects', image1: const AssetImage('lib/images/homepage_images/geography.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Food', image1: const AssetImage('lib/images/homepage_images/food.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: '1 2 3', image1: const AssetImage('lib/images/homepage_images/123.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Feeling', image1: const AssetImage('lib/images/homepage_images/drake.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Places',  image1: const AssetImage('lib/images/homepage_images/places.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Questions', image1: const AssetImage('lib/images/homepage_images/questions.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Prepositions', image1: const AssetImage('lib/images/homepage_images/prepositions.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Sight Words', image1: const AssetImage('lib/images/homepage_images/sight.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Actions & Verbs', image1: const AssetImage('lib/images/homepage_images/verbs.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Sequence', image1: const AssetImage('lib/images/homepage_images/sequence.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Fill Color Game', image1: const AssetImage('lib/images/homepage_images/colorgame.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Matching Games', image1: const AssetImage('lib/images/homepage_images/matching.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Tracing Games', image1: const AssetImage('lib/images/homepage_images/tracing.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Hoot Hoot', image1: const AssetImage('lib/images/homepage_images/birds.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Spelling Practice', image1: const AssetImage('lib/images/homepage_images/spelling.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Digital Books', image1: const AssetImage('lib/images/homepage_images/books.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Car Racing', image1: const AssetImage('lib/images/homepage_images/car_racing.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Math Practice', image1: const AssetImage('lib/images/homepage_images/math.jpg')),
                     ],
                   ),
                 ),

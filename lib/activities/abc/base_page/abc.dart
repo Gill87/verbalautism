@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:verbalautism/activities/abc/lowercaseActivity.dart';
-import 'package:verbalautism/activities/abc/mixedActivity.dart';
-import 'package:verbalautism/activities/abc/uppercaseActivity.dart';
+import 'package:verbalautism/activities/abc/games_pages/lowercaseActivity.dart';
+import 'package:verbalautism/activities/abc/games_pages/mixedActivity.dart';
+import 'package:verbalautism/activities/abc/games_pages/uppercaseActivity.dart';
 import 'package:verbalautism/components/large_subject_widget.dart';
 
 class Activity1 extends StatelessWidget {
@@ -26,7 +26,7 @@ class Activity1 extends StatelessWidget {
               )
             }, 
             text: "Uppercase", 
-            image1: const AssetImage("lib/images/uppercaseA.png")
+            image1: const AssetImage("lib/images/abc_images/uppercaseA.png")
           ),
 
           LargeSubjectWidget(
@@ -37,7 +37,7 @@ class Activity1 extends StatelessWidget {
               )
             }, 
             text: "Lowercase", image1: 
-            const AssetImage("lib/images/lowercaseA.png")
+            const AssetImage("lib/images/abc_images/lowercaseA.png")
           ),
 
           LargeSubjectWidget(
@@ -48,7 +48,7 @@ class Activity1 extends StatelessWidget {
               )
             }, 
             text: "Mixed", 
-            image1: const AssetImage("lib/images/bothA.png")
+            image1: const AssetImage("lib/images/abc_images/bothA.png")
           ),
 
         ],

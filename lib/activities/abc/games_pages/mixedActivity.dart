@@ -10,6 +10,10 @@ class MixedActivity extends StatefulWidget {
 class _MixedActivityState extends State<MixedActivity> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Mixed Letters"),
+      ),
+    );
   }
 }

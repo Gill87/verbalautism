@@ -63,10 +63,10 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: [
                 const SizedBox(height:25),
-          
+
                 // logo
                 Image.asset(
-                  'lib/images/logo4.png',
+                  'lib/images/loginpage_images/logo4.png',
                   height: 250,
                   width: 250,
                 ),
@@ -168,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                         color:Colors.white,
                       ),
                       child: Image.asset(
-                        'lib/images/google.png',
+                        'lib/images/loginpage_images/google.png',
                         height:50,
                       )
                     ),
@@ -195,7 +195,6 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 )
               ]
-            
             ),
           ),
         ),
