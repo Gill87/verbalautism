@@ -204,11 +204,11 @@ class _HomePageState extends State<HomePage> {
                   '${time.hour}:${time.minute}',
                   style: GoogleFonts.ubuntu(fontSize:40, color:Colors.black, letterSpacing: 2),
                 ),
-                SubjectWidget(tapFunction: onToActivity, text: 'Previous', image1: const AssetImage('lib/images/places.jpg')),
+                SubjectWidget(tapFunction: onToActivity, text: 'Previous', image1: const AssetImage('lib/images/homepage_images/places.jpg')),
                 const SizedBox(height: 20,),
-                SubjectWidget(tapFunction: onToActivity, text: 'Current', image1: const AssetImage('lib/images/geography.jpg')),
+                SubjectWidget(tapFunction: onToActivity, text: 'Current', image1: const AssetImage('lib/images/homepage_images/geography.jpg')),
                 const SizedBox(height: 20,),
-                SubjectWidget(tapFunction: onToActivity, text: 'Next', image1: const AssetImage('lib/images/sight.jpg')),
+                SubjectWidget(tapFunction: onToActivity, text: 'Next', image1: const AssetImage('lib/images/homepage_images/sight.jpg')),
 
               ],
             )

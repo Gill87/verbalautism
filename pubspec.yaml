@@ -42,6 +42,7 @@ dependencies:
   flutter_bloc: ^9.0.0
   cloud_firestore: ^5.6.1
   whiteboard: ^1.0.0
+  lottie: ^3.2.0
 
 
 dev_dependencies:
@@ -71,6 +72,7 @@ flutter:
     - lib/images/abc_images/
     - lib/images/homepage_images/
     - lib/images/loginpage_images/
+    - lib/animations/Animation - 1741222247323.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
