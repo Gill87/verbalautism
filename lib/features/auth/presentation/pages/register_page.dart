@@ -64,6 +64,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    bool smallHeight(BuildContext context) =>
+      MediaQuery.of(context).size.height >= 600;
+      
     return Scaffold(
       backgroundColor:  const Color.fromARGB(255, 33, 150, 243),
       body: SafeArea(
@@ -76,7 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 // logo
                 Image.asset(
                   'lib/images/loginpage_images/logo4.png',
-                  height: 250,
+                  height: smallHeight(context) ? 250 : 125,
                   width: 250,
                 ),
 

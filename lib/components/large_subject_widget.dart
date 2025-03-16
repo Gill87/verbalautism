@@ -23,25 +23,27 @@ class LargeSubjectWidget extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
-          child: Container(
-            height: 500,
-            width: 300,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.blue,
-              image: DecorationImage(image: image1, fit: BoxFit.fitWidth),
-              border: Border.all(width: 1)
-            ),
-                
-                
-            alignment: Alignment.bottomCenter,        
+          child: Center(
             child: Container(
-              width: 200,
-              color: Colors.white38.withOpacity(0.9),      
-              child: Text(
-                text,
-                style: GoogleFonts.ubuntu(fontSize: 30, color: Colors.black),
-                textAlign: TextAlign.center,
+              height: MediaQuery.of(context).size.height * 0.6,
+              width: MediaQuery.of(context).size.width * 0.2,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.blue,
+                image: DecorationImage(image: image1, fit: BoxFit.fitWidth),
+                border: Border.all(width: 1)
+              ),
+                  
+                  
+              alignment: Alignment.bottomCenter,        
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                color: Colors.white38.withOpacity(0.9),      
+                child: Text(
+                  text,
+                  style: GoogleFonts.ubuntu(fontSize: 30, color: Colors.black),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

@@ -55,6 +55,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    bool smallHeight(BuildContext context) =>
+      MediaQuery.of(context).size.height >= 600;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       body: SafeArea(
@@ -67,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                 // logo
                 Image.asset(
                   'lib/images/loginpage_images/logo4.png',
-                  height: 250,
+                  height: smallHeight(context) ? 250 : 125,
                   width: 250,
                 ),
           
@@ -77,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                   'Welcome Back',
                   style: GoogleFonts.ubuntu(
                     color: Colors.white,
-                    fontSize: 40,
+                    fontSize: 35,
                   ),
                 ),
           

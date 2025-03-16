@@ -16,8 +16,9 @@ class SoundButton extends StatelessWidget {
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Container(
-          width: 200,
-          padding: const EdgeInsets.all(20),
+          width: MediaQuery.of(context).size.width * 0.2,
+          height: MediaQuery.of(context).size.height * 0.1,
+          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             color: desiredColor,
             borderRadius: BorderRadius.circular(8),

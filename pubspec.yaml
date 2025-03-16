@@ -43,6 +43,8 @@ dependencies:
   cloud_firestore: ^5.6.1
   whiteboard: ^1.0.0
   lottie: ^3.2.0
+  tracing_game: ^0.0.4+1
+  one_clock: ^2.0.1
 
 
 dev_dependencies:

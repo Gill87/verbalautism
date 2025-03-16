@@ -6,8 +6,10 @@ class SubjectWidget extends StatelessWidget{
 final Function()? tapFunction;
 final String text;
 final AssetImage image1;
+final double height;
+final double width;
 
-const SubjectWidget({super.key, required this.tapFunction, required this.text, required this.image1});
+const SubjectWidget({super.key, required this.tapFunction, required this.text, required this.image1, this.width = 100, this.height = 100});
 
   @override
   Widget build(BuildContext context){
@@ -18,8 +20,8 @@ const SubjectWidget({super.key, required this.tapFunction, required this.text, r
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Container(
-            height: 100,
-            width: 150,
+            height: height,
+            width: width,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.blue,
@@ -30,7 +32,7 @@ const SubjectWidget({super.key, required this.tapFunction, required this.text, r
                 
             alignment: Alignment.bottomCenter,        
             child: Container(
-              width: 150,
+              width: width,
               color: Colors.white38.withOpacity(0.9),      
               child: Text(
                 text,
