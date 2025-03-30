@@ -2,16 +2,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:verbalautism/components/correct_animation.dart';
 
-class MixedActivity extends StatefulWidget {
-  const MixedActivity({super.key});
+class DragDropComponent extends StatefulWidget {
+  final VoidCallback onCompleted;
+  final String letterLink;
+
+  const DragDropComponent({super.key, required this.onCompleted, required this.letterLink});
 
   @override
-  State<MixedActivity> createState() => _MixedActivityState();
+  State<DragDropComponent> createState() => _DragDropComponentState();
 }
 
-class _MixedActivityState extends State<MixedActivity> {
+class _DragDropComponentState extends State<DragDropComponent> {
 
   bool imageDropped = false;
 
@@ -27,9 +31,10 @@ class _MixedActivityState extends State<MixedActivity> {
     );
 
     // Close the animation after a short delay
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.of(context).pop();
+        widget.onCompleted();
       }
     });
   }
@@ -37,51 +42,66 @@ class _MixedActivityState extends State<MixedActivity> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Mixed Letters"),
-      ),
+    return Column(
+      children: [
+        Text(
+          "Drag and Drop the Letter", 
+          style: GoogleFonts.ubuntu(fontSize: 40)
+        ),
+        const SizedBox(height: 50),
 
-      body: Center(
-        child: Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Draggable Image
             Draggable<String> (
               data: "image",
-              feedback: Material(
+              feedback: Opacity(
+                opacity: 1,
                 child: Transform.translate(
-                  offset: const Offset(100, 0),
+                  offset: const Offset(200, 0),
                   child: Image.asset(
-                    'lib/images/abc_images/uppercaseB.png',
-                    width: 100,
-                    height: 100,
+                    'lib/images/abc_images/${widget.letterLink}.png',
+                    width: 150,
+                    height: 150,
                   ),
                 ),
               ),
-
+        
               // Original image dims when dragging
               childWhenDragging: Opacity(
                 opacity: 0.3,
                 child: Image.asset(
-                  'lib/images/abc_images/uppercaseB.png',
+                  'lib/images/abc_images/${widget.letterLink}.png',
                   width: MediaQuery.of(context).size.width * 0.4,
                   height: MediaQuery.of(context).size.height * 0.4
                 ),
               ),
-
+        
               // When not dragging and image has not been dropped, display static image
               child: imageDropped
-              ? Text("")
-              : Image.asset(
-                "lib/images/abc_images/uppercaseB.png",
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.height * 0.4
+              ? const Text("")
+              : Stack(
+                alignment: Alignment.center,
+                children: [
+                  Positioned.fill(
+                    child: Lottie.network(
+                      "https://lottie.host/cad3fd15-1a69-4310-bb93-c41768c86f0b/lxJULL837q.json",
+                      fit: BoxFit.contain,
+                      repeat: true,
+                    ),
+                  ),
+                  Image.asset(
+                    'lib/images/abc_images/${widget.letterLink}.png',
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.4
+                  ),
+                ]
               ), 
             ),
-
+        
             const SizedBox(width: 50),
-
+        
             // Drag Target
             DragTarget<String> (
               onAcceptWithDetails: (data) {
@@ -94,11 +114,11 @@ class _MixedActivityState extends State<MixedActivity> {
         
               builder: (context, candidateData, rejectedData) {
                 return Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  width: MediaQuery.of(context).size.width * 0.3,
                   height: MediaQuery.of(context).size.height * 0.4,
-                  decoration: BoxDecoration(color: Colors.blueGrey),
+                  decoration: const BoxDecoration(color: Colors.blue),
                   child: imageDropped 
-                    ? Image.asset('lib/images/abc_images/uppercaseB.png')
+                    ? Image.asset('lib/images/abc_images/${widget.letterLink}.png',)
                     : Center(child: Text("Drop Here", style: GoogleFonts.ubuntu(fontSize: 30),))
                 );
               }
@@ -106,7 +126,7 @@ class _MixedActivityState extends State<MixedActivity> {
         
           ],
         ),
-      ),
+      ],
     );
   }
 }

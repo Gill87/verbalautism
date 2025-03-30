@@ -1,0 +1,73 @@
+// TRACE FEATURE
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tracing_game/tracing_game.dart';
+import 'package:verbalautism/components/correct_animation.dart';
+// import 'package:verbalautism/components/drawingPainter.dart';
+// import 'package:verbalautism/components/letterAPainter.dart';
+
+class TraceComponent extends StatefulWidget {
+  final VoidCallback onCompleted;
+  final String letter;
+
+  const TraceComponent({super.key, required this.onCompleted, required this.letter});
+
+  @override
+  State<TraceComponent> createState() => _TraceComponentState();
+}
+
+class _TraceComponentState extends State<TraceComponent> {
+  
+  void _showCorrectAnimation(){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Dialog(
+          backgroundColor: Colors.transparent, // Makes background transparent
+          child: CorrectAnimation(),
+        );
+      },
+    );
+
+    // Close the animation after a short delay
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pop();
+        widget.onCompleted();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          "Trace the Letter", 
+          style: GoogleFonts.ubuntu(fontSize: 40)
+        ),        
+        
+        const SizedBox(height: 50),
+
+        Container(
+          color: Colors.white,
+          width: MediaQuery.of(context).size.width * 0.4,
+          height: MediaQuery.of(context).size.height * 0.4,
+          child: TracingWordGame(
+            words: [
+              TraceWordModel(
+                word: widget.letter,
+                traceShapeOptions: const TraceShapeOptions(indexColor: Colors.green),
+        
+              ),
+            ],
+        
+            onGameFinished: (int index) async {
+              _showCorrectAnimation();
+            },
+          )
+        ),
+      ],
+    );
+  }
+}

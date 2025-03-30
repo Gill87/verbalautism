@@ -215,11 +215,14 @@ class _HomePageState extends State<HomePage> {
                           datetime: DateTime.now(),
                       ),
                       
-                      SubjectWidget(tapFunction: onToActivity, text: 'Previous', image1: const AssetImage('lib/images/homepage_images/places.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Previous', image1: const AssetImage('lib/images/homepage_images/places.jpg'), 
+                                  width: MediaQuery.of(context).size.width * 0.1, height: MediaQuery.of(context).size.height * 0.2),
                       const SizedBox(height: 10,),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Current', image1: const AssetImage('lib/images/homepage_images/geography.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Current', image1: const AssetImage('lib/images/homepage_images/geography.jpg'),
+                                  width: MediaQuery.of(context).size.width * 0.1, height: MediaQuery.of(context).size.height * 0.2),
                       const SizedBox(height: 10,),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Next', image1: const AssetImage('lib/images/homepage_images/sight.jpg')),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Next', image1: const AssetImage('lib/images/homepage_images/sight.jpg'),
+                                  width: MediaQuery.of(context).size.width * 0.1, height: MediaQuery.of(context).size.height * 0.2),
                                 
                     ],
                   ),

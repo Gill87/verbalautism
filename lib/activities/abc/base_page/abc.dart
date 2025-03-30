@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:verbalautism/activities/abc/games_pages/lowercaseActivity.dart';
-import 'package:verbalautism/activities/abc/games_pages/mixedActivity.dart';
-import 'package:verbalautism/activities/abc/games_pages/uppercaseActivity.dart';
+import 'package:verbalautism/activities/abc/games_pages/abc_uppercase_game.dart';
 import 'package:verbalautism/components/large_subject_widget.dart';
 
 class Activity1 extends StatelessWidget {
@@ -22,7 +20,7 @@ class Activity1 extends StatelessWidget {
             tapFunction: ()=>{
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const UppercaseActivity())
+                MaterialPageRoute(builder: (context) => const AbcUppercaseGame())
               )
             }, 
             text: "Uppercase", 
@@ -33,7 +31,7 @@ class Activity1 extends StatelessWidget {
             tapFunction: ()=>{
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LowercaseActivity())
+                MaterialPageRoute(builder: (context) => const AbcUppercaseGame())
               )
             }, 
             text: "Lowercase", image1: 
@@ -44,7 +42,7 @@ class Activity1 extends StatelessWidget {
             tapFunction: ()=>{
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const MixedActivity())
+                MaterialPageRoute(builder: (context) => const AbcUppercaseGame())
               )
             }, 
             text: "Mixed", 
