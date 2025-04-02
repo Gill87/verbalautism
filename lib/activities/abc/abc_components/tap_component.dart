@@ -1,7 +1,7 @@
 // TAP Feature
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
+// import 'package:lottie/lottie.dart';
 import 'package:verbalautism/components/correct_animation.dart';
 
 class TapComponent extends StatefulWidget {
@@ -56,20 +56,21 @@ class _TapComponentState extends State<TapComponent> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Lottie Animation
-                  Positioned.fill(
-                    child: Lottie.network(
-                      "https://lottie.host/858e5f4b-fd2f-4c4a-a658-4d5e42322a35/t6de2GaCSm.json",
-                      fit: BoxFit.contain,
-                      repeat: true,
-                    ),
-                  ),
                   Image(
                     image: AssetImage("lib/images/abc_images/${widget.letterLink}.png"),
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.2,
                     height: MediaQuery.of(context).size.height * 0.4,
+                    fit: BoxFit.fill,
                   ),
-
+                  
+                  // Lottie Animation
+                  // Positioned.fill(
+                  //   child: Lottie.network(
+                  //     "https://lottie.host/b4a90af8-4e69-4372-9146-60eb855bb0ba/ySCUk4ATJ6.json",
+                  //     fit: BoxFit.contain,
+                  //     repeat: true,
+                  //   ),
+                  // ),
                 ]
               ),
             ),

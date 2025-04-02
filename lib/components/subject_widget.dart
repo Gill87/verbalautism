@@ -8,8 +8,9 @@ final String text;
 final AssetImage image1;
 final double height;
 final double width;
+final Color color;
 
-const SubjectWidget({super.key, required this.tapFunction, required this.text, required this.image1, this.width = 100, this.height = 100});
+const SubjectWidget({super.key, required this.tapFunction, required this.text, required this.image1, this.width = 100, this.height = 100, this.color = Colors.blue});
 
   @override
   Widget build(BuildContext context){
@@ -24,7 +25,7 @@ const SubjectWidget({super.key, required this.tapFunction, required this.text, r
             width: width,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.blue,
+              color: color,
               image: DecorationImage(image: image1, fit: BoxFit.cover),
               border: Border.all(width: 1)
             ),

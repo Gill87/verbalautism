@@ -74,6 +74,7 @@ flutter:
     - lib/images/abc_images/
     - lib/images/homepage_images/
     - lib/images/loginpage_images/
+    - lib/images/background_images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

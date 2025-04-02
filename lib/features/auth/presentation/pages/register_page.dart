@@ -146,9 +146,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 // sign up button
                 SizedBox(
                   width:425.0,
-                  child: MyButton(
-                    tapFunction: register,
-                    text: 'Sign Up',
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: MyButton(
+                      tapFunction: register,
+                      text: 'Sign Up',
+                    ),
                   ),
                 ),
           
@@ -216,15 +219,19 @@ class _RegisterPageState extends State<RegisterPage> {
 
                     GestureDetector(
                       onTap: widget.onTap,
-                      child: Text(
-                        'Login Now',
-                        style: GoogleFonts.ubuntu(color: Colors.black, fontSize: 14),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Text(
+                          'Login Now',
+                          style: GoogleFonts.ubuntu(color: Colors.black, fontSize: 14, decoration: TextDecoration.underline, decorationColor: Colors.black),
+                        ),
                       ),
                     )
                   ],
-                )
+                ),
+
+                const SizedBox(height: 20),
               ]
-            
             ),
           ),
         ),

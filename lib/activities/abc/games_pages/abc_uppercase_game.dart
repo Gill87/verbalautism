@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:verbalautism/activities/abc/games_pages/TapComponent.dart';
-import 'package:verbalautism/activities/abc/games_pages/DragDropComponent.dart';
-import 'package:verbalautism/activities/abc/games_pages/TraceComponent.dart';
+import 'package:verbalautism/activities/abc/abc_components/tap_component.dart';
+import 'package:verbalautism/activities/abc/abc_components/drag_drop_component.dart';
+import 'package:verbalautism/activities/abc/abc_components/trace_component.dart';
 
 class AbcUppercaseGame extends StatefulWidget {
   const AbcUppercaseGame({super.key});
@@ -14,7 +14,7 @@ class AbcUppercaseGame extends StatefulWidget {
 
 class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
   
-  List <String> letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z'];
+  List <String> letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
   int step = 0;
   final int maxSteps = 10;
 
@@ -29,7 +29,7 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
   }
 
   void setRandomNumber(){
-    randomNumber = random.nextInt(24);
+    randomNumber = random.nextInt(26);
   }
 
   void nextStep() {
@@ -81,14 +81,35 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
       appBar: AppBar(
         title: const Center(child: Text("Uppercase Letters")),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Round: ${step + 1} / $maxSteps", style: const TextStyle(fontSize: 24)),
-            const SizedBox(height: 20),
-            currentActivity,
-          ],
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("lib/images/background_images/Clouds.png"),
+            fit: BoxFit.cover,
+          )
+        ),
+        child: Center(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.5), // White background with opacity for readability
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.5), // Shadow color
+                  blurRadius: 10, // Spread of shadow
+                  offset: const Offset(0, 4), // Position of shadow (X, Y)
+                ),
+              ],
+            ),           
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Round: ${step + 1} / $maxSteps", style: const TextStyle(fontSize: 24)),
+                const SizedBox(height: 20),
+                currentActivity,
+              ],
+            ),
+          ),
         ),
       ),
     );

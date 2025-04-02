@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tracing_game/tracing_game.dart';
 import 'package:verbalautism/components/correct_animation.dart';
-// import 'package:verbalautism/components/drawingPainter.dart';
-// import 'package:verbalautism/components/letterAPainter.dart';
 
 class TraceComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -50,7 +48,7 @@ class _TraceComponentState extends State<TraceComponent> {
         const SizedBox(height: 50),
 
         Container(
-          color: Colors.white,
+          color: Colors.transparent,
           width: MediaQuery.of(context).size.width * 0.4,
           height: MediaQuery.of(context).size.height * 0.4,
           child: TracingWordGame(
@@ -58,7 +56,7 @@ class _TraceComponentState extends State<TraceComponent> {
               TraceWordModel(
                 word: widget.letter,
                 traceShapeOptions: const TraceShapeOptions(indexColor: Colors.green),
-        
+                
               ),
             ],
         

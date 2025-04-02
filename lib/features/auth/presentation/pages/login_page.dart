@@ -112,10 +112,12 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height:15),
 
                 // forget password
-                Text(
-                  'Forgot Password?',
-                  
-                  style: GoogleFonts.ubuntu(color:Colors.white, fontSize: 18),
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Text(
+                    'Forgot Password?',
+                    style: GoogleFonts.ubuntu(color:Colors.white, fontSize: 18, decoration: TextDecoration.underline, decorationColor: Colors.white),
+                  ),
                 ),
           
                 const SizedBox(height: 20),
@@ -123,9 +125,12 @@ class _LoginPageState extends State<LoginPage> {
                 // sign in button
                 SizedBox(
                   width: 425.0,
-                  child: MyButton(
-                    tapFunction: signUserIn,
-                    text: 'Sign In',
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: MyButton(
+                      tapFunction: signUserIn,
+                      text: 'Sign In',
+                    ),
                   ),
                 ),
           
@@ -188,16 +193,24 @@ class _LoginPageState extends State<LoginPage> {
                       style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 14),
 
                     ),
+
                     const SizedBox(width:4),
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: Text(
-                        'Register Now',
-                         style: GoogleFonts.ubuntu(color: Colors.black, fontSize: 14),
+
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text(
+                          'Register Now',
+                           style: GoogleFonts.ubuntu(color: Colors.black, fontSize: 14, decoration: TextDecoration.underline, decorationColor: Colors.black),
+                        ),
                       ),
-                    )
+                    ),
                   ],
-                )
+                ),
+
+                const SizedBox(height: 20,),
+
               ]
             ),
           ),

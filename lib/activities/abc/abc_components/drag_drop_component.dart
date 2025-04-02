@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
+// import 'package:lottie/lottie.dart';
 import 'package:verbalautism/components/correct_animation.dart';
 
 class DragDropComponent extends StatefulWidget {
@@ -18,7 +18,7 @@ class DragDropComponent extends StatefulWidget {
 class _DragDropComponentState extends State<DragDropComponent> {
 
   bool imageDropped = false;
-
+  
   void _showCorrectAnimation(){
     showDialog(
       context: context,
@@ -48,6 +48,7 @@ class _DragDropComponentState extends State<DragDropComponent> {
           "Drag and Drop the Letter", 
           style: GoogleFonts.ubuntu(fontSize: 40)
         ),
+
         const SizedBox(height: 50),
 
         Row(
@@ -84,18 +85,19 @@ class _DragDropComponentState extends State<DragDropComponent> {
               : Stack(
                 alignment: Alignment.center,
                 children: [
-                  Positioned.fill(
-                    child: Lottie.network(
-                      "https://lottie.host/cad3fd15-1a69-4310-bb93-c41768c86f0b/lxJULL837q.json",
-                      fit: BoxFit.contain,
-                      repeat: true,
-                    ),
-                  ),
                   Image.asset(
                     'lib/images/abc_images/${widget.letterLink}.png',
                     width: MediaQuery.of(context).size.width * 0.4,
                     height: MediaQuery.of(context).size.height * 0.4
                   ),
+                  
+                  // Positioned.fill(
+                  //   child: Lottie.network(
+                  //     "https://lottie.host/b4a90af8-4e69-4372-9146-60eb855bb0ba/ySCUk4ATJ6.json",
+                  //     fit: BoxFit.contain,
+                  //     repeat: true,
+                  //   ),
+                  // ),
                 ]
               ), 
             ),
@@ -116,14 +118,14 @@ class _DragDropComponentState extends State<DragDropComponent> {
                 return Container(
                   width: MediaQuery.of(context).size.width * 0.3,
                   height: MediaQuery.of(context).size.height * 0.4,
-                  decoration: const BoxDecoration(color: Colors.blue),
+                  decoration: const BoxDecoration(color: Colors.lightBlue),
                   child: imageDropped 
                     ? Image.asset('lib/images/abc_images/${widget.letterLink}.png',)
                     : Center(child: Text("Drop Here", style: GoogleFonts.ubuntu(fontSize: 30),))
                 );
               }
             ),
-        
+            
           ],
         ),
       ],
