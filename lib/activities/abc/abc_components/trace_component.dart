@@ -18,6 +18,7 @@ class _TraceComponentState extends State<TraceComponent> {
   
   void _showCorrectAnimation(){
     showDialog(
+      barrierColor: Colors.transparent,
       context: context,
       builder: (context) {
         return const Dialog(

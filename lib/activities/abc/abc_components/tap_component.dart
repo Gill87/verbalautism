@@ -18,10 +18,10 @@ class _TapComponentState extends State<TapComponent> {
 
   void _showCorrectAnimation() {
     showDialog(
+      barrierColor: Colors.transparent,
       context: context,
       builder: (context) {
-        return const Dialog(
-          backgroundColor: Colors.transparent, // Makes background transparent
+        return const Center(
           child: CorrectAnimation(),
         );
       },
@@ -39,44 +39,49 @@ class _TapComponentState extends State<TapComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          "Tap the Letter", 
-          style: GoogleFonts.ubuntu(fontSize: 40)
-        ),
-
-        const SizedBox(height: 50),
-
-        Center(
-          child: MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: _showCorrectAnimation,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image(
-                    image: AssetImage("lib/images/abc_images/${widget.letterLink}.png"),
-                    width: MediaQuery.of(context).size.width * 0.2,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    fit: BoxFit.fill,
-                  ),
-                  
-                  // Lottie Animation
-                  // Positioned.fill(
-                  //   child: Lottie.network(
-                  //     "https://lottie.host/b4a90af8-4e69-4372-9146-60eb855bb0ba/ySCUk4ATJ6.json",
-                  //     fit: BoxFit.contain,
-                  //     repeat: true,
-                  //   ),
-                  // ),
-                ]
+    return Container(
+      color: Colors.transparent,
+      width: MediaQuery.of(context).size.width * 0.4,
+      
+      child: Column(
+        children: [
+          Text(
+            "Tap the Letter", 
+            style: GoogleFonts.ubuntu(fontSize: 40)
+          ),
+      
+          const SizedBox(height: 50),
+      
+          Center(
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: _showCorrectAnimation,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image(
+                      image: AssetImage("lib/images/abc_images/${widget.letterLink}.png"),
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      fit: BoxFit.fill,
+                    ),
+                    
+                    // Lottie Animation
+                    // Positioned.fill(
+                    //   child: Lottie.network(
+                    //     "https://lottie.host/b4a90af8-4e69-4372-9146-60eb855bb0ba/ySCUk4ATJ6.json",
+                    //     fit: BoxFit.contain,
+                    //     repeat: true,
+                    //   ),
+                    // ),
+                  ]
+                ),
               ),
-            ),
-          )
-        ),
-      ],
+            )
+          ),
+        ],
+      ),
     );
   }
 }
