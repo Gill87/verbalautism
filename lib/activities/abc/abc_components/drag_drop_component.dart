@@ -8,8 +8,9 @@ import 'package:verbalautism/components/correct_animation.dart';
 class DragDropComponent extends StatefulWidget {
   final VoidCallback onCompleted;
   final String letterLink;
-
-  const DragDropComponent({super.key, required this.onCompleted, required this.letterLink});
+  final String letter;
+  
+  const DragDropComponent({super.key, required this.onCompleted, required this.letterLink, required this.letter});
 
   @override
   State<DragDropComponent> createState() => _DragDropComponentState();
@@ -94,14 +95,6 @@ class _DragDropComponentState extends State<DragDropComponent> {
                       width: MediaQuery.of(context).size.width * 0.4,
                       height: MediaQuery.of(context).size.height * 0.4
                     ),
-                    
-                    // Positioned.fill(
-                    //   child: Lottie.network(
-                    //     "https://lottie.host/b4a90af8-4e69-4372-9146-60eb855bb0ba/ySCUk4ATJ6.json",
-                    //     fit: BoxFit.contain,
-                    //     repeat: true,
-                    //   ),
-                    // ),
                   ]
                 ), 
               ),
@@ -122,7 +115,10 @@ class _DragDropComponentState extends State<DragDropComponent> {
                   return Container(
                     width: MediaQuery.of(context).size.width * 0.3,
                     height: MediaQuery.of(context).size.height * 0.4,
-                    decoration: const BoxDecoration(color: Colors.lightBlue),
+                    decoration: BoxDecoration(
+                      color: Colors.yellow,
+                      borderRadius: BorderRadius.circular(40),
+                    ),
                     child: imageDropped 
                       ? Image.asset('lib/images/abc_images/${widget.letterLink}.png',)
                       : Center(child: Text("Drop Here", style: GoogleFonts.ubuntu(fontSize: 30),))

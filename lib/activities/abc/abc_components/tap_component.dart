@@ -7,8 +7,8 @@ import 'package:verbalautism/components/correct_animation.dart';
 class TapComponent extends StatefulWidget {
   final VoidCallback onCompleted;
   final String letterLink;
-
-  const TapComponent({super.key, required this.onCompleted, required this.letterLink});
+  final String letter;
+  const TapComponent({super.key, required this.onCompleted, required this.letterLink, required this.letter});
 
   @override
   State<TapComponent> createState() => _TapComponentState();
@@ -46,7 +46,7 @@ class _TapComponentState extends State<TapComponent> {
       child: Column(
         children: [
           Text(
-            "Tap the Letter", 
+            "Tap the Letter ${widget.letter}", 
             style: GoogleFonts.ubuntu(fontSize: 40)
           ),
       

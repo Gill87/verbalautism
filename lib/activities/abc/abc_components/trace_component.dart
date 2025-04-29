@@ -42,7 +42,7 @@ class _TraceComponentState extends State<TraceComponent> {
     return Column(
       children: [
         Text(
-          "Trace the Letter", 
+          "Trace the Letter ${widget.letter}", 
           style: GoogleFonts.ubuntu(fontSize: 40)
         ),        
         
@@ -56,8 +56,7 @@ class _TraceComponentState extends State<TraceComponent> {
             words: [
               TraceWordModel(
                 word: widget.letter,
-                traceShapeOptions: const TraceShapeOptions(indexColor: Colors.green),
-                
+                traceShapeOptions: const TraceShapeOptions(indexColor: Colors.green, innerPaintColor: Colors.blue),
               ),
             ],
         
