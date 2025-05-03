@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                         SubjectWidget(tapFunction: onToActivity, text: 'Objects', image1: const AssetImage('lib/images/homepage_images/geography.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Food', image1: const AssetImage('lib/images/homepage_images/food.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: '1 2 3', image1: const AssetImage('lib/images/homepage_images/123.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Feeling', image1: const AssetImage('lib/images/homepage_images/drake.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Feeling', image1: const AssetImage('lib/images/homepage_images/flowers.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Places',  image1: const AssetImage('lib/images/homepage_images/places.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Questions', image1: const AssetImage('lib/images/homepage_images/questions.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Prepositions', image1: const AssetImage('lib/images/homepage_images/prepositions.jpg')),
