@@ -10,7 +10,7 @@ final double height;
 final double width;
 final Color color;
 
-const SubjectWidget({super.key, required this.tapFunction, required this.text, required this.image1, this.width = 100, this.height = 100, this.color = Colors.blue});
+const SubjectWidget({super.key, required this.tapFunction, required this.text, required this.image1, this.width = 100, this.height = 10, this.color = Colors.blue});
 
   @override
   Widget build(BuildContext context){

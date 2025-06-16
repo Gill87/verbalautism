@@ -50,21 +50,21 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           
           // Logo
-          title: const Image(image: AssetImage('lib/images/homepage_images/appbarlogo.png'), height: 100,),
+          title: const Image(image: AssetImage('lib/images/homepage_images/appbarlogo.png'), height: 75,),
       
           toolbarHeight: 80,
       
           actions: [
-            
+
             // Cash
             const Image(image: AssetImage('lib/images/homepage_images/cash.png')),
             Text(
               '= \$200',  // Money Feature Needed
               style: GoogleFonts.ubuntu(color: Colors.green[500], fontSize: 18),
-              ),
-      
-            const SizedBox(width: 40,),
-            
+            ),
+
+            const SizedBox(width: 30),
+                  
             // Schedule Button
             ScheduleButton(tapFunction: () => ()),
       
@@ -154,8 +154,8 @@ class _HomePageState extends State<HomePage> {
                       color: const Color.fromARGB(97, 161, 140, 140),
                     ),
                     child: GridView.count(
-                      crossAxisCount: 7,
-                      childAspectRatio: 1,
+                      crossAxisCount: 4,
+                      childAspectRatio: 1.75,
                       children: [
                         SubjectWidget(tapFunction: onToActivity, text: 'A B C', image1: const AssetImage('lib/images/homepage_images/abc.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Colors', image1: const AssetImage('lib/images/homepage_images/colors.jpg')),
@@ -170,14 +170,9 @@ class _HomePageState extends State<HomePage> {
                         SubjectWidget(tapFunction: onToActivity, text: 'Sight Words', image1: const AssetImage('lib/images/homepage_images/sight.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Actions & Verbs', image1: const AssetImage('lib/images/homepage_images/verbs.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Sequence', image1: const AssetImage('lib/images/homepage_images/sequence.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Fill Color Game', image1: const AssetImage('lib/images/homepage_images/colorgame.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Matching Games', image1: const AssetImage('lib/images/homepage_images/matching.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Tracing Games', image1: const AssetImage('lib/images/homepage_images/tracing.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Hoot Hoot', image1: const AssetImage('lib/images/homepage_images/birds.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Spelling Practice', image1: const AssetImage('lib/images/homepage_images/spelling.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Digital Books', image1: const AssetImage('lib/images/homepage_images/books.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Car Racing', image1: const AssetImage('lib/images/homepage_images/car_racing.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Math Practice', image1: const AssetImage('lib/images/homepage_images/math.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Hoot Hoot', image1: const AssetImage('lib/images/homepage_images/birds.jpg')),                      
                       ],
                     ),
                   ),
@@ -229,11 +224,8 @@ class _HomePageState extends State<HomePage> {
                 )
               ),
             )
-      
-          // End Rohan
           ],
         ),
-      
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/abc/abc_components/drag_drop_multiple_letters_component.dart';
 import 'package:verbalautism/activities/abc/abc_components/tap_component.dart';
 import 'package:verbalautism/activities/abc/abc_components/drag_drop_component.dart';
@@ -17,8 +18,12 @@ class AbcMixedGame extends StatefulWidget {
 class _AbcMixedGameState extends State<AbcMixedGame> {
   
   List <String> letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-  int step = 1;
-  final int maxSteps = 15;
+  
+  // Variables
+  int displaySteps = 1;
+  int totalSteps = 1;
+  int round = 1;
+  final int maxSteps = 30;
 
   // Random Object
   Random random = Random();
@@ -93,23 +98,43 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
     
   }
 
+ void round2(){
+    setOneWrongNumber();
+    round = 2;
+  }
+
+  void round3(){
+    setTwoWrongNumbers();
+    round = 3;
+  }
+
   void nextStep() {
-
+    
     setState(() {
-      if(step >= 9 && step < 13){
-        setOneWrongNumber();
+
+      // Check round 2
+      if(totalSteps >= 10 && totalSteps < 20){
+        round2();
       }
 
-      if(step >= 12){
-        setTwoWrongNumbers();
+      // Check round 3
+      if(totalSteps >= 20){
+        round3();
       }
-
-      // Next Activity
-      if(step < maxSteps){
-        ++step;
-      } 
       
-      // Game ends and Restart Game Prompt
+      // Check total steps
+      if(totalSteps < maxSteps){
+      // Increment step
+        ++totalSteps;
+
+        // Correctly modify display steps number
+        displaySteps = totalSteps % 10;
+        if(displaySteps == 0){
+          displaySteps = 10;
+        }
+      }
+
+      // Or Game ends and Restart Game Prompt
       else {
         showDialog(
           context: context,
@@ -117,13 +142,18 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
             title: const Text("Exercise Complete!"),
             actions: [
               TextButton(
+                
+                // Restart Game
                 onPressed: () {
                   Navigator.of(context).pop();
                   setState(() {
-                    step = 1; // Restart the game
+                    totalSteps = 1;
+                    round = 1;
+                    displaySteps = 1; 
                   });
-                  setRandomNumber();
+                  randomNumber = random.nextInt(26);
                 },
+                
                 child: const Text("Restart"),
               ),
             ],
@@ -138,11 +168,21 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   Widget build(BuildContext context) {
     Widget currentActivity;
 
-    if (step % 3 == 1 && step < 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber],);
-    } else if (step % 3 == 2 && step < 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber]);
-    } else if(step % 3 == 0 && step < 10){
+    if (totalSteps % 3 == 1 && totalSteps < 10) {
+      if(namingLetter == "Uppercase_"){
+        currentActivity = TapComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber],);
+      } else {
+        currentActivity = TapComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase(),);
+      }
+    } 
+    else if (totalSteps % 3 == 2 && totalSteps < 10) {
+      if(namingLetter == "Uppercase_"){
+        currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber]);
+      } else {
+        currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase());
+      }
+    } 
+    else if(totalSteps % 3 == 0 && totalSteps < 10){
       if(namingLetter == "Uppercase_"){
         currentActivity = TraceComponent(
           onCompleted: nextStep, 
@@ -154,11 +194,22 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
           letter: letters[randomNumber].toLowerCase(),
         );
       }   
-    } else if(step % 3 == 1 && step >= 10){
-      currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber],);
-    } else if(step % 3 == 2 && step >= 10){
-      currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber],);
-    } else {
+    } 
+    else if(totalSteps % 3 == 1 && totalSteps >= 10){
+      if(namingLetter == "Uppercase_"){
+        currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber],);
+      } else {
+        currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber].toLowerCase(),);
+      }
+    } 
+    else if(totalSteps % 3 == 2 && totalSteps >= 10){
+      if(namingLetter == "Uppercase_"){
+        currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber],);
+      } else {
+        currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber].toLowerCase(),);
+      }
+    } 
+    else {
       if(namingLetter == "Uppercase_"){
         currentActivity = TraceComponent(
           onCompleted: nextStep, 
@@ -174,6 +225,7 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Center(child: Text("Mixed Letters")),
       ),
       body: Container(
@@ -199,7 +251,9 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Round: ${step} / $maxSteps", style: const TextStyle(fontSize: 24)),
+                Text("Round: $round", style: GoogleFonts.ubuntu(fontSize: 24),),
+                const SizedBox(height: 20,),
+                Text("Trial: $displaySteps / 10", style: GoogleFonts.ubuntu(fontSize: 24)),
                 const SizedBox(height: 20),
                 currentActivity,
               ],

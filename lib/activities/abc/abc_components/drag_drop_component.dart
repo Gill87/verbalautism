@@ -50,7 +50,7 @@ class _DragDropComponentState extends State<DragDropComponent> {
       child: Column(
         children: [
           Text(
-            "Drag and Drop the Letter", 
+            "Drag and Drop the Letter ${widget.letter}", 
             style: GoogleFonts.ubuntu(fontSize: 40)
           ),
       
