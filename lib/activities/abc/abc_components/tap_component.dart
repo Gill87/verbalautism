@@ -1,8 +1,9 @@
 // TAP Feature
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:lottie/lottie.dart';
 import 'package:verbalautism/components/correct_animation.dart';
+import 'package:verbalautism/components/tap_animation.dart';
 
 class TapComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -16,7 +17,28 @@ class TapComponent extends StatefulWidget {
   
 class _TapComponentState extends State<TapComponent> {
 
+  bool tapClicked = false;
+  bool showTapAnimation = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Show tap animation
+    if (mounted && !tapClicked) {
+      setState(() {
+        showTapAnimation = true;
+      });
+    }
+  }
+
   void _showCorrectAnimation() {
+    tapClicked = true;
+
+    setState(() {
+      showTapAnimation = false;
+    });
+
     showDialog(
       barrierColor: Colors.transparent,
       context: context,
@@ -32,7 +54,6 @@ class _TapComponentState extends State<TapComponent> {
       if (mounted) {
         Navigator.of(context).pop();
         widget.onCompleted();
-        
       }
     });
   }
@@ -47,7 +68,7 @@ class _TapComponentState extends State<TapComponent> {
         children: [
           Text(
             "Tap the Letter ${widget.letter}", 
-            style: GoogleFonts.ubuntu(fontSize: 40)
+            style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
           ),
       
           const SizedBox(height: 50),
@@ -60,21 +81,19 @@ class _TapComponentState extends State<TapComponent> {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    Image(
-                      image: AssetImage("lib/images/abc_images/${widget.letterLink}.png"),
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      fit: BoxFit.fill,
+                    Transform.scale(
+                      scale: 1.5,
+                      child: SvgPicture.asset(
+                        'assets/abc_images/${widget.letterLink}.svg',
+                        width: MediaQuery.of(context).size.width * 0.2,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        fit: BoxFit.contain,
+                      ),
                     ),
-                    
-                    // Lottie Animation
-                    // Positioned.fill(
-                    //   child: Lottie.network(
-                    //     "https://lottie.host/b4a90af8-4e69-4372-9146-60eb855bb0ba/ySCUk4ATJ6.json",
-                    //     fit: BoxFit.contain,
-                    //     repeat: true,
-                    //   ),
-                    // ),
+
+                    // Tap Animation
+                    if(showTapAnimation == true && tapClicked == false)
+                      const TapAnimation(),        
                   ]
                 ),
               ),

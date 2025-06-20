@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/correct_animation.dart';
 
@@ -76,7 +77,7 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
         children: [
           Text(
             "Drag and Drop the Letter ${widget.letter}",
-            style: GoogleFonts.ubuntu(fontSize: 40),
+            style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
           ),
           const SizedBox(height: 50),
           Row(
@@ -102,28 +103,31 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
         opacity: 1,
         child: Transform.translate(
           offset: const Offset(200, 0),
-          child: Image.asset(
-            'lib/images/abc_images/$letterLink.png',
+          child: SvgPicture.asset(
+            'assets/abc_images/$letterLink.svg',
             width: 150,
             height: 150,
+            fit: BoxFit.contain,
           ),
         ),
       ),
       childWhenDragging: Opacity(
         opacity: 0.3,
-        child: Image.asset(
-          'lib/images/abc_images/$letterLink.png',
+        child: SvgPicture.asset(
+          'assets/abc_images/$letterLink.svg',
           width: MediaQuery.of(context).size.width * 0.2,
           height: MediaQuery.of(context).size.height * 0.3,
+          fit: BoxFit.contain,
         ),
       ),
       child: imageDropped && letterLink == widget.correctLetterLink
           ? const SizedBox(width: 0, height: 0)
-          : Image.asset(
-              'lib/images/abc_images/$letterLink.png',
+          : SvgPicture.asset(
+              'assets/abc_images/$letterLink.svg',
               width: MediaQuery.of(context).size.width * 0.2,
               height: MediaQuery.of(context).size.height * 0.3,
-            ),
+              fit: BoxFit.contain,
+          ),
     );
   }
 
@@ -139,7 +143,12 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
             borderRadius: BorderRadius.circular(40),
           ),
           child: imageDropped
-              ? Image.asset('lib/images/abc_images/${widget.correctLetterLink}.png')
+              ? SvgPicture.asset(
+                  'assets/abc_images/${widget.correctLetterLink}.svg',
+                  // width: MediaQuery.of(context).size.width * 0.2,
+                  // height: MediaQuery.of(context).size.height * 0.4,
+                  fit: BoxFit.contain,
+              )
               : Center(
                   child: Text(
                     "Drop Here",

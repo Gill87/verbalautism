@@ -1,8 +1,8 @@
 // DRAG AND DROP Feature
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:lottie/lottie.dart';
 import 'package:verbalautism/components/correct_animation.dart';
 
 class DragDropComponent extends StatefulWidget {
@@ -51,7 +51,7 @@ class _DragDropComponentState extends State<DragDropComponent> {
         children: [
           Text(
             "Drag and Drop the Letter ${widget.letter}", 
-            style: GoogleFonts.ubuntu(fontSize: 40)
+            style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white)
           ),
       
           const SizedBox(height: 50),
@@ -64,39 +64,39 @@ class _DragDropComponentState extends State<DragDropComponent> {
                 data: "image",
                 feedback: Opacity(
                   opacity: 1,
-                  child: Transform.translate(
-                    offset: const Offset(200, 0),
-                    child: Image.asset(
-                      'lib/images/abc_images/${widget.letterLink}.png',
-                      width: 150,
-                      height: 150,
-                    ),
+                  child: Stack(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/abc_images/${widget.letterLink}.svg',
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        fit: BoxFit.contain,
+                      ),
+                    ],
                   ),
                 ),
           
-                // Original image dims when dragging
+                // Original image disappers dragging
                 childWhenDragging: Opacity(
-                  opacity: 0.3,
-                  child: Image.asset(
-                    'lib/images/abc_images/${widget.letterLink}.png',
+                  opacity: 0.0,
+                  child: SvgPicture.asset(
+                    'assets/abc_images/${widget.letterLink}.svg',
                     width: MediaQuery.of(context).size.width * 0.4,
-                    height: MediaQuery.of(context).size.height * 0.4
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    fit: BoxFit.contain,
                   ),
                 ),
+                
+                // When not dragging, static image displayed
+                child: !imageDropped 
+                  ? SvgPicture.asset(
+                    'assets/abc_images/${widget.letterLink}.svg',
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    fit: BoxFit.contain,
+                  )
+                  : const SizedBox.shrink(),
           
-                // When not dragging and image has not been dropped, display static image
-                child: imageDropped
-                ? const Text("")
-                : Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(
-                      'lib/images/abc_images/${widget.letterLink}.png',
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: MediaQuery.of(context).size.height * 0.4
-                    ),
-                  ]
-                ), 
               ),
           
               const SizedBox(width: 50),
@@ -113,19 +113,23 @@ class _DragDropComponentState extends State<DragDropComponent> {
           
                 builder: (context, candidateData, rejectedData) {
                   return Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
+                    width: MediaQuery.of(context).size.width * 0.4,
                     height: MediaQuery.of(context).size.height * 0.4,
                     decoration: BoxDecoration(
                       color: Colors.yellow,
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: imageDropped 
-                      ? Image.asset('lib/images/abc_images/${widget.letterLink}.png',)
+                      ? SvgPicture.asset(
+                        'assets/abc_images/${widget.letterLink}.svg',
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        fit: BoxFit.contain,
+                      )
                       : Center(child: Text("Drop Here", style: GoogleFonts.ubuntu(fontSize: 30),))
                   );
                 }
               ),
-              
             ],
           ),
         ],

@@ -24,7 +24,7 @@ const LargeSubjectWidget({super.key, required this.tapFunction, required this.te
             height: height,
             width: width,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(20),
               color: color,
               image: DecorationImage(image: image1),
               border: Border.all(width: 1)

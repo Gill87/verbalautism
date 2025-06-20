@@ -70,12 +70,12 @@ class _LoginPageState extends State<LoginPage> {
 
                 // logo
                 Image.asset(
-                  'lib/images/loginpage_images/logo4.png',
+                  'assets/loginpage_images/logo4.png',
                   height: smallHeight(context) ? 250 : 125,
                   width: 250,
                 ),
           
-                const SizedBox(height:15),
+                const SizedBox(height:20),
           
                 Text(
                   'Welcome Back',
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
           
-                const SizedBox(height:25),
+                const SizedBox(height:15),
           
                 // email textfield
                 SizedBox(
@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                         color:Colors.white,
                       ),
                       child: Image.asset(
-                        'lib/images/loginpage_images/google.png',
+                        'assets/loginpage_images/google.png',
                         height:50,
                       )
                     ),

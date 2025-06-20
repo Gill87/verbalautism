@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:one_clock/one_clock.dart';
 import 'package:verbalautism/activities/abc/base_page/abc.dart';
+import 'package:verbalautism/components/buttons_column.dart';
 import 'package:verbalautism/components/schedule_button.dart';
 import 'package:verbalautism/components/sound_button.dart';
 import 'package:verbalautism/components/subject_widget.dart';
@@ -46,18 +47,18 @@ class _HomePageState extends State<HomePage> {
   
     return SafeArea(
       child: Scaffold(
-      
+
         appBar: AppBar(
           
           // Logo
-          title: const Image(image: AssetImage('lib/images/homepage_images/appbarlogo.png'), height: 75,),
+          title: const Image(image: AssetImage('assets/homepage_images/appbarlogo.png'), height: 75,),
       
           toolbarHeight: 80,
       
           actions: [
 
             // Cash
-            const Image(image: AssetImage('lib/images/homepage_images/cash.png')),
+            const Image(image: AssetImage('assets/homepage_images/cash.png')),
             Text(
               '= \$200',  // Money Feature Needed
               style: GoogleFonts.ubuntu(color: Colors.green[500], fontSize: 18),
@@ -139,45 +140,53 @@ class _HomePageState extends State<HomePage> {
         body: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(width: 10,),
+
+            // Left Buttons Column
+            const ButtonsColumn(),
+
+
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                      
+                
+                // Middle Area
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: Container(
                     height: MediaQuery.sizeOf(context).height * 0.7,
-                    width: MediaQuery.sizeOf(context).width * 0.8,
+                    width: MediaQuery.sizeOf(context).width * 0.7,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: const Color.fromARGB(97, 161, 140, 140),
+                      color: Colors.deepPurple
                     ),
                     child: GridView.count(
                       crossAxisCount: 4,
                       childAspectRatio: 1.75,
                       children: [
-                        SubjectWidget(tapFunction: onToActivity, text: 'A B C', image1: const AssetImage('lib/images/homepage_images/abc.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Colors', image1: const AssetImage('lib/images/homepage_images/colors.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Shapes', image1: const AssetImage('lib/images/homepage_images/shapes.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Objects', image1: const AssetImage('lib/images/homepage_images/geography.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Food', image1: const AssetImage('lib/images/homepage_images/food.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: '1 2 3', image1: const AssetImage('lib/images/homepage_images/123.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Feeling', image1: const AssetImage('lib/images/homepage_images/flowers.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Places',  image1: const AssetImage('lib/images/homepage_images/places.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Questions', image1: const AssetImage('lib/images/homepage_images/questions.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Prepositions', image1: const AssetImage('lib/images/homepage_images/prepositions.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Sight Words', image1: const AssetImage('lib/images/homepage_images/sight.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Actions & Verbs', image1: const AssetImage('lib/images/homepage_images/verbs.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Sequence', image1: const AssetImage('lib/images/homepage_images/sequence.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Matching Games', image1: const AssetImage('lib/images/homepage_images/matching.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Tracing Games', image1: const AssetImage('lib/images/homepage_images/tracing.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Hoot Hoot', image1: const AssetImage('lib/images/homepage_images/birds.jpg')),                      
+                        SubjectWidget(tapFunction: onToActivity, text: 'A B C', image1: const AssetImage('assets/homepage_images/abc.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Colors', image1: const AssetImage('assets/homepage_images/colors.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Shapes', image1: const AssetImage('assets/homepage_images/shapes.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Objects', image1: const AssetImage('assets/homepage_images/geography.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Food', image1: const AssetImage('assets/homepage_images/food.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: '1 2 3', image1: const AssetImage('assets/homepage_images/123.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Feeling', image1: const AssetImage('assets/homepage_images/flowers.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Places',  image1: const AssetImage('assets/homepage_images/places.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Questions', image1: const AssetImage('assets/homepage_images/questions.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Prepositions', image1: const AssetImage('assets/homepage_images/prepositions.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Sight Words', image1: const AssetImage('assets/homepage_images/sight.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Actions & Verbs', image1: const AssetImage('assets/homepage_images/verbs.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Sequence', image1: const AssetImage('assets/homepage_images/sequence.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Matching Games', image1: const AssetImage('assets/homepage_images/matching.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Tracing Games', image1: const AssetImage('assets/homepage_images/tracing.jpg')),
+                        SubjectWidget(tapFunction: onToActivity, text: 'Hoot Hoot', image1: const AssetImage('assets/homepage_images/birds.jpg')),                      
                       ],
                     ),
                   ),
-                ),       
-                      
+                ),
+
+                // Bottom Area 
                 Row(
                   children: [
                     SoundButton(tapFunction: ()=> (), text: 'Help', desiredColor: Colors.orange),
@@ -189,7 +198,8 @@ class _HomePageState extends State<HomePage> {
                 ),       
               ],
             ),
-      
+
+            // Right Area
             SafeArea(
               child: Container(
                 padding: isDesktop(context) 
@@ -210,20 +220,20 @@ class _HomePageState extends State<HomePage> {
                           datetime: DateTime.now(),
                       ),
                       
-                      SubjectWidget(tapFunction: onToActivity, text: 'Previous', image1: const AssetImage('lib/images/homepage_images/places.jpg'), 
+                      SubjectWidget(tapFunction: onToActivity, text: 'Previous', image1: const AssetImage('assets/homepage_images/places.jpg'), 
                                   width: MediaQuery.of(context).size.width * 0.1, height: MediaQuery.of(context).size.height * 0.2),
                       const SizedBox(height: 10,),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Current', image1: const AssetImage('lib/images/homepage_images/geography.jpg'),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Current', image1: const AssetImage('assets/homepage_images/geography.jpg'),
                                   width: MediaQuery.of(context).size.width * 0.1, height: MediaQuery.of(context).size.height * 0.2),
                       const SizedBox(height: 10,),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Next', image1: const AssetImage('lib/images/homepage_images/sight.jpg'),
+                      SubjectWidget(tapFunction: onToActivity, text: 'Next', image1: const AssetImage('assets/homepage_images/sight.jpg'),
                                   width: MediaQuery.of(context).size.width * 0.1, height: MediaQuery.of(context).size.height * 0.2),
                                 
                     ],
                   ),
                 )
               ),
-            )
+            ),
           ],
         ),
       ),

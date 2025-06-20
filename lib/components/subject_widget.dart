@@ -37,7 +37,10 @@ const SubjectWidget({super.key, required this.tapFunction, required this.text, r
               color: Colors.white38.withOpacity(0.9),      
               child: Text(
                 text,
-                style: GoogleFonts.ubuntu(fontSize: 15, color: Colors.black),
+                style: GoogleFonts.ubuntu(
+                  fontSize: 15, 
+                  color: Colors.black
+                ),
                 textAlign: TextAlign.center,
               ),
             ),

@@ -43,7 +43,7 @@ class _TraceComponentState extends State<TraceComponent> {
       children: [
         Text(
           "Trace the Letter ${widget.letter}", 
-          style: GoogleFonts.ubuntu(fontSize: 40)
+          style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white)
         ),        
         
         const SizedBox(height: 50),
@@ -52,14 +52,17 @@ class _TraceComponentState extends State<TraceComponent> {
           color: Colors.transparent,
           width: MediaQuery.of(context).size.width * 0.4,
           height: MediaQuery.of(context).size.height * 0.4,
-          child: TracingWordGame(
-            words: [
-              TraceWordModel(
-                word: widget.letter,
-                traceShapeOptions: const TraceShapeOptions(indexColor: Colors.green, innerPaintColor: Colors.blue),
-              ),
+          child: TracingCharsGame(
+            traceShapeModel: [
+              TraceCharsModel(
+                chars: [
+                  TraceCharModel(
+                    char: widget.letter,
+                    traceShapeOptions: const TraceShapeOptions(innerPaintColor: Color.fromARGB(255, 33, 150, 243))
+                  )
+                ]
+              )
             ],
-        
             onGameFinished: (int index) async {
               _showCorrectAnimation();
             },

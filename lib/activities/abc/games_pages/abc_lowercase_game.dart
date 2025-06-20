@@ -161,7 +161,8 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
       // App Bar
       appBar: AppBar(
         centerTitle: true,
-        title: const Center(child: Text("Lowercase Letters")),
+        title: Center(child: Text("Lowercase Letters", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
+        backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
 
       // Body
@@ -170,7 +171,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
         // Background image
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("lib/images/background_images/Clouds.png"),
+            image: AssetImage("assets/background_images/32442923_7895078.jpg"),
             fit: BoxFit.cover,
           )
         ),
@@ -179,8 +180,8 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
         child: Center(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.5), // White background with opacity for readability
-              borderRadius: BorderRadius.circular(10),
+              color: Colors.deepPurple, // White background with opacity for readability
+              borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.5), // Shadow color
@@ -194,9 +195,9 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Round: $round", style: GoogleFonts.ubuntu(fontSize: 24),),
+                Text("Round: $round", style: GoogleFonts.ubuntu(fontSize: 24, color: Colors.white),),
                 const SizedBox(height: 20,),
-                Text("Trial: $displaySteps / 10", style: GoogleFonts.ubuntu(fontSize: 24)),
+                Text("Trial: $displaySteps / 10", style: GoogleFonts.ubuntu(fontSize: 24, color: Colors.white)),
                 const SizedBox(height: 20),
                 currentActivity,
               ],

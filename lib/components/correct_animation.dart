@@ -8,12 +8,10 @@ class CorrectAnimation extends StatelessWidget {
   Widget build(BuildContext context) {
     
     return Container(
-      child: Lottie.network(
-        'https://lottie.host/b4a90af8-4e69-4372-9146-60eb855bb0ba/ySCUk4ATJ6.json',
-        repeat: false,
-        width: MediaQuery.of(context).size.width * 0.4,
-        height: MediaQuery.of(context).size.height * 0.4,
-
+      child: Lottie.asset(
+        "assets/lottie_animations/correct.json",
+        width: 300,
+        height: 300,
       )
     );
   }

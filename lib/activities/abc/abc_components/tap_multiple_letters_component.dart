@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/correct_animation.dart';
 
@@ -71,7 +72,7 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
         children: [
           Text(
             "Tap the Letter ${widget.letter}",
-            style: GoogleFonts.ubuntu(fontSize: 40),
+            style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
           ),
           const SizedBox(height: 50),
           Row(
@@ -85,7 +86,7 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
                     onTap: () => _handleTap(letter),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white, // Background color for each letter
+                        color: Colors.yellow, // Background color for each letter
                         borderRadius: BorderRadius.circular(20), // Rounded corners
                         boxShadow: [
                           BoxShadow(
@@ -95,9 +96,10 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
                           ),
                         ],
                       ),
-                      padding: const EdgeInsets.all(8), // Space inside the container
-                      child: Image.asset(
-                        'lib/images/abc_images/$letter.png',
+                    child: Transform.scale(
+                      scale: 1.5,
+                      child: SvgPicture.asset(
+                        'assets/abc_images/$letter.svg',
                         width: MediaQuery.of(context).size.width * 0.2,
                         height: MediaQuery.of(context).size.height * 0.3,
                         fit: BoxFit.contain,
@@ -105,11 +107,11 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
                     ),
                   ),
                 ),
-              );
-            }).toList(),
-          )
-        ],
-      ),
-    );
-  }
-}
+              ),
+            );
+          }).toList(),
+        )
+      ],
+    ),
+  );
+}}
