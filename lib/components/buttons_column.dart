@@ -20,17 +20,17 @@ class ButtonsColumn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(height: 15),
-              CircularButton(text: "Hi", color:  Color.fromARGB(255, 33, 150, 243),),
+              CircularButton(text: "Hi", image: AssetImage("assets/letter_colors/glitter_6.jpg"), audioAsset: "audio_files/hi.mp3",),
               SizedBox(height: 10,),
-              CircularButton(text: "Please", color: Color.fromARGB(255, 33, 150, 243),),
+              CircularButton(text: "Please", image: AssetImage("assets/letter_colors/glitter_2.jpg"), audioAsset: "audio_files/please.mp3"),
               SizedBox(height: 10,),
-              CircularButton(text: "Thanks", color: Color.fromARGB(255, 33, 150, 243),),
+              CircularButton(text: "Thanks", image: AssetImage("assets/letter_colors/glitter_3.jpg"), audioAsset: "audio_files/thanks.mp3"),
               SizedBox(height: 10,),
-              CircularButton(text: "Sorry", color: Color.fromARGB(255, 33, 150, 243),),
+              CircularButton(text: "Sorry", image: AssetImage("assets/letter_colors/glitter_4.jpg"),audioAsset: "audio_files/sorry.mp3"),
               SizedBox(height: 10,),
-              CircularButton(text: "Bye", color: Color.fromARGB(255, 33, 150, 243),),
+              CircularButton(text: "Bye", image: AssetImage("assets/letter_colors/glitter_5.jpg"), audioAsset: "audio_files/bye.mp3"),
               SizedBox(height: 10,),
-              CircularButton(text: "Stop", color: Color.fromARGB(255, 33, 150, 243),),
+              CircularButton(text: "Stop", image: AssetImage("assets/letter_colors/glitter_1.jpg"), audioAsset: "audio_files/stop.mp3"),
             ],
           )
         )

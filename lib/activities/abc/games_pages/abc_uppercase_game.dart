@@ -167,11 +167,11 @@ void setOneWrongNumber(){
         child: Center(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.deepPurple, // White background with opacity for readability
+              color: Colors.black, // White background with opacity for readability
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.5), // Shadow color
+                  color: Colors.white.withOpacity(0.5), // Shadow color
                   blurRadius: 10, // Spread of shadow
                   offset: const Offset(0, 4), // Position of shadow (X, Y)
                 ),

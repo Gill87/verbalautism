@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/correct_animation.dart';
+import 'package:verbalautism/components/incorrect_animation.dart';
 
 class TapMultipleLettersComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -21,27 +22,52 @@ class TapMultipleLettersComponent extends StatefulWidget {
   State<TapMultipleLettersComponent> createState() => _TapMultipleLettersComponentState();
 }
 
-class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponent> {
+class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponent> with SingleTickerProviderStateMixin{
   late List<String> allLetterLinks;
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
     allLetterLinks = [widget.correctLetterLink, ...widget.wrongLetterLinks];
     allLetterLinks.shuffle(); // Randomize their order
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    )..repeat(reverse: true); // makes it float up and down
+
+    _animation = Tween<double>(begin: 0.0, end: 10.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
   }
 
   void _handleTap(String tappedLetter) {
     if (tappedLetter == widget.correctLetterLink) {
       _showCorrectAnimation();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Wrong letter! Try again.'),
-          duration: Duration(seconds: 1),
-        ),
-      );
+      _showIncorrectAnimation();
     }
+  }
+
+  void _showIncorrectAnimation(){
+    showDialog(
+      barrierColor: Colors.transparent,
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: IncorrectAnimation(),
+        );
+      }
+    );
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    });
+    
   }
 
   void _showCorrectAnimation() {
@@ -85,6 +111,8 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
                   child: GestureDetector(
                     onTap: () => _handleTap(letter),
                     child: Container(
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.3,
                       decoration: BoxDecoration(
                         color: Colors.yellow, // Background color for each letter
                         borderRadius: BorderRadius.circular(20), // Rounded corners
@@ -96,15 +124,25 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
                           ),
                         ],
                       ),
-                    child: Transform.scale(
-                      scale: 1.5,
+                    child: AnimatedBuilder(
+                      animation: _animation, 
+                      builder: (context, child){
+                        return Transform.translate(
+                          offset: Offset(0, _animation.value),
+                          child: Transform.scale(
+                            scale: 1.5,
+                            child: child,
+                          ),
+                        );
+                      },
                       child: SvgPicture.asset(
                         'assets/abc_images/$letter.svg',
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        height: MediaQuery.of(context).size.height * 0.3,
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: MediaQuery.of(context).size.height * 0.15,
                         fit: BoxFit.contain,
                       ),
-                    ),
+                    )
+                    
                   ),
                 ),
               ),

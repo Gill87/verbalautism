@@ -46,6 +46,7 @@ dependencies:
   tracing_game: ^0.0.4+1
   one_clock: ^2.0.1
   flutter_svg: ^2.1.0
+  audioplayers: ^6.4.0
 
 
 dev_dependencies:
@@ -77,6 +78,8 @@ flutter:
     - assets/loginpage_images/
     - assets/background_images/
     - assets/lottie_animations/
+    - assets/letter_colors/
+    - assets/audio_files/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

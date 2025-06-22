@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                     width: MediaQuery.sizeOf(context).width * 0.7,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.deepPurple
+                      color: const Color.fromARGB(255, 33, 150, 243),
                     ),
                     child: GridView.count(
                       crossAxisCount: 4,
@@ -187,13 +187,13 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 // Bottom Area 
-                Row(
+                const Row(
                   children: [
-                    SoundButton(tapFunction: ()=> (), text: 'Help', desiredColor: Colors.orange),
-                    const SizedBox(width: 20),
-                    SoundButton(tapFunction: ()=> (), text: 'Yes', desiredColor: Colors.green),
-                    const SizedBox(width:20),
-                    SoundButton(tapFunction: ()=> (), text: 'No', desiredColor: Colors.red),
+                    SoundButton(text: 'Help', desiredColor: Colors.orange, audioAsset: "audio_files/help.mp3",),
+                    SizedBox(width: 20),
+                    SoundButton(text: 'Yes', desiredColor: Colors.green, audioAsset: "audio_files/yes.mp3",),
+                    SizedBox(width:20),
+                    SoundButton(text: 'No', desiredColor: Colors.red, audioAsset: "audio_files/no.mp3"),
                   ],
                 ),       
               ],

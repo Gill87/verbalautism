@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/correct_animation.dart';
+import 'package:verbalautism/components/incorrect_animation.dart';
 
 class DragDropMultipleLettersComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -21,15 +22,27 @@ class DragDropMultipleLettersComponent extends StatefulWidget {
   State<DragDropMultipleLettersComponent> createState() => _DragDropMultipleLettersComponentState();
 }
 
-class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLettersComponent> {
+class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLettersComponent> with SingleTickerProviderStateMixin{
   bool imageDropped = false;
   late List<String> allLetterLinks;
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
     allLetterLinks = [widget.correctLetterLink, ...widget.wrongLetterLinks];
     allLetterLinks.shuffle(); // Randomize order
+    
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    )..repeat(reverse: true); // makes it float up and down
+
+    _animation = Tween<double>(begin: 0.0, end: 10.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
   }
 
   void _showCorrectAnimation() {
@@ -52,6 +65,25 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
     });
   }
 
+
+  void _showIncorrectAnimation() {
+    showDialog(
+      barrierColor: Colors.transparent,
+      context: context,
+      builder: (context) {
+        return const Dialog(
+          backgroundColor: Colors.transparent,
+          child: IncorrectAnimation(),
+        );
+      },
+    );
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pop();      }
+    });
+  }
+
   void _handleDrop(DragTargetDetails<String> details) {
     if (details.data == widget.correctLetterLink) {
       setState(() {
@@ -59,12 +91,7 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
       });
       _showCorrectAnimation();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Wrong letter! Try again.'),
-          duration: Duration(seconds: 1),
-        ),
-      );
+      _showIncorrectAnimation();
     }
   }
 
@@ -97,39 +124,61 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
   }
 
   Widget _buildDraggable(String letterLink) {
+
+    // Define letter image
+    final svg = SvgPicture.asset(
+      'assets/abc_images/$letterLink.svg',
+      width: MediaQuery.of(context).size.width * 0.2,
+      height: MediaQuery.of(context).size.height * 0.3,
+      fit: BoxFit.contain,
+    );
+
+    final animatedSvg = AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, -_animation.value),
+          child: child,
+        );
+      },
+      child: svg,
+    );
+
     return Draggable<String>(
       data: letterLink,
-      feedback: Opacity(
-        opacity: 1,
-        child: Transform.translate(
-          offset: const Offset(200, 0),
-          child: SvgPicture.asset(
-            'assets/abc_images/$letterLink.svg',
-            width: 150,
-            height: 150,
-            fit: BoxFit.contain,
-          ),
-        ),
+
+      // The widget being dragged
+      feedback: Material(
+        color: Colors.transparent,  // no background
+        child: animatedSvg,                // same as child -> no offset
       ),
+
+      // What is shown in the original spot when dragging is occuring (in this case invisible lettter)
       childWhenDragging: Opacity(
-        opacity: 0.3,
-        child: SvgPicture.asset(
-          'assets/abc_images/$letterLink.svg',
-          width: MediaQuery.of(context).size.width * 0.2,
-          height: MediaQuery.of(context).size.height * 0.3,
-          fit: BoxFit.contain,
-        ),
+        opacity: 0.0,
+        child: animatedSvg,
       ),
+
+      // 👇 Stop floating when drag starts
+      onDragStarted: () {
+        _controller.stop();
+      },
+
+      // If correct image dropped in
       child: imageDropped && letterLink == widget.correctLetterLink
-          ? const SizedBox(width: 0, height: 0)
-          : SvgPicture.asset(
-              'assets/abc_images/$letterLink.svg',
-              width: MediaQuery.of(context).size.width * 0.2,
-              height: MediaQuery.of(context).size.height * 0.3,
-              fit: BoxFit.contain,
-          ),
+          ? const SizedBox.shrink()
+          : animatedSvg,
+
+      // If image not dropped in, resume floating animation
+      onDragEnd: (details) {
+        if (mounted && !imageDropped) {
+          _controller.repeat(reverse: true);
+        }
+      },
+
     );
   }
+
 
   Widget _buildDragTarget() {
     return DragTarget<String>(

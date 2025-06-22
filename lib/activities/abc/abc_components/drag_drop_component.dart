@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/correct_animation.dart';
+import 'package:verbalautism/components/drag_animation.dart';
 
 class DragDropComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -16,9 +17,27 @@ class DragDropComponent extends StatefulWidget {
   State<DragDropComponent> createState() => _DragDropComponentState();
 }
 
-class _DragDropComponentState extends State<DragDropComponent> {
+class _DragDropComponentState extends State<DragDropComponent> with SingleTickerProviderStateMixin {
 
   bool imageDropped = false;
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    )..repeat(reverse: true); // makes it float up and down
+
+    _animation = Tween<double>(begin: 0.0, end: 10.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+  }
   
   void _showCorrectAnimation(){
     showDialog(
@@ -87,16 +106,38 @@ class _DragDropComponentState extends State<DragDropComponent> {
                   ),
                 ),
                 
-                // When not dragging, static image displayed
+                // When not dragging, static image displayed with floating animation
                 child: !imageDropped 
-                  ? SvgPicture.asset(
-                    'assets/abc_images/${widget.letterLink}.svg',
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    fit: BoxFit.contain,
+                  ? Stack(
+                    alignment: Alignment.center,  // ✅ Center everything in the stack
+                    children: [
+
+                      AnimatedBuilder(
+                        animation: _animation, 
+                        builder: (context, child) {
+                          return Transform.translate(
+                            offset: Offset(0, -_animation.value),
+                            child: Transform.scale(
+                              scale: 1.5,
+                              child: child
+                            ),
+                          );
+                        },
+
+                        // Image
+                        child: SvgPicture.asset(
+                          'assets/abc_images/${widget.letterLink}.svg',
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          fit: BoxFit.contain,
+                        )
+                      )
+                      
+                      // Drag Animation (centered by Stack's alignment)
+                      // const DragAnimation(),
+                    ],
                   )
                   : const SizedBox.shrink(),
-          
               ),
           
               const SizedBox(width: 50),

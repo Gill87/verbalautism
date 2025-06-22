@@ -15,21 +15,37 @@ class TapComponent extends StatefulWidget {
   State<TapComponent> createState() => _TapComponentState();
 }
   
-class _TapComponentState extends State<TapComponent> {
-
+class _TapComponentState extends State<TapComponent> with SingleTickerProviderStateMixin {
   bool tapClicked = false;
   bool showTapAnimation = false;
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
 
-    // Show tap animation
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    )..repeat(reverse: true); // makes it float up and down
+
+    _animation = Tween<double>(begin: 0.0, end: 10.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
     if (mounted && !tapClicked) {
       setState(() {
         showTapAnimation = true;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void _showCorrectAnimation() {
@@ -38,6 +54,8 @@ class _TapComponentState extends State<TapComponent> {
     setState(() {
       showTapAnimation = false;
     });
+
+    _controller.stop();  // stop floating
 
     showDialog(
       barrierColor: Colors.transparent,
@@ -49,7 +67,6 @@ class _TapComponentState extends State<TapComponent> {
       },
     );
 
-    // Close the animation after a short delay
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.of(context).pop();
@@ -63,16 +80,16 @@ class _TapComponentState extends State<TapComponent> {
     return Container(
       color: Colors.transparent,
       width: MediaQuery.of(context).size.width * 0.4,
-      
+
       child: Column(
         children: [
           Text(
-            "Tap the Letter ${widget.letter}", 
+            "Tap the Letter ${widget.letter}",
             style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
           ),
-      
+
           const SizedBox(height: 50),
-      
+
           Center(
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
@@ -81,8 +98,17 @@ class _TapComponentState extends State<TapComponent> {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    Transform.scale(
-                      scale: 1.5,
+                    AnimatedBuilder(
+                      animation: _animation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(0, -_animation.value),
+                          child: Transform.scale(
+                            scale: 1.5,
+                            child: child,
+                          ),
+                        );
+                      },
                       child: SvgPicture.asset(
                         'assets/abc_images/${widget.letterLink}.svg',
                         width: MediaQuery.of(context).size.width * 0.2,
@@ -91,13 +117,13 @@ class _TapComponentState extends State<TapComponent> {
                       ),
                     ),
 
-                    // Tap Animation
-                    if(showTapAnimation == true && tapClicked == false)
-                      const TapAnimation(),        
-                  ]
+                    // Optionally show tap animation
+                    if (showTapAnimation && !tapClicked)
+                      const TapAnimation(),
+                  ],
                 ),
               ),
-            )
+            ),
           ),
         ],
       ),

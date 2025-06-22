@@ -75,7 +75,7 @@ class Activity1 extends StatelessWidget {
       splashColor: Colors.yellow.withOpacity(0.3),
       child: Card(
         elevation: 10,
-        color: Colors.deepPurple,
+        color: Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
           width: 200,
