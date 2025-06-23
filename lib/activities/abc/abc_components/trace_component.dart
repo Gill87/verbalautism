@@ -7,8 +7,9 @@ import 'package:verbalautism/components/correct_animation.dart';
 class TraceComponent extends StatefulWidget {
   final VoidCallback onCompleted;
   final String letter;
+  final VoidCallback onCorrectAction;
 
-  const TraceComponent({super.key, required this.onCompleted, required this.letter});
+  const TraceComponent({super.key, required this.onCompleted, required this.letter, required this.onCorrectAction});
 
   @override
   State<TraceComponent> createState() => _TraceComponentState();
@@ -17,6 +18,9 @@ class TraceComponent extends StatefulWidget {
 class _TraceComponentState extends State<TraceComponent> {
   
   void _showCorrectAnimation(){
+
+    widget.onCorrectAction();
+    
     showDialog(
       barrierColor: Colors.transparent,
       context: context,

@@ -9,6 +9,8 @@ class TapMultipleLettersComponent extends StatefulWidget {
   final String correctLetterLink;
   final List<String> wrongLetterLinks; // 1 or 2 wrong letters
   final String letter;
+  final VoidCallback onCorrectAction;
+  final VoidCallback onIncorrectAction;
 
   const TapMultipleLettersComponent({
     super.key,
@@ -16,6 +18,8 @@ class TapMultipleLettersComponent extends StatefulWidget {
     required this.correctLetterLink,
     required this.wrongLetterLinks,
     required this.letter,
+    required this.onCorrectAction,
+    required this.onIncorrectAction,
   });
 
   @override
@@ -52,6 +56,9 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
   }
 
   void _showIncorrectAnimation(){
+
+    widget.onIncorrectAction();
+
     showDialog(
       barrierColor: Colors.transparent,
       context: context,
@@ -71,6 +78,9 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
   }
 
   void _showCorrectAnimation() {
+
+    widget.onCorrectAction();
+    
     showDialog(
       barrierColor: Colors.transparent,
       context: context,
@@ -125,23 +135,41 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
                         ],
                       ),
                     child: AnimatedBuilder(
-                      animation: _animation, 
-                      builder: (context, child){
+                      animation: _animation,
+                      builder: (context, child) {
                         return Transform.translate(
                           offset: Offset(0, _animation.value),
-                          child: Transform.scale(
-                            scale: 1.5,
-                            child: child,
-                          ),
+                          child: child,
                         );
                       },
-                      child: SvgPicture.asset(
-                        'assets/abc_images/$letter.svg',
-                        width: MediaQuery.of(context).size.width * 0.15,
-                        height: MediaQuery.of(context).size.height * 0.15,
-                        fit: BoxFit.contain,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.2,
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        decoration: BoxDecoration(
+                          color: Colors.yellow,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Transform.scale(
+                            scale: 1.5,
+                            child: SvgPicture.asset(
+                              'assets/abc_images/$letter.svg',
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
                       ),
                     )
+
                     
                   ),
                 ),

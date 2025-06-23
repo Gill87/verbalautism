@@ -129,6 +129,35 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
     });
   }
 
+  Color containerColor = Colors.black;
+
+  void triggerCorrectFlash() {
+    setState(() {
+      containerColor = Colors.lightGreen;
+    });
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          containerColor = Colors.black;
+        });
+      }
+    });
+  }
+
+  void triggerIncorrectFlash() {
+    setState(() {
+      containerColor = Colors.red;
+    });
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          containerColor = Colors.black;
+        });
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -137,22 +166,22 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
     
     // Set Current Activity to appropriate activity
     if (totalSteps % 3 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, letterLink: "Lowercase_${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase(),);
+      currentActivity = TapComponent(onCompleted: nextStep, letterLink: "Lowercase_${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
     } 
     else if (totalSteps % 3 == 2 && totalSteps < 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "Lowercase_${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase(),);
+      currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "Lowercase_${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
     } 
     else if(totalSteps % 3 == 0 && totalSteps < 10){
-      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber].toLowerCase(),);
+      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash,);
     } 
     else if(totalSteps % 3 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Lowercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber].toLowerCase(),);
+      currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Lowercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
     }
     else if(totalSteps % 3 == 2 && totalSteps >= 10){
-      currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Lowercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber].toLowerCase(),);
+      currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Lowercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
     } 
     else {
-      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber].toLowerCase());
+      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash,);
     }
 
     // Scaffold
@@ -180,7 +209,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
         child: Center(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.black, // White background with opacity for readability
+              color: containerColor, // Dynamic flash
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(

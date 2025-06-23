@@ -10,8 +10,10 @@ class DragDropComponent extends StatefulWidget {
   final VoidCallback onCompleted;
   final String letterLink;
   final String letter;
+  final VoidCallback onCorrectAction;
+  final int totalSteps;
   
-  const DragDropComponent({super.key, required this.onCompleted, required this.letterLink, required this.letter});
+  const DragDropComponent({super.key, required this.onCompleted, required this.letterLink, required this.letter, required this.onCorrectAction, required this.totalSteps});
 
   @override
   State<DragDropComponent> createState() => _DragDropComponentState();
@@ -40,6 +42,10 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
   }
   
   void _showCorrectAnimation(){
+    
+    // Flash Green
+    widget.onCorrectAction();
+
     showDialog(
       barrierColor: Colors.transparent,
       context: context,
@@ -58,6 +64,8 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
         widget.onCompleted();
       }
     });
+
+    
   }
 
   @override
@@ -85,11 +93,14 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                   opacity: 1,
                   child: Stack(
                     children: [
-                      SvgPicture.asset(
-                        'assets/abc_images/${widget.letterLink}.svg',
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        height: MediaQuery.of(context).size.height * 0.4,
-                        fit: BoxFit.contain,
+                      Transform.scale(
+                        scale: 1.5,
+                        child: SvgPicture.asset(
+                          'assets/abc_images/${widget.letterLink}.svg',
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ],
                   ),
@@ -118,7 +129,7 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                           return Transform.translate(
                             offset: Offset(0, -_animation.value),
                             child: Transform.scale(
-                              scale: 1.5,
+                              scale: 1,
                               child: child
                             ),
                           );
@@ -131,10 +142,11 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                           height: MediaQuery.of(context).size.height * 0.4,
                           fit: BoxFit.contain,
                         )
-                      )
+                      ),
                       
-                      // Drag Animation (centered by Stack's alignment)
-                      // const DragAnimation(),
+                      // Drag Animation (centered by Stack's alignment) if first one
+                      if(widget.totalSteps == 2)
+                        const DragAnimation(),
                     ],
                   )
                   : const SizedBox.shrink(),
@@ -143,34 +155,62 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
               const SizedBox(width: 50),
           
               // Drag Target
-              DragTarget<String> (
-                onAcceptWithDetails: (data) {
-                  setState(() {
-                    // Update dropped status if data is dropped in
-                    imageDropped = true;
-                    _showCorrectAnimation();
-                  });
-                },
-          
-                builder: (context, candidateData, rejectedData) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    decoration: BoxDecoration(
-                      color: Colors.yellow,
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: imageDropped 
-                      ? SvgPicture.asset(
-                        'assets/abc_images/${widget.letterLink}.svg',
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        height: MediaQuery.of(context).size.height * 0.4,
-                        fit: BoxFit.contain,
-                      )
-                      : Center(child: Text("Drop Here", style: GoogleFonts.ubuntu(fontSize: 30),))
-                  );
-                }
-              ),
+              AnimatedAlign(
+                alignment: imageDropped ? Alignment.center : Alignment.centerRight,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                child: DragTarget<String>(
+                  onAcceptWithDetails: (data) {
+                    setState(() {
+                      imageDropped = true;
+                    });
+
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      _showCorrectAnimation();
+                    });
+                  },
+                  builder: (context, candidateData, rejectedData) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      decoration: BoxDecoration(
+                        color: Colors.yellow,
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 500),
+                        transitionBuilder: (child, animation) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(0.0, -1.0),
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            ),
+                          );
+                        },
+                        child: imageDropped
+                            ? SvgPicture.asset(
+                                'assets/abc_images/${widget.letterLink}.svg',
+                                key: const ValueKey('droppedImage'),
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                height: MediaQuery.of(context).size.height * 0.4,
+                                fit: BoxFit.contain,
+                              )
+                            : Center(
+                                key: const ValueKey('dropText'),
+                                child: Text(
+                                  "Drop Here",
+                                  style: GoogleFonts.ubuntu(fontSize: 30),
+                                ),
+                              ),
+                      ),
+                    );
+                  },
+                ),
+              )
             ],
           ),
         ],

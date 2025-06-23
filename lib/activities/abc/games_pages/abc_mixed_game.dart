@@ -166,61 +166,95 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
     });
   }
 
+  Color containerColor = Colors.black;
+
+  void triggerCorrectFlash() {
+    setState(() {
+      containerColor = Colors.lightGreen;
+    });
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          containerColor = Colors.black;
+        });
+      }
+    });
+  }
+
+  void triggerIncorrectFlash() {
+    setState(() {
+      containerColor = Colors.red;
+    });
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          containerColor = Colors.black;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget currentActivity;
 
     if (totalSteps % 3 == 1 && totalSteps < 10) {
       if(namingLetter == "Uppercase_"){
-        currentActivity = TapComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber],);
+        currentActivity = TapComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
       } else {
-        currentActivity = TapComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase(),);
+        currentActivity = TapComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
       }
     } 
     else if (totalSteps % 3 == 2 && totalSteps < 10) {
       if(namingLetter == "Uppercase_"){
-        currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber]);
+        currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
       } else {
-        currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase());
+        currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
       }
     } 
     else if(totalSteps % 3 == 0 && totalSteps < 10){
       if(namingLetter == "Uppercase_"){
         currentActivity = TraceComponent(
           onCompleted: nextStep, 
-          letter: letters[randomNumber]
+          letter: letters[randomNumber],
+          onCorrectAction: triggerCorrectFlash,
         );
       } else {
         currentActivity = TraceComponent(
           onCompleted: nextStep, 
           letter: letters[randomNumber].toLowerCase(),
+          onCorrectAction: triggerCorrectFlash,
         );
       }   
     } 
     else if(totalSteps % 3 == 1 && totalSteps >= 10){
       if(namingLetter == "Uppercase_"){
-        currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber],);
+        currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
       } else {
-        currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber].toLowerCase(),);
+        currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
       }
     } 
     else if(totalSteps % 3 == 2 && totalSteps >= 10){
       if(namingLetter == "Uppercase_"){
-        currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber],);
+        currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
       } else {
-        currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber].toLowerCase(),);
+        currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
       }
     } 
     else {
       if(namingLetter == "Uppercase_"){
         currentActivity = TraceComponent(
           onCompleted: nextStep, 
-          letter: letters[randomNumber]
+          letter: letters[randomNumber],
+          onCorrectAction: triggerCorrectFlash,
         );
       } else {
         currentActivity = TraceComponent(
           onCompleted: nextStep, 
           letter: letters[randomNumber].toLowerCase(),
+          onCorrectAction: triggerCorrectFlash,
         );
       }    
     }
@@ -241,7 +275,7 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
         child: Center(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.black, // White background with opacity for readability
+              color: containerColor, // Dynamic flash
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(

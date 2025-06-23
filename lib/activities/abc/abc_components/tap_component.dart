@@ -9,7 +9,10 @@ class TapComponent extends StatefulWidget {
   final VoidCallback onCompleted;
   final String letterLink;
   final String letter;
-  const TapComponent({super.key, required this.onCompleted, required this.letterLink, required this.letter});
+  final VoidCallback onCorrectAction;
+  final int totalSteps;
+
+  const TapComponent({super.key, required this.onCompleted, required this.letterLink, required this.letter, required this.onCorrectAction, required this.totalSteps});
 
   @override
   State<TapComponent> createState() => _TapComponentState();
@@ -56,6 +59,8 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
     });
 
     _controller.stop();  // stop floating
+
+    widget.onCorrectAction();  // <-- trigger the flash!
 
     showDialog(
       barrierColor: Colors.transparent,
@@ -118,7 +123,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
                     ),
 
                     // Optionally show tap animation
-                    if (showTapAnimation && !tapClicked)
+                    if (showTapAnimation && !tapClicked && widget.totalSteps == 1)
                       const TapAnimation(),
                   ],
                 ),

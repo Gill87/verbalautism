@@ -128,27 +128,57 @@ void setOneWrongNumber(){
     });
   }
 
+  Color containerColor = Colors.black;
+
+  void triggerCorrectFlash() {
+    setState(() {
+      containerColor = Colors.lightGreen;
+    });
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          containerColor = Colors.black;
+        });
+      }
+    });
+  }
+
+  void triggerIncorrectFlash() {
+    setState(() {
+      containerColor = Colors.red;
+    });
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          containerColor = Colors.black;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget currentActivity;
     
     if (totalSteps % 3 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, letterLink: "Uppercase_${letters[randomNumber]}", letter: letters[randomNumber],);
+      currentActivity = TapComponent(onCompleted: nextStep, letterLink: "Uppercase_${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
     } 
     else if (totalSteps % 3 == 2 && totalSteps < 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "Uppercase_${letters[randomNumber]}", letter: letters[randomNumber],);
+      currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "Uppercase_${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
     } 
     else if(totalSteps % 3 == 0 && totalSteps < 10){
-      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber]);
+      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash,);
     } 
     else if(totalSteps % 3 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Uppercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber]);
+      currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Uppercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
     }
     else if(totalSteps % 3 == 2 && totalSteps >= 10){
-      currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Uppercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber]);
+      currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Uppercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
     } 
     else {
-      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber]);
+      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash,);
     }
 
     return Scaffold(
@@ -167,7 +197,7 @@ void setOneWrongNumber(){
         child: Center(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.black, // White background with opacity for readability
+              color: containerColor, // Black except for flash
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
