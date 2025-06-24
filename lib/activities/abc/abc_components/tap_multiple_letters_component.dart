@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/correct_animation.dart';
 import 'package:verbalautism/components/incorrect_animation.dart';
+import 'package:verbalautism/components/tts_service.dart';
 
 class TapMultipleLettersComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -31,9 +32,14 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
   late AnimationController _controller;
   late Animation<double> _animation;
 
+  final TtsService _ttsService = TtsService();
+
   @override
   void initState() {
     super.initState();
+    
+    _ttsService.speak("Tap the Letter ${widget.letter}");
+
     allLetterLinks = [widget.correctLetterLink, ...widget.wrongLetterLinks];
     allLetterLinks.shuffle(); // Randomize their order
 
@@ -97,6 +103,12 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
         widget.onCompleted();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _ttsService.stop();
+    super.dispose();
   }
 
   @override

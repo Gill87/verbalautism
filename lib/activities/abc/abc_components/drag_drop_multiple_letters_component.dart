@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/correct_animation.dart';
 import 'package:verbalautism/components/incorrect_animation.dart';
+import 'package:verbalautism/components/tts_service.dart';
 
 class DragDropMultipleLettersComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -34,9 +35,14 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
   late AnimationController _controller;
   late Animation<double> _animation;
 
+  final TtsService _ttsService = TtsService();
+
   @override
   void initState() {
     super.initState();
+
+    _ttsService.speak("Drag and Drop the Letter ${widget.letter}");
+    
     allLetterLinks = [widget.correctLetterLink, ...widget.wrongLetterLinks];
     allLetterLinks.shuffle(); // Randomize order
     
@@ -102,6 +108,12 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
     } else {
       _showIncorrectAnimation();
     }
+  }
+
+  @override
+  void dispose() {
+    _ttsService.stop();
+    super.dispose();
   }
 
   @override

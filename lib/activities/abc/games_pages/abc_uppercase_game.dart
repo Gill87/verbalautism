@@ -62,14 +62,63 @@ void setOneWrongNumber(){
     wrongLetters = ["Uppercase_${letters[randomNumber2]}", "Uppercase_${letters[randomNumber3]}"];
   }
 
- void round2(){
+  void nextRoundDialog(int roundNumber){
+    // Dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 33, 150, 243), // Blue background
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // Soft edges
+        ),
+        title: Center(
+          child: Text(
+            "Moving to Next Round",
+            style: GoogleFonts.ubuntu(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        content: Center(
+          heightFactor: 1, // Keeps content vertically centered
+          child: Text(
+            "Round ${roundNumber - 1} Complete! Moving to Round $roundNumber...",
+            style: GoogleFonts.ubuntu(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+
+    // Automatically close the dialog after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    });
+  }
+
+  void round2(){
     setOneWrongNumber();
     round = 2;
+    if(totalSteps == 10){
+      nextRoundDialog(2);
+    }
   }
 
   void round3(){
     setTwoWrongNumbers();
     round = 3;
+    if(totalSteps == 20){
+      nextRoundDialog(3);
+    }
   }
 
   void nextStep() {

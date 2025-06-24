@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tracing_game/tracing_game.dart';
 import 'package:verbalautism/components/correct_animation.dart';
+import 'package:verbalautism/components/tts_service.dart';
 
 class TraceComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -16,6 +17,14 @@ class TraceComponent extends StatefulWidget {
 }
 
 class _TraceComponentState extends State<TraceComponent> {
+
+  final TtsService _ttsService = TtsService();
+
+  @override
+  void initState() {
+    _ttsService.speak("Trace the Letter ${widget.letter}");
+    super.initState();
+  }
   
   void _showCorrectAnimation(){
 
@@ -39,6 +48,12 @@ class _TraceComponentState extends State<TraceComponent> {
         widget.onCompleted();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _ttsService.stop();
+    super.dispose();
   }
 
   @override

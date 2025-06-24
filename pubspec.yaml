@@ -47,6 +47,7 @@ dependencies:
   one_clock: ^2.0.1
   flutter_svg: ^2.1.0
   audioplayers: ^6.4.0
+  flutter_tts: ^4.2.3
 
 
 dev_dependencies:

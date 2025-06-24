@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/correct_animation.dart';
 import 'package:verbalautism/components/tap_animation.dart';
+import 'package:verbalautism/components/tts_service.dart';
 
 class TapComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -25,10 +26,16 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
   late AnimationController _controller;
   late Animation<double> _animation;
 
+  final TtsService _ttsService = TtsService();
+
   @override
   void initState() {
     super.initState();
+    
+    // Text to speech
+    _ttsService.speak("Tap the letter ${widget.letter}");
 
+    // Floating Animation
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -45,9 +52,11 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
     }
   }
 
+
   @override
   void dispose() {
     _controller.dispose();
+    _ttsService.stop();
     super.dispose();
   }
 
