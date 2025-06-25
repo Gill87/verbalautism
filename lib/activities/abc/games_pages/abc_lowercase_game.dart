@@ -7,6 +7,7 @@ import 'package:verbalautism/activities/abc/abc_components/drag_drop_multiple_le
 import 'package:verbalautism/activities/abc/abc_components/tap_component.dart';
 import 'package:verbalautism/activities/abc/abc_components/tap_multiple_letters_component.dart';
 import 'package:verbalautism/activities/abc/abc_components/trace_component.dart';
+import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class AbcLowercaseGame extends StatefulWidget {
   const AbcLowercaseGame({super.key});
@@ -23,6 +24,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   int totalSteps = 1;
   int round = 1;
   final int maxSteps = 30;
+  bool isPaused = false;
 
   // Random Object
   Random random = Random();
@@ -63,12 +65,70 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
 
   }
 
+  void nextRoundDialog(int roundNumber){
+
+    // Pause
+    setState(() {
+      isPaused = true;
+    });
+
+    // Dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 33, 150, 243), // Blue background
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // Soft edges
+        ),
+        title: Center(
+          child: Text(
+            "Moving to Next Round",
+            style: GoogleFonts.ubuntu(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        content: Center(
+          heightFactor: 1, // Keeps content vertically centered
+          child: Text(
+            "Round ${roundNumber - 1} Complete! Moving to Round $roundNumber...",
+            style: GoogleFonts.ubuntu(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+
+    // Automatically close the dialog after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pop();
+        setState(() {
+          isPaused = false;
+        });
+      }
+    });
+  }
+
   void round2(){
+    if(totalSteps == 10){
+      nextRoundDialog(2);
+    }
     setOneWrongNumber();
     round = 2;
   }
 
   void round3(){
+    if(totalSteps == 20){
+      nextRoundDialog(3);
+    }
     setTwoWrongNumbers();
     round = 3;
   }
@@ -104,11 +164,21 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text("Exercise Complete!"),
+            backgroundColor: const Color.fromARGB(255, 33, 150, 243), // Blue background
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20), // Soft edges
+            ),
+            title: Text("Exercise Complete!", style: GoogleFonts.ubuntu(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
             actions: [
-              TextButton(
-                
-                // Restart Game
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white, // Button color
+                  foregroundColor: const Color.fromARGB(255, 33, 150, 243), // Text color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                   setState(() {
@@ -118,9 +188,39 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                   });
                   randomNumber = random.nextInt(26);
                 },
-                
-                child: const Text("Restart"),
+                child: Text(
+                  "Restart",
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
+              
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white, // Button color
+                  foregroundColor: const Color.fromARGB(255, 33, 150, 243), // Text color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                  );                
+                },
+                child: Text(
+                  "Home",
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
             ],
           ),
         );    
@@ -221,7 +321,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
             ),
 
             // Display Activity
-            child: Column(
+            child: !isPaused ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Round: $round", style: GoogleFonts.ubuntu(fontSize: 24, color: Colors.white),),
@@ -230,7 +330,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                 const SizedBox(height: 20),
                 currentActivity,
               ],
-            ),
+            ) : const SizedBox(),
           ),
         ),
       ),

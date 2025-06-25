@@ -213,7 +213,7 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
         onAcceptWithDetails: _handleDrop,
         builder: (context, candidateData, rejectedData) {
           return Container(
-            width: MediaQuery.of(context).size.width * 0.4,
+            width: MediaQuery.of(context).size.width * 0.35,
             height: MediaQuery.of(context).size.height * 0.4,
             decoration: BoxDecoration(
               color: Colors.yellow,

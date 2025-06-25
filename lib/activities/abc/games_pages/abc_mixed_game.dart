@@ -7,6 +7,7 @@ import 'package:verbalautism/activities/abc/abc_components/tap_component.dart';
 import 'package:verbalautism/activities/abc/abc_components/drag_drop_component.dart';
 import 'package:verbalautism/activities/abc/abc_components/tap_multiple_letters_component.dart';
 import 'package:verbalautism/activities/abc/abc_components/trace_component.dart';
+import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class AbcMixedGame extends StatefulWidget {
   const AbcMixedGame({super.key});
@@ -24,6 +25,7 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   int totalSteps = 1;
   int round = 1;
   final int maxSteps = 30;
+  bool isPaused = false;
 
   // Random Object
   Random random = Random();
@@ -100,12 +102,70 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
     
   }
 
+  void nextRoundDialog(int roundNumber){
+
+    // Pause
+    setState(() {
+      isPaused = true;
+    });
+
+    // Dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 33, 150, 243), // Blue background
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // Soft edges
+        ),
+        title: Center(
+          child: Text(
+            "Moving to Next Round",
+            style: GoogleFonts.ubuntu(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        content: Center(
+          heightFactor: 1, // Keeps content vertically centered
+          child: Text(
+            "Round ${roundNumber - 1} Complete! Moving to Round $roundNumber...",
+            style: GoogleFonts.ubuntu(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+
+    // Automatically close the dialog after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pop();
+        setState(() {
+          isPaused = false;
+        });
+      }
+    });
+  }
+
  void round2(){
+    if(totalSteps == 10){
+      nextRoundDialog(2);
+    }
     setOneWrongNumber();
     round = 2;
   }
 
   void round3(){
+    if(totalSteps == 20){
+      nextRoundDialog(3);
+    }
     setTwoWrongNumbers();
     round = 3;
   }
@@ -141,11 +201,21 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text("Exercise Complete!"),
+            backgroundColor: const Color.fromARGB(255, 33, 150, 243), // Blue background
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20), // Soft edges
+            ),
+            title: Text("Exercise Complete!", style: GoogleFonts.ubuntu(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
             actions: [
-              TextButton(
-                
-                // Restart Game
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white, // Button color
+                  foregroundColor: const Color.fromARGB(255, 33, 150, 243), // Text color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                   setState(() {
@@ -155,9 +225,39 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
                   });
                   randomNumber = random.nextInt(26);
                 },
-                
-                child: const Text("Restart"),
+                child: Text(
+                  "Restart",
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
+              
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white, // Button color
+                  foregroundColor: const Color.fromARGB(255, 33, 150, 243), // Text color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                  );                
+                },
+                child: Text(
+                  "Home",
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
             ],
           ),
         );    
@@ -200,21 +300,21 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   Widget build(BuildContext context) {
     Widget currentActivity;
 
-    if (totalSteps % 3 == 1 && totalSteps < 10) {
+    if (totalSteps % 3 == 1 && totalSteps <= 10) {
       if(namingLetter == "Uppercase_"){
         currentActivity = TapComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
       } else {
         currentActivity = TapComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
       }
     } 
-    else if (totalSteps % 3 == 2 && totalSteps < 10) {
+    else if (totalSteps % 3 == 2 && totalSteps <= 10) {
       if(namingLetter == "Uppercase_"){
         currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
       } else {
         currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "$namingLetter${letters[randomNumber]}", letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
       }
     } 
-    else if(totalSteps % 3 == 0 && totalSteps < 10){
+    else if(totalSteps % 3 == 0 && totalSteps <= 10){
       if(namingLetter == "Uppercase_"){
         currentActivity = TraceComponent(
           onCompleted: nextStep, 
@@ -229,14 +329,14 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
         );
       }   
     } 
-    else if(totalSteps % 3 == 1 && totalSteps >= 10){
+    else if(totalSteps % 3 == 1 && totalSteps > 10){
       if(namingLetter == "Uppercase_"){
         currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
       } else {
         currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
       }
     } 
-    else if(totalSteps % 3 == 2 && totalSteps >= 10){
+    else if(totalSteps % 3 == 2 && totalSteps > 10){
       if(namingLetter == "Uppercase_"){
         currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "$namingLetter${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
       } else {
@@ -285,7 +385,7 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
                 ),
               ],
             ),           
-            child: Column(
+            child: !isPaused ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Round: $round", style: GoogleFonts.ubuntu(fontSize: 24, color: Colors.white),),
@@ -294,7 +394,7 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
                 const SizedBox(height: 20),
                 currentActivity,
               ],
-            ),
+            ) : const SizedBox(),
           ),
         ),
       ),

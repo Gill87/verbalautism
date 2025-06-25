@@ -7,6 +7,7 @@ import 'package:verbalautism/activities/abc/abc_components/tap_component.dart';
 import 'package:verbalautism/activities/abc/abc_components/drag_drop_component.dart';
 import 'package:verbalautism/activities/abc/abc_components/tap_multiple_letters_component.dart';
 import 'package:verbalautism/activities/abc/abc_components/trace_component.dart';
+import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class AbcUppercaseGame extends StatefulWidget {
   const AbcUppercaseGame({super.key});
@@ -24,6 +25,7 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
   int totalSteps = 1;
   int round = 1;
   final int maxSteps = 30;
+  bool isPaused = false;
 
   // Random Object
   Random random = Random();
@@ -63,6 +65,12 @@ void setOneWrongNumber(){
   }
 
   void nextRoundDialog(int roundNumber){
+
+    // Pause
+    setState(() {
+      isPaused = true;
+    });
+
     // Dialog
     showDialog(
       context: context,
@@ -101,24 +109,27 @@ void setOneWrongNumber(){
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.of(context).pop();
+        setState(() {
+          isPaused = false;
+        });
       }
     });
   }
 
   void round2(){
-    setOneWrongNumber();
-    round = 2;
     if(totalSteps == 10){
       nextRoundDialog(2);
     }
+    setOneWrongNumber();
+    round = 2;
   }
 
   void round3(){
-    setTwoWrongNumbers();
-    round = 3;
     if(totalSteps == 20){
       nextRoundDialog(3);
     }
+    setTwoWrongNumbers();
+    round = 3;
   }
 
   void nextStep() {
@@ -152,11 +163,21 @@ void setOneWrongNumber(){
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text("Exercise Complete!"),
+            backgroundColor: const Color.fromARGB(255, 33, 150, 243), // Blue background
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20), // Soft edges
+            ),
+            title: Text("Exercise Complete!", style: GoogleFonts.ubuntu(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
             actions: [
-              TextButton(
-                
-                // Restart Game
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white, // Button color
+                  foregroundColor: const Color.fromARGB(255, 33, 150, 243), // Text color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                   setState(() {
@@ -166,9 +187,39 @@ void setOneWrongNumber(){
                   });
                   randomNumber = random.nextInt(26);
                 },
-                
-                child: const Text("Restart"),
+                child: Text(
+                  "Restart",
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
+              
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white, // Button color
+                  foregroundColor: const Color.fromARGB(255, 33, 150, 243), // Text color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                  );                
+                },
+                child: Text(
+                  "Home",
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
             ],
           ),
         );    
@@ -256,7 +307,7 @@ void setOneWrongNumber(){
                 ),
               ],
             ),           
-            child: Column(
+            child: !isPaused ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Round: $round", style: GoogleFonts.ubuntu(fontSize: 24, color: Colors.white),),
@@ -265,7 +316,7 @@ void setOneWrongNumber(){
                 const SizedBox(height: 20),
                 currentActivity,
               ],
-            ),
+            ) : const SizedBox(),
           ),
         ),
       ),
