@@ -5,6 +5,7 @@ import 'package:verbalautism/components/my_button.dart';
 import 'package:verbalautism/components/text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:verbalautism/features/auth/presentation/pages/forgot_password_page.dart';
 
 class LoginPage extends StatefulWidget {
   
@@ -55,7 +56,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
+    
+    // Screen check
     bool smallHeight(BuildContext context) =>
       MediaQuery.of(context).size.height >= 600;
 
@@ -66,17 +68,17 @@ class _LoginPageState extends State<LoginPage> {
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height:25),
+                const SizedBox(height: 20,),
 
                 // logo
                 Image.asset(
-                  'assets/loginpage_images/logo4.png',
-                  height: smallHeight(context) ? 250 : 125,
-                  width: 250,
+                  'assets/loginpage_images/logo.png',
+                  height: 200,
+                  // width: 300,
                 ),
-          
-                const SizedBox(height:20),
-          
+
+                const SizedBox(height: 10,),
+
                 Text(
                   'Welcome Back',
                   style: GoogleFonts.ubuntu(
@@ -101,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                 
                 // password textfield 
                 SizedBox(
-                    width: 400,
+                  width: 400,
                   child: MyTextField(
                     controller: passwordController,
                     textBoxDetails: 'Password',
@@ -114,9 +116,17 @@ class _LoginPageState extends State<LoginPage> {
                 // forget password
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
-                  child: Text(
-                    'Forgot Password?',
-                    style: GoogleFonts.ubuntu(color:Colors.white, fontSize: 18, decoration: TextDecoration.underline, decorationColor: Colors.white),
+                  child: GestureDetector(
+                    onTap: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ForgotPasswordPage())
+                      )
+                    },
+                    child: Text(
+                      'Forgot Password?',
+                      style: GoogleFonts.ubuntu(color:Colors.white, fontSize: 18, decoration: TextDecoration.underline, decorationColor: Colors.white),
+                    ),
                   ),
                 ),
           
@@ -169,17 +179,20 @@ class _LoginPageState extends State<LoginPage> {
                   onTap: () => googleSignIn,
                   child: Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        border:Border.all(color:Colors.grey),
-                        borderRadius: BorderRadius.circular(16),
-                        color:Colors.white,
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          border:Border.all(color:Colors.grey),
+                          borderRadius: BorderRadius.circular(16),
+                          color:Colors.white,
+                        ),
+                        child: Image.asset(
+                          'assets/loginpage_images/google.png',
+                          height:50,
+                        )
                       ),
-                      child: Image.asset(
-                        'assets/loginpage_images/google.png',
-                        height:50,
-                      )
                     ),
                   ),
                 ),

@@ -128,9 +128,12 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
             style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
           ),
           const SizedBox(height: 50),
+          
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: imageDropped ? [
+              _buildDragTarget(),
+            ] : [
               ...allLetterLinks.map((letter) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: _buildDraggable(letter),
@@ -189,7 +192,7 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
       },
 
       // If correct image dropped in
-      child: imageDropped && letterLink == widget.correctLetterLink
+      child: imageDropped
           ? const SizedBox.shrink()
           : animatedSvg,
 

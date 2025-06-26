@@ -69,22 +69,21 @@ class _RegisterPageState extends State<RegisterPage> {
       MediaQuery.of(context).size.height >= 600;
       
     return Scaffold(
-      backgroundColor:  const Color.fromARGB(255, 33, 150, 243),
+      backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height:5),
+                const SizedBox(height:20),
           
                 // logo
                 Image.asset(
-                  'assets/loginpage_images/logo4.png',
-                  height: smallHeight(context) ? 250 : 125,
-                  width: 250,
+                  'assets/loginpage_images/logo.png',
+                  height: 200,
                 ),
 
-                const SizedBox(height:15),
+                const SizedBox(height:10),
           
                 // Create an Account
                 Text(
@@ -190,17 +189,20 @@ class _RegisterPageState extends State<RegisterPage> {
                   onTap: () => googleSignIn,
                   child: Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        border:Border.all(color:Colors.grey),
-                        borderRadius: BorderRadius.circular(16),
-                        color:Colors.white,
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          border:Border.all(color:Colors.grey),
+                          borderRadius: BorderRadius.circular(16),
+                          color:Colors.white,
+                        ),
+                        child: Image.asset(
+                          'assets/loginpage_images/google.png',
+                          height:50,
+                        )
                       ),
-                      child: Image.asset(
-                        'assets/loginpage_images/google.png',
-                        height:50,
-                      )
                     ),
                   ),
                 ),

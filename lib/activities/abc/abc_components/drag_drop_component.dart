@@ -33,6 +33,7 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
   void initState() {
     super.initState();
     _ttsService.speak("Drag and Drop the Letter ${widget.letter}");
+    
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -157,7 +158,8 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                         const DragAnimation(),
                     ],
                   )
-                  : const SizedBox.shrink(),
+                  : const SizedBox.shrink()
+
               ),
           
               const SizedBox(width: 50),

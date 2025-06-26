@@ -102,6 +102,8 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
             style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
           ),
 
+          // AnimatedText(text: "Tap the Letter ${widget.letter}"),
+
           const SizedBox(height: 50),
 
           Center(
