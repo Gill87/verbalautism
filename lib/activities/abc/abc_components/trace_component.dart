@@ -58,19 +58,26 @@ class _TraceComponentState extends State<TraceComponent> {
 
   @override
   Widget build(BuildContext context) {
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
         Text(
           "Trace the Letter ${widget.letter}", 
-          style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white)
-        ),        
+          style: GoogleFonts.ubuntu(
+            fontSize: screenWidth <= 660 ? 32 : 40, 
+            color: Colors.white
+          ),
+        ),
         
         const SizedBox(height: 50),
 
         Container(
           color: Colors.transparent,
-          width: MediaQuery.of(context).size.width * 0.4,
-          height: MediaQuery.of(context).size.height * 0.4,
+          width: screenWidth * 0.5,
+          height: screenHeight * 0.4,
           child: TracingCharsGame(
             traceShapeModel: [
               TraceCharsModel(

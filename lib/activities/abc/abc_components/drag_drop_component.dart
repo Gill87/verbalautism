@@ -82,7 +82,7 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
 
     return Container(
       color: Colors.transparent,
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: MediaQuery.of(context).size.width * 0.9,
       child: Column(
         children: [
           Text(
@@ -93,7 +93,7 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
           const SizedBox(height: 50),
       
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: !imageDropped ? MainAxisAlignment.spaceAround : MainAxisAlignment.center,
             children: [
               // Draggable Image
               Draggable<String> (
@@ -162,7 +162,7 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
 
               ),
           
-              const SizedBox(width: 50),
+              // const SizedBox(width: 50),
           
               // Drag Target
               AnimatedAlign(

@@ -31,7 +31,6 @@ class DragDropMultipleLettersComponent extends StatefulWidget {
 class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLettersComponent> with SingleTickerProviderStateMixin{
   bool imageDropped = false;
   late List<String> allLetterLinks;
-
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -55,6 +54,7 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
   }
+
 
   void _showCorrectAnimation() {
     widget.onCorrectAction();
@@ -110,6 +110,55 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
     }
   }
 
+  double horizontalPadding(){
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    if(allLetterLinks.length == 3 && screenWidth <= 1050){
+      return 1;
+    } else if(allLetterLinks.length == 2 && screenWidth <= 800){
+      return 1;
+    } else {
+      return screenWidth * 0.01;
+    }
+  }
+
+  double widthSize(){
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    if(screenWidth <= 680 && allLetterLinks.length == 3){
+      return screenWidth * 0.005;
+    } else if(screenWidth <= 700 && allLetterLinks.length == 2){
+      return screenWidth * 0.02;
+    } else {
+      return screenWidth * 0.04;
+    }
+  }
+
+  double imageWidth(){
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    if(screenWidth <= 1000 && allLetterLinks.length == 3){
+      return screenWidth * 0.1;
+    } else if(screenWidth <= 700 && allLetterLinks.length == 2){
+      return screenWidth * 0.15;
+    } else {
+      return screenWidth * 0.2;
+    }
+  }
+
+  double imageHeight(){
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    if(screenWidth <= 1000 && allLetterLinks.length == 3){
+      return screenHeight * 0.2;
+    } else if(screenWidth <= 700 && allLetterLinks.length == 2){
+      return screenHeight * 0.25;
+    } else {
+      return screenHeight * 0.3;
+    }
+  }
+
   @override
   void dispose() {
     _ttsService.stop();
@@ -118,6 +167,7 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       color: Colors.transparent,
       width: MediaQuery.of(context).size.width * 0.97,
@@ -127,6 +177,7 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
             "Drag and Drop the Letter ${widget.letter}",
             style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
           ),
+
           const SizedBox(height: 50),
           
           Row(
@@ -135,10 +186,12 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
               _buildDragTarget(),
             ] : [
               ...allLetterLinks.map((letter) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: horizontalPadding(),
+                    ),
                     child: _buildDraggable(letter),
                   )),
-              const SizedBox(width: 50),
+              SizedBox(width: widthSize(),),
               _buildDragTarget(),
             ],
           ),
@@ -152,8 +205,8 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
     // Define letter image
     final svg = SvgPicture.asset(
       'assets/abc_images/$letterLink.svg',
-      width: MediaQuery.of(context).size.width * 0.2,
-      height: MediaQuery.of(context).size.height * 0.3,
+      width: imageWidth(),
+      height: imageHeight(),
       fit: BoxFit.contain,
     );
 

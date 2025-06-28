@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
     
     // Screen check
     bool smallHeight(BuildContext context) =>
-      MediaQuery.of(context).size.height >= 600;
+      MediaQuery.of(context).size.height <= 600;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 33, 150, 243),
@@ -71,11 +71,11 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 20,),
 
                 // logo
-                Image.asset(
-                  'assets/loginpage_images/logo.png',
-                  height: 200,
-                  // width: 300,
-                ),
+                  Image.asset(
+                    'assets/loginpage_images/logo.png',
+                    height: smallHeight(context) ? 125 : 150,
+                    // width: 300,
+                  ),
 
                 const SizedBox(height: 10,),
 
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   'Welcome Back',
                   style: GoogleFonts.ubuntu(
                     color: Colors.white,
-                    fontSize: 35,
+                    fontSize: 30,
                   ),
                 ),
           
@@ -114,20 +114,38 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height:15),
 
                 // forget password
-                MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ForgotPasswordPage())
-                      )
-                    },
-                    child: Text(
-                      'Forgot Password?',
-                      style: GoogleFonts.ubuntu(color:Colors.white, fontSize: 18, decoration: TextDecoration.underline, decorationColor: Colors.white),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ForgotPasswordPage())
+                          )
+                        },
+                        child: Text(
+                          'Forgot Password?',
+                          style: GoogleFonts.ubuntu(color:Colors.white, fontSize: 18, decoration: TextDecoration.underline, decorationColor: Colors.white),
+                        ),
+                      ),
                     ),
-                  ),
+
+                    const SizedBox(width: 80,),
+
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text(
+                          'Create Account',
+                           style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 18, decoration: TextDecoration.underline, decorationColor: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
           
                 const SizedBox(height: 20),
@@ -144,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
           
-                const SizedBox(height:40),
+                const SizedBox(height:20),
           
                 // or continue with
                 Padding(
@@ -178,11 +196,11 @@ class _LoginPageState extends State<LoginPage> {
                 GestureDetector(
                   onTap: () => googleSignIn,
                   child: Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(10),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Container(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           border:Border.all(color:Colors.grey),
                           borderRadius: BorderRadius.circular(16),
@@ -196,34 +214,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-          
-                // not a member? register now
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Not a member?',
-                      style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 14),
-
-                    ),
-
-                    const SizedBox(width:4),
-
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: widget.onTap,
-                        child: Text(
-                          'Register Now',
-                           style: GoogleFonts.ubuntu(color: Colors.black, fontSize: 14, decoration: TextDecoration.underline, decorationColor: Colors.black),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 20,),
-
               ]
             ),
           ),

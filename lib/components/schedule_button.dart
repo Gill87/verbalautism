@@ -14,9 +14,9 @@ class ScheduleButton extends StatelessWidget {
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Container(
-          width: 150,
+          width: 100,
           height: 50,
-          // padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.yellow[800],
             borderRadius: BorderRadius.circular(15),

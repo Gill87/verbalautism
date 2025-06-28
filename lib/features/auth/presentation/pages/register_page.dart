@@ -66,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
 
     bool smallHeight(BuildContext context) =>
-      MediaQuery.of(context).size.height >= 600;
+      MediaQuery.of(context).size.height <= 650;
       
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 33, 150, 243),
@@ -75,23 +75,21 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height:20),
+                const SizedBox(height:10),
           
                 // logo
                 Image.asset(
                   'assets/loginpage_images/logo.png',
-                  height: 200,
+                  height: smallHeight(context) ? 115 : 150,
                 ),
-
-                const SizedBox(height:10),
           
                 // Create an Account
                 Text(
                   'Create Account',
-                  style:GoogleFonts.ubuntu(color: Colors.white, fontSize: 40),
+                  style:GoogleFonts.ubuntu(color: Colors.white, fontSize: 30),
                 ),
           
-                const SizedBox(height:25),
+                const SizedBox(height:15),
                 
                 // name textfield
                 SizedBox(
@@ -140,7 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                         
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
           
                 // sign up button
                 SizedBox(
@@ -154,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
           
-                const SizedBox(height:40),
+                const SizedBox(height:10),
           
                 // or continue with
                 Padding(
@@ -188,11 +186,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 GestureDetector(
                   onTap: () => googleSignIn,
                   child: Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(10),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Container(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           border:Border.all(color:Colors.grey),
                           borderRadius: BorderRadius.circular(16),
@@ -232,7 +230,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ],
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
               ]
             ),
           ),

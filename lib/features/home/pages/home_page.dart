@@ -20,8 +20,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
 
-  final String menuUser = '';
-
   // Sign out method
   void signUserOut(){
     final authCubit = context.read<AuthCubit>();
@@ -32,9 +30,34 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
-    // Is Desktop
-    bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 1000;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    bool isSmallWidth(BuildContext context) =>
+      screenWidth <= 920;
+
+    double rightSideLength(){
+      if(screenWidth <= 730){
+        return screenWidth * 0.005;
+      } else if(screenWidth <= 800){
+        return screenWidth * 0.02;
+      }
+      else if(screenWidth <= 920){
+        return screenWidth * 0.025;
+      } else {
+        return screenWidth * 0.05;
+      }
+    }
+
+    double smallFont() {
+      if(screenWidth <= 920 && screenWidth > 720){
+        return 1;
+      } else if(screenWidth <= 720){
+        return 0.9;
+      } else {
+        return 1.25;
+      }
+    }
 
     void onToActivity(){
       Navigator.push(
@@ -49,92 +72,84 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
 
         appBar: AppBar(
-          
-          // Logo
-          title: const Image(image: AssetImage('assets/homepage_images/appbarlogo.png'), height: 75,),
-      
+          automaticallyImplyLeading: false,
           toolbarHeight: 80,
-      
-          actions: [
+          backgroundColor: Colors.white,
+          titleSpacing: 16,
+          title: LayoutBuilder(
+            builder: (context, constraints) {
+              final screenWidth = constraints.maxWidth;
 
-            // Cash
-            const Image(image: AssetImage('assets/homepage_images/cash.png')),
-            Text(
-              '= \$200',  // Money Feature Needed
-              style: GoogleFonts.ubuntu(color: Colors.green[500], fontSize: 18),
-            ),
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Left: Logo or empty space
+                  if (screenWidth > 900)
+                    const Image(
+                      image: AssetImage('assets/homepage_images/appbarlogo.png'),
+                      height: 60,
+                    ),
 
-            const SizedBox(width: 30),
-                  
-            // Schedule Button
-            ScheduleButton(tapFunction: () => ()),
-      
-            const SizedBox(width: 30),     
-      
-            // Music Toggle
-            IconButton(
-              icon: const Icon(Icons.music_note),
-              onPressed: () => (),
-            ),
-            
-            const SizedBox(width: 30),     
+                  const SizedBox(width: 5,),
 
-            // Leaderboard Button
-            IconButton(
-              icon: const Icon(Icons.leaderboard),
-              onPressed: () => (),
-            ),
-      
-            const SizedBox(width: 30),
+                  // Right: Wrap all the elements, so spacing adjusts on its own
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ScheduleButton(tapFunction: () {}),
 
-            // Select Student Dropdown
-            const DropdownMenu(
-              dropdownMenuEntries: <DropdownMenuEntry<String>>[
-                DropdownMenuEntry(value: '', label: 'Danny'),
-                DropdownMenuEntry(value: '', label: 'Guri'),
-                DropdownMenuEntry(value: '', label: 'Rohan'),
-                DropdownMenuEntry(value: '', label: 'Katherine'),
-              ]
-            ),
-      
-            const SizedBox(width: 30),
+                        IconButton(icon: const Icon(Icons.music_note), onPressed: () {}),
 
-            // Select Activity
-            GestureDetector(
-              onTap: () => (),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Text(
-                  'Select Activity',
-                  style: GoogleFonts.ubuntu(fontSize: 15, color: Colors.black, letterSpacing: 1),
-                ),
-              ),
-            ),
-            
-            const SizedBox(width: 30),
+                        IconButton(icon: const Icon(Icons.leaderboard), onPressed: () {}),
 
-            // Reset
-            GestureDetector(
-              onTap: () => (),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Text(
-                  'Reset',
-                  style: GoogleFonts.ubuntu(fontSize: 15, color: Colors.black, letterSpacing: 1),
-                ),
-              ),
-            ),
-      
-            const SizedBox(width: 30),
 
-            // Sign out button
-            IconButton(
-              onPressed: signUserOut, 
-              icon: const Icon(Icons.logout)
-            ),
-      
-          ],
+                        const DropdownMenu(
+                          width: 125,
+                          dropdownMenuEntries: <DropdownMenuEntry<String>>[
+                            DropdownMenuEntry(value: '', label: 'Danny'),
+                            DropdownMenuEntry(value: '', label: 'Guri'),
+                            DropdownMenuEntry(value: '', label: 'Rohan'),
+                            DropdownMenuEntry(value: '', label: 'Katherine'),
+                          ],
+                        ),
+
+
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: TextButton(
+                            onPressed: () => {},
+                            child: Text(
+                              'Select Activity',
+                              style: GoogleFonts.ubuntu(fontSize: 16, color: Colors.black),
+                            ),
+                          ),
+                        ),
+
+
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: TextButton(
+                            onPressed: () => {},
+                            child: Text(
+                              'W: $screenWidth',
+                              // 'Reset',
+                              style: GoogleFonts.ubuntu(fontSize: 16, color: Colors.black),
+                            ),
+                          ),
+                        ),
+
+                        // Logout
+                        IconButton(onPressed: signUserOut, icon: const Icon(Icons.logout)),
+                      ],
+                    ),
+                  )
+                ],
+              );
+            },
+          ),
         ),
+
         
         // Main Body
         body: Row(
@@ -162,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                       color: const Color.fromARGB(255, 33, 150, 243),
                     ),
                     child: GridView.count(
-                      crossAxisCount: 4,
+                      crossAxisCount: isSmallWidth(context) ? 3 : 4,
                       childAspectRatio: 1.75,
                       children: [
                         SubjectWidget(tapFunction: onToActivity, text: 'A B C', image1: const AssetImage('assets/homepage_images/abc.jpg')),
@@ -202,32 +217,50 @@ class _HomePageState extends State<HomePage> {
             // Right Area
             SafeArea(
               child: Container(
-                padding: isDesktop(context) 
-                            ? EdgeInsets.only(left: MediaQuery.sizeOf(context).height * 0.1)
-                            : EdgeInsets.only(left: MediaQuery.sizeOf(context).height * 0.05),
+                padding: EdgeInsets.only(left: rightSideLength()),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+
                       DigitalClock(
                         showSeconds: false,
-                        isLive:false,
+                        isLive: true,
                         digitalClockTextColor: Colors.white,
-                        textScaleFactor: 1.25,
+                        textScaleFactor: smallFont(),
                         decoration: const BoxDecoration(
-                          color: Colors.blue,
+                          color: Color.fromARGB(255, 33, 150, 243),
                           shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
                           datetime: DateTime.now(),
                       ),
                       
-                      SubjectWidget(tapFunction: onToActivity, text: 'Previous', image1: const AssetImage('assets/homepage_images/places.jpg'), 
-                                  width: MediaQuery.of(context).size.width * 0.1, height: MediaQuery.of(context).size.height * 0.2),
+                      SubjectWidget(
+                        tapFunction: onToActivity, 
+                        text: 'Previous', 
+                        image1: const AssetImage('assets/homepage_images/places.jpg'), 
+                        width: screenWidth * 0.1, height: screenHeight * 0.2
+                      ),
+
                       const SizedBox(height: 10,),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Current', image1: const AssetImage('assets/homepage_images/geography.jpg'),
-                                  width: MediaQuery.of(context).size.width * 0.1, height: MediaQuery.of(context).size.height * 0.2),
+
+                      SubjectWidget(
+                        tapFunction: onToActivity, 
+                        text: 'Current', 
+                        image1: const AssetImage('assets/homepage_images/geography.jpg'),
+                        width: screenWidth * 0.1, 
+                        height: screenHeight * 0.2
+                      
+                      ),
+                      
                       const SizedBox(height: 10,),
-                      SubjectWidget(tapFunction: onToActivity, text: 'Next', image1: const AssetImage('assets/homepage_images/sight.jpg'),
-                                  width: MediaQuery.of(context).size.width * 0.1, height: MediaQuery.of(context).size.height * 0.2),
+
+                      SubjectWidget(
+                        tapFunction: onToActivity, 
+                        text: 'Next', 
+                        image1: const AssetImage('assets/homepage_images/sight.jpg'),
+                        width: screenWidth* 0.1, 
+                        height: screenHeight * 0.2
+                      ),
                                 
                     ],
                   ),

@@ -173,8 +173,8 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
                             scale: 1.5,
                             child: SvgPicture.asset(
                               'assets/abc_images/$letter.svg',
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              height: MediaQuery.of(context).size.height * 0.3,
+                              width: MediaQuery.of(context).size.width * 0.15,
+                              height: MediaQuery.of(context).size.height * 0.25,
                               fit: BoxFit.contain,
                             ),
                           ),

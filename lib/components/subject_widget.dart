@@ -12,6 +12,9 @@ final Color color;
 
 const SubjectWidget({super.key, required this.tapFunction, required this.text, required this.image1, this.width = 100, this.height = 10, this.color = Colors.black});
 
+  bool isSmallWidth(BuildContext context) =>
+    MediaQuery.of(context).size.width <= 740;
+
   @override
   Widget build(BuildContext context){
     return GestureDetector(
@@ -38,7 +41,7 @@ const SubjectWidget({super.key, required this.tapFunction, required this.text, r
               child: Text(
                 text,
                 style: GoogleFonts.ubuntu(
-                  fontSize: 15, 
+                  fontSize: isSmallWidth(context) ? 12 : 15, 
                   color: Colors.black
                 ),
                 textAlign: TextAlign.center,

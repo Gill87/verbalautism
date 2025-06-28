@@ -91,15 +91,21 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
       color: Colors.transparent,
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: screenWidth * 0.5,
 
       child: Column(
         children: [
           Text(
             "Tap the Letter ${widget.letter}",
-            style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
+            style: GoogleFonts.ubuntu(
+              fontSize: screenWidth <= 700 ? 32 : 40, 
+              color: Colors.white
+            ),
           ),
 
           // AnimatedText(text: "Tap the Letter ${widget.letter}"),

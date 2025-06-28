@@ -280,6 +280,8 @@ void setOneWrongNumber(){
     else {
       currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash,);
     }
+    
+    // final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
