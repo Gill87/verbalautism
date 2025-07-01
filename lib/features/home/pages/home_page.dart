@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:one_clock/one_clock.dart';
 import 'package:verbalautism/activities/abc/base_page/abc.dart';
-import 'package:verbalautism/components/buttons_column.dart';
-import 'package:verbalautism/components/schedule_button.dart';
-import 'package:verbalautism/components/sound_button.dart';
-import 'package:verbalautism/components/subject_widget.dart';
+import 'package:verbalautism/activities/numbers/base_page/numbers.dart';
+import 'package:verbalautism/components/home%20page%20components/buttons_column.dart';
+import 'package:verbalautism/components/home%20page%20components/schedule_button.dart';
+import 'package:verbalautism/components/home%20page%20components/sound_button.dart';
+import 'package:verbalautism/components/home%20page%20components/subject_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
 
@@ -64,6 +65,15 @@ class _HomePageState extends State<HomePage> {
         context, 
         MaterialPageRoute(
           builder: (context) => const Activity1()
+        )
+      );
+    }
+
+    void onToNumbers(){
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const Numbers()
         )
       );
     }
@@ -132,8 +142,7 @@ class _HomePageState extends State<HomePage> {
                           child: TextButton(
                             onPressed: () => {},
                             child: Text(
-                              'W: $screenWidth',
-                              // 'Reset',
+                              'Reset',
                               style: GoogleFonts.ubuntu(fontSize: 16, color: Colors.black),
                             ),
                           ),
@@ -185,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                         SubjectWidget(tapFunction: onToActivity, text: 'Shapes', image1: const AssetImage('assets/homepage_images/shapes.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Objects', image1: const AssetImage('assets/homepage_images/geography.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Food', image1: const AssetImage('assets/homepage_images/food.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: '1 2 3', image1: const AssetImage('assets/homepage_images/123.jpg')),
+                        SubjectWidget(tapFunction: onToNumbers,  text: '1 2 3', image1: const AssetImage('assets/homepage_images/123.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Feeling', image1: const AssetImage('assets/homepage_images/flowers.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Places',  image1: const AssetImage('assets/homepage_images/places.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Questions', image1: const AssetImage('assets/homepage_images/questions.jpg')),

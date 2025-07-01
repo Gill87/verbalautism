@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:verbalautism/components/my_button.dart';
-import 'package:verbalautism/components/text_field.dart';
+import 'package:verbalautism/components/login%20page%20components/my_button.dart';
+import 'package:verbalautism/components/login%20page%20components/text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:verbalautism/features/auth/presentation/pages/forgot_password_page.dart';

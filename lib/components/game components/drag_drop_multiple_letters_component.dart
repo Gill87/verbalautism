@@ -1,0 +1,317 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:verbalautism/components/animations/correct_animation.dart';
+import 'package:verbalautism/components/animations/incorrect_animation.dart';
+import 'package:verbalautism/components/tts_service.dart';
+
+class DragDropMultipleLettersComponent extends StatefulWidget {
+  final VoidCallback onCompleted;
+  final String correctLetterLink;
+  final List<String> wrongLetterLinks; // Can be 1 or 2 wrong letters
+  final String letter;
+  final VoidCallback onCorrectAction;
+  final VoidCallback onIncorrectAction;
+  final String directory;
+  final String objectVariation;
+
+
+  const DragDropMultipleLettersComponent({
+    super.key,
+    required this.onCompleted,
+    required this.correctLetterLink,
+    required this.wrongLetterLinks,
+    required this.letter,
+    required this.onCorrectAction,
+    required this.onIncorrectAction,
+    required this.directory,
+    required this.objectVariation,
+  });
+
+  @override
+  State<DragDropMultipleLettersComponent> createState() => _DragDropMultipleLettersComponentState();
+}
+
+class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLettersComponent> with SingleTickerProviderStateMixin{
+  bool imageDropped = false;
+  late List<String> allLetterLinks;
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  final TtsService _ttsService = TtsService();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _ttsService.speak("Drag and Drop the Letter ${widget.letter}");
+    
+    allLetterLinks = [widget.correctLetterLink, ...widget.wrongLetterLinks];
+    allLetterLinks.shuffle(); // Randomize order
+    
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    )..repeat(reverse: true); // makes it float up and down
+
+    _animation = Tween<double>(begin: 0.0, end: 10.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+
+  void _showCorrectAnimation() {
+    widget.onCorrectAction();
+
+    showDialog(
+      barrierColor: Colors.transparent,
+      context: context,
+      builder: (context) {
+        return const Dialog(
+          backgroundColor: Colors.transparent,
+          child: CorrectAnimation(),
+        );
+      },
+    );
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pop();
+        widget.onCompleted();
+      }
+    });
+  }
+
+
+  void _showIncorrectAnimation() {
+    widget.onIncorrectAction();
+    
+    showDialog(
+      barrierColor: Colors.transparent,
+      context: context,
+      builder: (context) {
+        return const Dialog(
+          backgroundColor: Colors.transparent,
+          child: IncorrectAnimation(),
+        );
+      },
+    );
+
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pop();      }
+    });
+  }
+
+  void _handleDrop(DragTargetDetails<String> details) {
+    if (details.data == widget.correctLetterLink) {
+      setState(() {
+        imageDropped = true;
+      });
+      _showCorrectAnimation();
+    } else {
+      _showIncorrectAnimation();
+    }
+  }
+
+  double horizontalPadding(){
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    if(allLetterLinks.length == 3 && screenWidth <= 1050){
+      return 1;
+    } else if(allLetterLinks.length == 2 && screenWidth <= 800){
+      return 1;
+    } else {
+      return screenWidth * 0.01;
+    }
+  }
+
+  double widthSize(){
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    if(screenWidth <= 680 && allLetterLinks.length == 3){
+      return screenWidth * 0.005;
+    } else if(screenWidth <= 700 && allLetterLinks.length == 2){
+      return screenWidth * 0.02;
+    } else {
+      return screenWidth * 0.04;
+    }
+  }
+
+  double imageWidth(){
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    if(screenWidth <= 1000 && allLetterLinks.length == 3){
+      return screenWidth * 0.1;
+    } else if(screenWidth <= 700 && allLetterLinks.length == 2){
+      return screenWidth * 0.15;
+    } else {
+      return screenWidth * 0.2;
+    }
+  }
+
+  double imageHeight(){
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    if(screenWidth <= 1000 && allLetterLinks.length == 3){
+      return screenHeight * 0.2;
+    } else if(screenWidth <= 700 && allLetterLinks.length == 2){
+      return screenHeight * 0.25;
+    } else {
+      return screenHeight * 0.3;
+    }
+  }
+
+  @override
+  void dispose() {
+    _ttsService.stop();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      color: Colors.transparent,
+      width: MediaQuery.of(context).size.width * 0.97,
+      child: Column(
+        children: [
+          Text(
+            "Drag and Drop the ${widget.objectVariation} ${widget.letter}",
+            style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
+          ),
+
+          const SizedBox(height: 50),
+          
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: imageDropped ? [
+              _buildDragTarget(),
+            ] : [
+              ...allLetterLinks.map((letter) => Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: horizontalPadding(),
+                    ),
+                    child: _buildDraggable(letter),
+                  )),
+              SizedBox(width: widthSize(),),
+              _buildDragTarget(),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDraggable(String letterLink) {
+
+    // Define letter image
+    final svg = SvgPicture.asset(
+      '${widget.directory}$letterLink.svg',
+      width: imageWidth(),
+      height: imageHeight(),
+      fit: BoxFit.contain,
+    );
+
+    final animatedSvg = AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, -_animation.value),
+          child: child,
+        );
+      },
+      child: svg,
+    );
+
+    return Draggable<String>(
+      data: letterLink,
+
+      // The widget being dragged
+      feedback: Material(
+        color: Colors.transparent,  // no background
+        child: Transform.scale(
+          scale: 1.5,
+          child: animatedSvg
+        ),                // same as child -> no offset
+      ),
+
+      // What is shown in the original spot when dragging is occuring (in this case invisible lettter)
+      childWhenDragging: Opacity(
+        opacity: 0.0,
+        child: animatedSvg,
+      ),
+
+      // 👇 Stop floating when drag starts
+      onDragStarted: () {
+        _controller.stop();
+      },
+
+      // If correct image dropped in
+      child: imageDropped
+          ? const SizedBox.shrink()
+          : animatedSvg,
+
+      // If image not dropped in, resume floating animation
+      onDragEnd: (details) {
+        if (mounted && !imageDropped) {
+          _controller.repeat(reverse: true);
+        }
+      },
+
+    );
+  }
+
+
+  Widget _buildDragTarget() {
+    return AnimatedAlign(
+      alignment: imageDropped ? Alignment.center : Alignment.centerRight,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      child: DragTarget<String>(
+        onAcceptWithDetails: _handleDrop,
+        builder: (context, candidateData, rejectedData) {
+          return Container(
+            width: MediaQuery.of(context).size.width * 0.35,
+            height: MediaQuery.of(context).size.height * 0.4,
+            decoration: BoxDecoration(
+              color: Colors.yellow,
+              borderRadius: BorderRadius.circular(40),
+            ),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              transitionBuilder: (child, animation) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0.0, -1.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                );
+              },
+              child: imageDropped
+                  ? SvgPicture.asset(
+                      '${widget.directory}${widget.correctLetterLink}.svg',
+                      key: const ValueKey('droppedImage'),
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      fit: BoxFit.contain,
+                    )
+                  : Center(
+                      key: const ValueKey('dropText'),
+                      child: Text(
+                        "Drop Here",
+                        style: GoogleFonts.ubuntu(fontSize: 30),
+                      ),
+                    ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

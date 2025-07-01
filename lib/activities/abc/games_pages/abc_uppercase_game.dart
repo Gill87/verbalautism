@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:verbalautism/activities/abc/abc_components/drag_drop_multiple_letters_component.dart';
-import 'package:verbalautism/activities/abc/abc_components/tap_component.dart';
-import 'package:verbalautism/activities/abc/abc_components/drag_drop_component.dart';
-import 'package:verbalautism/activities/abc/abc_components/tap_multiple_letters_component.dart';
-import 'package:verbalautism/activities/abc/abc_components/trace_component.dart';
+import 'package:verbalautism/components/game%20components/drag_drop_multiple_letters_component.dart';
+import 'package:verbalautism/components/game%20components/tap_component.dart';
+import 'package:verbalautism/components/game%20components/drag_drop_component.dart';
+import 'package:verbalautism/components/game%20components/tap_multiple_letters_component.dart';
+import 'package:verbalautism/components/game%20components/trace_component.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class AbcUppercaseGame extends StatefulWidget {
@@ -20,6 +20,7 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
   
   List <String> letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
   
+
   // Variables
   int displaySteps = 1;
   int totalSteps = 1;
@@ -263,22 +264,22 @@ void setOneWrongNumber(){
     Widget currentActivity;
     
     if (totalSteps % 3 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, letterLink: "Uppercase_${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
+      currentActivity = TapComponent(onCompleted: nextStep, letterLink: "Uppercase_${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
     } 
     else if (totalSteps % 3 == 2 && totalSteps < 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "Uppercase_${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps,);
+      currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "Uppercase_${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
     } 
     else if(totalSteps % 3 == 0 && totalSteps < 10){
-      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash,);
+      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, objectVariation: "Letter",);
     } 
     else if(totalSteps % 3 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Uppercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
+      currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Uppercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
     }
     else if(totalSteps % 3 == 2 && totalSteps >= 10){
-      currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Uppercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash,);
+      currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Uppercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
     } 
     else {
-      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash,);
+      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, objectVariation: "Letter",);
     }
     
     // final screenWidth = MediaQuery.of(context).size.width;
