@@ -10,7 +10,12 @@ import 'package:verbalautism/components/game%20components/trace_component.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class AbcLowercaseGame extends StatefulWidget {
-  const AbcLowercaseGame({super.key});
+  final String selectedLetter;
+
+  const AbcLowercaseGame({
+    super.key,
+    required this.selectedLetter,
+    });
 
   @override
   State<AbcLowercaseGame> createState() => _AbcLowercaseGameState();
@@ -37,7 +42,19 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
 
   @override
   void initState() {
-    randomNumber = random.nextInt(26);
+    if(widget.selectedLetter != ""){
+      // If a letter is selected, find its index
+      randomNumber = letters.indexOf(widget.selectedLetter.toUpperCase());
+      
+      if(randomNumber == -1){
+        randomNumber = random.nextInt(26); // Fallback to a random letter if not found
+      }
+    }
+    else {
+      // If no letter is selected, choose a random letter
+      randomNumber = random.nextInt(26);
+    }
+
     super.initState();
   }
 
@@ -186,7 +203,18 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                     round = 1;
                     displaySteps = 1; 
                   });
-                  randomNumber = random.nextInt(26);
+                  if(widget.selectedLetter != ""){
+                    // If a letter is selected, find its index
+                    randomNumber = letters.indexOf(widget.selectedLetter.toUpperCase());
+                    
+                    if(randomNumber == -1){
+                      randomNumber = random.nextInt(26); // Fallback to a random letter if not found
+                    }
+                  }
+                  else {
+                    // If no letter is selected, choose a random letter
+                    randomNumber = random.nextInt(26);
+                  }
                 },
                 child: Text(
                   "Restart",

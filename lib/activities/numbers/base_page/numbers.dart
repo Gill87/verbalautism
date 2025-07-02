@@ -6,6 +6,7 @@ class Numbers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
@@ -15,6 +16,7 @@ class Numbers extends StatelessWidget {
           style: GoogleFonts.ubuntu(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
+      
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -32,114 +34,59 @@ class Numbers extends StatelessWidget {
               _buildCard(
                 context,
                 label: "0-9",
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NumbersGame(
-                    min: 0,
-                    max: 9,
-                  )),
-                ),
+                onTap: onTapCard(context, "0-9", 0, 9),
               ),
               _buildCard(
                 context,
                 label: "10-19",
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NumbersGame(
-                    min: 10,
-                    max: 19,
-                  )),
-                ),
+                onTap: onTapCard(context, "10-19", 10, 19),
               ),
               _buildCard(
                 context,
                 label: "20-29",
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NumbersGame(
-                    min: 20,
-                    max: 29,
-                  )),
-                ),
+                onTap: onTapCard(context, "20-29", 20, 29),
               ),
 
               _buildCard(
                 context,
                 label: "30-39",
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NumbersGame(
-                    min: 30,
-                    max: 39,
-                  )),
-                ),
+                onTap: onTapCard(context, "30-39", 30, 39),
               ),
+              
               _buildCard(
                 context,
                 label: "40-49",
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NumbersGame(
-                    min: 40,
-                    max: 49,
-                  )),
-                ),
+                onTap: onTapCard(context, "40-49", 40, 49),
               ),
+
               _buildCard(
                 context,
                 label: "50-59",
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NumbersGame(
-                    min: 50,
-                    max: 59,
-                  )),
-                ),
+                onTap: onTapCard(context, "50-59", 50, 59),
               ),
+
               _buildCard(
                 context,
                 label: "60-69",
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NumbersGame(
-                    min: 60,
-                    max: 69,
-                  )),
-                ),
+                onTap: onTapCard(context, "60-69", 60, 69),
               ),
+
               _buildCard(
                 context,
                 label: "70-79",
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NumbersGame(
-                    min: 70,
-                    max: 79,
-                  )),
-                ),
+                onTap: onTapCard(context, "70-79", 70, 79),
               ),
+
               _buildCard(
                 context,
                 label: "80-89",
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NumbersGame(
-                    min: 80,
-                    max: 89,
-                  )),
-                ),
+                onTap: onTapCard(context, "80-89", 80, 89),
               ),
 
               _buildCard(
                 context,
                 label: "90-99",
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NumbersGame(
-                    min: 90,
-                    max: 99,
-                  )),
-                ),
+                onTap: onTapCard(context, "90-99", 90, 99),
               ),
             ],
           ),
@@ -170,7 +117,7 @@ class Numbers extends StatelessWidget {
                   style: GoogleFonts.ubuntu(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 33, 150, 243),
+                    color: Colors.white,
                 ),
               )
             ],
@@ -180,3 +127,48 @@ class Numbers extends StatelessWidget {
     );
   }
 }
+
+void Function() onTapCard(BuildContext context, String label, int min, int max) {
+  return () async {
+    int? selected = await showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Select a number from $label", style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
+          content: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              // Numbers min to max
+              for (int i = min; i <= max; i++)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                  onPressed: () => Navigator.of(context).pop(i),
+                  child: Text("$i", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold),),
+                ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                onPressed: () => Navigator.of(context).pop(-1),
+                child: Text("Random", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold),),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (selected != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NumbersGame(
+            min: min,
+            max: max,
+            selectedNumber: selected,
+          ),
+        ),
+      );
+    }
+  };
+}
+

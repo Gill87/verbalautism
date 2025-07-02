@@ -10,7 +10,10 @@ import 'package:verbalautism/components/game%20components/trace_component.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class AbcMixedGame extends StatefulWidget {
-  const AbcMixedGame({super.key});
+  
+  const AbcMixedGame({
+    super.key,
+  });
 
   @override
   State<AbcMixedGame> createState() => _AbcMixedGameState();

@@ -37,18 +37,18 @@ class Activity1 extends StatelessWidget {
                 context,
                 label: "Uppercase",
                 image: "assets/abc_images/Uppercase_A.svg",
-                onTap: () => Navigator.push(
+                onTap: onTapCard(
                   context,
-                  MaterialPageRoute(builder: (context) => const AbcUppercaseGame()),
+                  "Uppercase",
                 ),
               ),
               _buildCard(
                 context,
                 label: "Lowercase",
                 image: "assets/abc_images/Lowercase_A.svg",
-                onTap: () => Navigator.push(
+                onTap: onTapCard(
                   context,
-                  MaterialPageRoute(builder: (context) => const AbcLowercaseGame()),
+                  "Lowercase",
                 ),
               ),
               _buildCard(
@@ -106,4 +106,54 @@ class Activity1 extends StatelessWidget {
       ),
     );
   }
+}
+
+void Function() onTapCard(BuildContext context, String label){
+  return () async {
+    String? selectedLetter = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Select a letter", style: GoogleFonts.ubuntu(color: Colors.black, fontWeight: FontWeight.bold),),
+          content: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              ...List<Widget>.generate(
+                26,
+                (index) {
+                  String letter = String.fromCharCode(index + (label == "Uppercase" ? 65 : 97));
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: Text(letter, style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold, color: Colors.white)),
+                    onPressed: () => Navigator.of(context).pop(letter),
+                  );
+                },
+              ),
+
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                child: Text("Random", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
+                onPressed: () => Navigator.of(context).pop(""), // empty string for random
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if(selectedLetter != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => label == "Uppercase"
+              ? AbcUppercaseGame(selectedLetter: selectedLetter)
+              : AbcLowercaseGame(selectedLetter: selectedLetter)
+        ),
+      );
+    }
+  };
 }

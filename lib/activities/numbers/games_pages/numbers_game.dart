@@ -11,10 +11,12 @@ import 'package:verbalautism/features/home/pages/home_page.dart';
 class NumbersGame extends StatefulWidget {
   final int min;
   final int max;
+  final int selectedNumber;
 
   const NumbersGame({
     required this.min,
     required this.max,
+    required this.selectedNumber,
     super.key
   });
 
@@ -52,7 +54,12 @@ class _NumbersGameState extends State<NumbersGame> {
       (index) => widget.min + index, // generate
     );
 
-    randomNumber = generateRandomNumber(widget.min, widget.max);
+    if(widget.selectedNumber != -1){
+      randomNumber = widget.selectedNumber;
+    } else {
+      randomNumber = generateRandomNumber(widget.min, widget.max);
+    }
+
     correctIndex = randomNumber - widget.min;
 
     super.initState();
@@ -206,8 +213,15 @@ class _NumbersGameState extends State<NumbersGame> {
                     round = 1;
                     displaySteps = 1; 
                   });
-                  randomNumber = generateRandomNumber(widget.min, widget.max);
+
+                  if(widget.selectedNumber != -1){
+                    randomNumber = widget.selectedNumber;
+                  } else {
+                    // Reset random number
+                    randomNumber = generateRandomNumber(widget.min, widget.max);
+                  }
                   correctIndex = randomNumber - widget.min;
+                  
                 },
                 child: Text(
                   "Restart",
