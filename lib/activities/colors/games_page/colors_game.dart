@@ -3,27 +3,27 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/game%20components/drag_drop_component.dart';
-import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
-import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
-import 'package:verbalautism/components/game%20components/trace_component.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
-class AbcLowercaseGame extends StatefulWidget {
-  final String selectedLetter;
-
-  const AbcLowercaseGame({
+class ColorsGame extends StatefulWidget {
+  const ColorsGame({
     super.key,
-    required this.selectedLetter,
-    });
+    required this.selectedColor,
+
+  });
+
+  final String selectedColor;
 
   @override
-  State<AbcLowercaseGame> createState() => _AbcLowercaseGameState();
+  State<ColorsGame> createState() => _ColorsGameState();
 }
 
-class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
-  List <String> letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-  
+class _ColorsGameState extends State<ColorsGame> {
+
+  // List
+  late List<String> colors;
+
   // Variables
   int displaySteps = 1;
   int totalSteps = 1;
@@ -31,55 +31,65 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   final int maxSteps = 30;
   bool isPaused = false;
 
-  // Random Object
-  Random random = Random();
-
-  // Random Number Variables
+  // Random
+  final random = Random();
   late int randomNumber;
   late int randomNumber2;
   late int randomNumber3;
-  late List <String> wrongLetters;
+  late int correctIndex;
+  late List<String> wrongColors;
 
   @override
   void initState() {
-    if(widget.selectedLetter != ""){
-      // If a letter is selected, find its index
-      randomNumber = letters.indexOf(widget.selectedLetter.toUpperCase());
-      
-      if(randomNumber == -1){
-        randomNumber = random.nextInt(26); // Fallback to a random letter if not found
-      }
-    }
-    else {
-      // If no letter is selected, choose a random letter
-      randomNumber = random.nextInt(26);
-    }
+    colors = [
+      "Red",
+      "Blue",
+      "Green",
+      "Yellow",
+      "Orange",
+      "Purple",
+      "Pink",
+      "Brown",
+      "Black",
+      "White"
+    ];
 
+    if(widget.selectedColor.isNotEmpty) {
+      correctIndex = colors.indexOf(widget.selectedColor);
+      randomNumber = correctIndex;
+
+      if(correctIndex == -1) {
+        randomNumber = random.nextInt(colors.length);
+        correctIndex = randomNumber;
+      }
+    } else {
+      randomNumber = random.nextInt(colors.length);
+      correctIndex = randomNumber;
+    }
     super.initState();
   }
 
   void setOneWrongNumber(){
-    randomNumber2 = random.nextInt(26);
+
+    randomNumber2 = random.nextInt(colors.length);
 
     while(randomNumber2 == randomNumber){
-      randomNumber2 = random.nextInt(26);
+      randomNumber2 = random.nextInt(colors.length);
     }
     
-    wrongLetters = ["Lowercase_${letters[randomNumber2]}"];
-
+    wrongColors = [colors[randomNumber2]];
   }
 
   void setTwoWrongNumbers(){
-    randomNumber2 = random.nextInt(26);
-    randomNumber3 = random.nextInt(26);
+    randomNumber2 = random.nextInt(colors.length);
+    randomNumber3 = random.nextInt(colors.length);
 
     while(randomNumber == randomNumber2 || randomNumber == randomNumber3 || randomNumber2 == randomNumber3){
-      randomNumber2 = random.nextInt(26);
-      randomNumber3 = random.nextInt(26);
+      randomNumber2 = random.nextInt(colors.length);
+      randomNumber3 = random.nextInt(colors.length);
     }
 
-    wrongLetters = ["Lowercase_${letters[randomNumber2]}", "Lowercase_${letters[randomNumber3]}"];
-
+    wrongColors = [colors[randomNumber2], colors[randomNumber3]];
   }
 
   void nextRoundDialog(int roundNumber){
@@ -156,6 +166,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
 
       // Check round 2
       if(totalSteps >= 10 && totalSteps < 20){
+        displaySteps = totalSteps % 10;
         round2();
       }
 
@@ -166,7 +177,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
       
       // Check total steps
       if(totalSteps < maxSteps){
-      // Increment step
+        // Increment step
         ++totalSteps;
 
         // Correctly modify display steps number
@@ -203,18 +214,8 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                     round = 1;
                     displaySteps = 1; 
                   });
-                  if(widget.selectedLetter != ""){
-                    // If a letter is selected, find its index
-                    randomNumber = letters.indexOf(widget.selectedLetter.toUpperCase());
-                    
-                    if(randomNumber == -1){
-                      randomNumber = random.nextInt(26); // Fallback to a random letter if not found
-                    }
-                  }
-                  else {
-                    // If no letter is selected, choose a random letter
-                    randomNumber = random.nextInt(26);
-                  }
+                  // Reset the game state
+                  initState();
                 },
                 child: Text(
                   "Restart",
@@ -286,58 +287,44 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
-
-    // Current Activity Widget
+    
     Widget currentActivity;
     
-    // Set Current Activity to appropriate activity
-    if (totalSteps % 3 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, assetLink: "Lowercase_${letters[randomNumber]}", mainData: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
+    if (totalSteps % 2 == 1 && totalSteps <= 10) {
+      currentActivity = TapComponent(onCompleted: nextStep, assetLink: "", mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "", objectVariation: "Color",);
     } 
-    else if (totalSteps % 3 == 2 && totalSteps < 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: "Lowercase_${letters[randomNumber]}", mainData: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
+    else if (totalSteps % 2 == 0 && totalSteps <= 10) {
+      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: "", mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "", objectVariation: "Color",);
     } 
-    else if(totalSteps % 3 == 0 && totalSteps < 10){
-      currentActivity = TraceComponent(onCompleted: nextStep, mainData: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, objectVariation: "Letter",);
-    } 
-    else if(totalSteps % 3 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: "Lowercase_${letters[randomNumber]}", wrongAssetLinks: wrongLetters, mainData: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
+    else if(totalSteps % 2 == 1 && totalSteps >= 10){
+      currentActivity = Container();
+      // currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
     }
-    else if(totalSteps % 3 == 2 && totalSteps >= 10){
-      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: "Lowercase_${letters[randomNumber]}", wrongAssetLinks: wrongLetters, mainData: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
-    } 
     else {
-      currentActivity = TraceComponent(onCompleted: nextStep, mainData: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, objectVariation: "Letter",);
+      currentActivity = Container();
+      // currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
     }
 
-    // Scaffold
     return Scaffold(
-
-      // App Bar
       appBar: AppBar(
         centerTitle: true,
-        title: Center(child: Text("Lowercase Letters", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
+        title: Center(child: Text("Basic Colors", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
-
-      // Body
       body: Container(
-
-        // Background image
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/background_images/32442923_7895078.jpg"),
             fit: BoxFit.cover,
           )
         ),
-
-        // Middle part opacity change
         child: Center(
           child: Container(
             decoration: BoxDecoration(
-              color: containerColor, // Dynamic flash
+              color: containerColor, // Black except for flash
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
@@ -347,12 +334,10 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                 ),
               ],
             ),
-
-            // Display Activity
             child: !isPaused ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Round: $round", style: GoogleFonts.ubuntu(fontSize: 24, color: Colors.white),),
+                Text("Round: ${MediaQuery.of(context).size.width}", style: GoogleFonts.ubuntu(fontSize: 24, color: Colors.white),),
                 const SizedBox(height: 20,),
                 Text("Trial: $displaySteps / 10", style: GoogleFonts.ubuntu(fontSize: 24, color: Colors.white)),
                 const SizedBox(height: 20),
@@ -366,4 +351,3 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   }
 
 }
-

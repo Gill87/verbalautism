@@ -5,22 +5,22 @@ import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/incorrect_animation.dart';
 import 'package:verbalautism/components/tts_service.dart';
 
-class TapMultipleLettersComponent extends StatefulWidget {
+class TapMultipleObjectsComponent extends StatefulWidget {
   final VoidCallback onCompleted;
-  final String correctLetterLink;
-  final List<String> wrongLetterLinks; // 1 or 2 wrong letters
-  final String letter;
+  final String correctAssetLink;
+  final List<String> wrongAssetLinks; // 1 or 2 wrong objects
+  final String mainData; // This is the object
   final VoidCallback onCorrectAction;
   final VoidCallback onIncorrectAction;
   final String directory;
   final String objectVariation;
 
-  const TapMultipleLettersComponent({
+  const TapMultipleObjectsComponent({
     super.key,
     required this.onCompleted,
-    required this.correctLetterLink,
-    required this.wrongLetterLinks,
-    required this.letter,
+    required this.correctAssetLink,
+    required this.wrongAssetLinks,
+    required this.mainData,
     required this.onCorrectAction,
     required this.onIncorrectAction,
     required this.directory,
@@ -28,11 +28,11 @@ class TapMultipleLettersComponent extends StatefulWidget {
   });
 
   @override
-  State<TapMultipleLettersComponent> createState() => _TapMultipleLettersComponentState();
+  State<TapMultipleObjectsComponent> createState() => _TapMultipleObjectsComponentState();
 }
 
-class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponent> with SingleTickerProviderStateMixin{
-  late List<String> allLetterLinks;
+class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponent> with SingleTickerProviderStateMixin{
+  late List<String> allObjectLinks;
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -42,10 +42,10 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
   void initState() {
     super.initState();
     
-    _ttsService.speak("Tap the ${widget.objectVariation} ${widget.letter}");
+    _ttsService.speak("Tap the ${widget.objectVariation} ${widget.mainData}");
 
-    allLetterLinks = [widget.correctLetterLink, ...widget.wrongLetterLinks];
-    allLetterLinks.shuffle(); // Randomize their order
+    allObjectLinks = [widget.correctAssetLink, ...widget.wrongAssetLinks];
+    allObjectLinks.shuffle(); // Randomize their order
 
     _controller = AnimationController(
       vsync: this,
@@ -58,7 +58,7 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
   }
 
   void _handleTap(String tappedLetter) {
-    if (tappedLetter == widget.correctLetterLink) {
+    if (tappedLetter == widget.correctAssetLink) {
       _showCorrectAnimation();
     } else {
       _showIncorrectAnimation();
@@ -109,6 +109,14 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
     });
   }
 
+  bool isEmptyAssetLink() {
+    if (widget.correctAssetLink.isEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     _ttsService.stop();
@@ -123,24 +131,24 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
       child: Column(
         children: [
           Text(
-            "Tap the Letter ${widget.letter}",
+            "Tap the ${widget.objectVariation} ${widget.mainData}",
             style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
           ),
           const SizedBox(height: 50),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: allLetterLinks.map((letter) {
+            children: allObjectLinks.map((object) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
-                    onTap: () => _handleTap(letter),
+                    onTap: () => _handleTap(object),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.2,
                       height: MediaQuery.of(context).size.height * 0.3,
                       decoration: BoxDecoration(
-                        color: Colors.yellow, // Background color for each letter
+                        color: Colors.yellow,
                         borderRadius: BorderRadius.circular(20), // Rounded corners
                         boxShadow: [
                           BoxShadow(
@@ -162,7 +170,6 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
                         width: MediaQuery.of(context).size.width * 0.2,
                         height: MediaQuery.of(context).size.height * 0.3,
                         decoration: BoxDecoration(
-                          color: Colors.yellow,
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
@@ -174,19 +181,17 @@ class _TapMultipleLettersComponentState extends State<TapMultipleLettersComponen
                         ),
                         child: Center(
                           child: Transform.scale(
-                            scale: 1.5,
-                            child: SvgPicture.asset(
-                              '${widget.directory}$letter.svg',
-                              width: MediaQuery.of(context).size.width * 0.15,
-                              height: MediaQuery.of(context).size.height * 0.25,
-                              fit: BoxFit.contain,
-                            ),
+                              scale: 1.5,
+                              child: SvgPicture.asset(
+                                '${widget.directory}$object.svg',
+                                width: MediaQuery.of(context).size.width * 0.15,
+                                height: MediaQuery.of(context).size.height * 0.25,
+                                fit: BoxFit.contain,
+                              ),
+                            )
                           ),
-                        ),
                       ),
                     )
-
-                    
                   ),
                 ),
               ),

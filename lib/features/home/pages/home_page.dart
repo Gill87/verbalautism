@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:one_clock/one_clock.dart';
 import 'package:verbalautism/activities/abc/base_page/abc.dart';
+import 'package:verbalautism/activities/colors/base_page/colors_base_page.dart';
 import 'package:verbalautism/activities/numbers/base_page/numbers.dart';
 import 'package:verbalautism/components/home%20page%20components/buttons_column.dart';
 import 'package:verbalautism/components/home%20page%20components/schedule_button.dart';
@@ -74,6 +75,15 @@ class _HomePageState extends State<HomePage> {
         context, 
         MaterialPageRoute(
           builder: (context) => const Numbers()
+        )
+      );
+    }
+
+    void onToColors(){
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const ColorsBasePage()
         )
       );
     }
@@ -190,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                       childAspectRatio: 1.75,
                       children: [
                         SubjectWidget(tapFunction: onToActivity, text: 'A B C', image1: const AssetImage('assets/homepage_images/abc.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Colors', image1: const AssetImage('assets/homepage_images/colors.jpg')),
+                        SubjectWidget(tapFunction: onToColors, text: 'Colors', image1: const AssetImage('assets/homepage_images/colors.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Shapes', image1: const AssetImage('assets/homepage_images/shapes.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Objects', image1: const AssetImage('assets/homepage_images/geography.jpg')),
                         SubjectWidget(tapFunction: onToActivity, text: 'Food', image1: const AssetImage('assets/homepage_images/food.jpg')),

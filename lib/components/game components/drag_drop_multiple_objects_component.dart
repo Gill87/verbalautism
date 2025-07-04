@@ -5,23 +5,23 @@ import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/incorrect_animation.dart';
 import 'package:verbalautism/components/tts_service.dart';
 
-class DragDropMultipleLettersComponent extends StatefulWidget {
+class DragDropMultipleObjectsComponent extends StatefulWidget {
   final VoidCallback onCompleted;
-  final String correctLetterLink;
-  final List<String> wrongLetterLinks; // Can be 1 or 2 wrong letters
-  final String letter;
+  final String correctAssetLinks;
+  final List<String> wrongAssetLinks; // Can be 1 or 2 wrong objects
+  final String mainData;
   final VoidCallback onCorrectAction;
   final VoidCallback onIncorrectAction;
   final String directory;
   final String objectVariation;
 
 
-  const DragDropMultipleLettersComponent({
+  const DragDropMultipleObjectsComponent({
     super.key,
     required this.onCompleted,
-    required this.correctLetterLink,
-    required this.wrongLetterLinks,
-    required this.letter,
+    required this.correctAssetLinks,
+    required this.wrongAssetLinks,
+    required this.mainData,
     required this.onCorrectAction,
     required this.onIncorrectAction,
     required this.directory,
@@ -29,12 +29,12 @@ class DragDropMultipleLettersComponent extends StatefulWidget {
   });
 
   @override
-  State<DragDropMultipleLettersComponent> createState() => _DragDropMultipleLettersComponentState();
+  State<DragDropMultipleObjectsComponent> createState() => _DragDropMultipleObjectsComponentState();
 }
 
-class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLettersComponent> with SingleTickerProviderStateMixin{
+class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjectsComponent> with SingleTickerProviderStateMixin{
   bool imageDropped = false;
-  late List<String> allLetterLinks;
+  late List<String> allObjectLinks;
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -44,10 +44,10 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
   void initState() {
     super.initState();
 
-    _ttsService.speak("Drag and Drop the Letter ${widget.letter}");
-    
-    allLetterLinks = [widget.correctLetterLink, ...widget.wrongLetterLinks];
-    allLetterLinks.shuffle(); // Randomize order
+    _ttsService.speak("Drag and Drop the ${widget.objectVariation} ${widget.mainData}");
+
+    allObjectLinks = [widget.correctAssetLinks, ...widget.wrongAssetLinks];
+    allObjectLinks.shuffle(); // Randomize order
     
     _controller = AnimationController(
       vsync: this,
@@ -104,7 +104,7 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
   }
 
   void _handleDrop(DragTargetDetails<String> details) {
-    if (details.data == widget.correctLetterLink) {
+    if (details.data == widget.correctAssetLinks) {
       setState(() {
         imageDropped = true;
       });
@@ -117,9 +117,9 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
   double horizontalPadding(){
     final screenWidth = MediaQuery.of(context).size.width;
 
-    if(allLetterLinks.length == 3 && screenWidth <= 1050){
+    if(allObjectLinks.length == 3 && screenWidth <= 1050){
       return 1;
-    } else if(allLetterLinks.length == 2 && screenWidth <= 800){
+    } else if(allObjectLinks.length == 2 && screenWidth <= 800){
       return 1;
     } else {
       return screenWidth * 0.01;
@@ -129,9 +129,9 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
   double widthSize(){
     final screenWidth = MediaQuery.of(context).size.width;
 
-    if(screenWidth <= 680 && allLetterLinks.length == 3){
+    if(screenWidth <= 680 && allObjectLinks.length == 3){
       return screenWidth * 0.005;
-    } else if(screenWidth <= 700 && allLetterLinks.length == 2){
+    } else if(screenWidth <= 700 && allObjectLinks.length == 2){
       return screenWidth * 0.02;
     } else {
       return screenWidth * 0.04;
@@ -141,9 +141,9 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
   double imageWidth(){
     final screenWidth = MediaQuery.of(context).size.width;
 
-    if(screenWidth <= 1000 && allLetterLinks.length == 3){
+    if(screenWidth <= 1000 && allObjectLinks.length == 3){
       return screenWidth * 0.1;
-    } else if(screenWidth <= 700 && allLetterLinks.length == 2){
+    } else if(screenWidth <= 700 && allObjectLinks.length == 2){
       return screenWidth * 0.15;
     } else {
       return screenWidth * 0.2;
@@ -154,9 +154,9 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    if(screenWidth <= 1000 && allLetterLinks.length == 3){
+    if(screenWidth <= 1000 && allObjectLinks.length == 3){
       return screenHeight * 0.2;
-    } else if(screenWidth <= 700 && allLetterLinks.length == 2){
+    } else if(screenWidth <= 700 && allObjectLinks.length == 2){
       return screenHeight * 0.25;
     } else {
       return screenHeight * 0.3;
@@ -178,7 +178,7 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
       child: Column(
         children: [
           Text(
-            "Drag and Drop the ${widget.objectVariation} ${widget.letter}",
+            "Drag and Drop the ${widget.objectVariation} ${widget.mainData}",
             style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
           ),
 
@@ -189,11 +189,11 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
             children: imageDropped ? [
               _buildDragTarget(),
             ] : [
-              ...allLetterLinks.map((letter) => Padding(
+              ...allObjectLinks.map((object) => Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: horizontalPadding(),
                     ),
-                    child: _buildDraggable(letter),
+                    child: _buildDraggable(object),
                   )),
               SizedBox(width: widthSize(),),
               _buildDragTarget(),
@@ -204,11 +204,11 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
     );
   }
 
-  Widget _buildDraggable(String letterLink) {
+  Widget _buildDraggable(String assetLink) {
 
-    // Define letter image
+    // Define object image
     final svg = SvgPicture.asset(
-      '${widget.directory}$letterLink.svg',
+      '${widget.directory}$assetLink.svg',
       width: imageWidth(),
       height: imageHeight(),
       fit: BoxFit.contain,
@@ -226,7 +226,7 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
     );
 
     return Draggable<String>(
-      data: letterLink,
+      data: assetLink,
 
       // The widget being dragged
       feedback: Material(
@@ -295,7 +295,7 @@ class _DragDropMultipleLettersComponentState extends State<DragDropMultipleLette
               },
               child: imageDropped
                   ? SvgPicture.asset(
-                      '${widget.directory}${widget.correctLetterLink}.svg',
+                      '${widget.directory}${widget.correctAssetLinks}.svg',
                       key: const ValueKey('droppedImage'),
                       width: MediaQuery.of(context).size.width * 0.3,
                       height: MediaQuery.of(context).size.height * 0.4,

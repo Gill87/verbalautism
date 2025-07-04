@@ -2,9 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/game%20components/drag_drop_component.dart';
-import 'package:verbalautism/components/game%20components/drag_drop_multiple_letters_component.dart';
+import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
-import 'package:verbalautism/components/game%20components/tap_multiple_letters_component.dart';
+import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/trace_component.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
@@ -300,22 +300,22 @@ class _NumbersGameState extends State<NumbersGame> {
     Widget currentActivity;
     
     if (totalSteps % 3 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, letterLink: "Number_${numbers[correctIndex]}", letter: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/number_images/", objectVariation: "Number",);
+      currentActivity = TapComponent(onCompleted: nextStep, assetLink: "Number_${numbers[correctIndex]}", mainData: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/number_images/", objectVariation: "Number",);
     } 
     else if (totalSteps % 3 == 2 && totalSteps < 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "Number_${numbers[correctIndex]}", letter: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/number_images/", objectVariation: "Number",);
+      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: "Number_${numbers[correctIndex]}", mainData: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/number_images/", objectVariation: "Number",);
     } 
     else if(totalSteps % 3 == 0 && totalSteps < 10){
-      currentActivity = TraceComponent(onCompleted: nextStep, letter: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, objectVariation: "Number",);
+      currentActivity = TraceComponent(onCompleted: nextStep, mainData: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, objectVariation: "Number",);
     } 
     else if(totalSteps % 3 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Number_${numbers[correctIndex]}", wrongLetterLinks: wrongNumbers, letter: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/number_images/", objectVariation: "Number",);
+      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: "Number_${numbers[correctIndex]}", wrongAssetLinks: wrongNumbers, mainData: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/number_images/", objectVariation: "Number",);
     }
     else if(totalSteps % 3 == 2 && totalSteps >= 10){
-      currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Number_${numbers[correctIndex]}", wrongLetterLinks: wrongNumbers, letter: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/number_images/", objectVariation: "Number",);
+      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: "Number_${numbers[correctIndex]}", wrongAssetLinks: wrongNumbers, mainData: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/number_images/", objectVariation: "Number",);
     } 
     else {
-      currentActivity = TraceComponent(onCompleted: nextStep, letter: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, objectVariation: "Number",);
+      currentActivity = TraceComponent(onCompleted: nextStep, mainData: numbers[correctIndex].toString(), onCorrectAction: triggerCorrectFlash, objectVariation: "Number",);
     }
     
     // final screenWidth = MediaQuery.of(context).size.width;

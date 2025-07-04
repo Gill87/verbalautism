@@ -7,14 +7,14 @@ import 'package:verbalautism/components/tts_service.dart';
 
 class TraceComponent extends StatefulWidget {
   final VoidCallback onCompleted;
-  final String letter;
+  final String mainData;
   final VoidCallback onCorrectAction;
   final String objectVariation;
 
   const TraceComponent({
     super.key, 
     required this.onCompleted, 
-    required this.letter, 
+    required this.mainData, 
     required this.onCorrectAction,
     required this.objectVariation,
   });
@@ -29,7 +29,7 @@ class _TraceComponentState extends State<TraceComponent> {
 
   @override
   void initState() {
-    _ttsService.speak("Trace the Letter ${widget.letter}");
+    _ttsService.speak("Trace the ${widget.objectVariation} ${widget.mainData}");
     super.initState();
   }
   
@@ -63,6 +63,13 @@ class _TraceComponentState extends State<TraceComponent> {
     super.dispose();
   }
 
+  bool isChar(){
+    if(widget.mainData.length == 1){
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -72,9 +79,9 @@ class _TraceComponentState extends State<TraceComponent> {
     return Column(
       children: [
         Text(
-          "Trace the ${widget.objectVariation} ${widget.letter}", 
+          "Trace the ${widget.objectVariation} ${widget.mainData}", 
           style: GoogleFonts.ubuntu(
-            fontSize: screenWidth <= 660 ? 32 : 40, 
+            fontSize: screenWidth <= 660 ? 30 : 40, 
             color: Colors.white
           ),
         ),
@@ -85,22 +92,35 @@ class _TraceComponentState extends State<TraceComponent> {
           color: Colors.transparent,
           width: screenWidth * 0.5,
           height: screenHeight * 0.4,
-          child: TracingCharsGame(
-            traceShapeModel: [
-              TraceCharsModel(
-                chars: [
-                  TraceCharModel(
-                    char: widget.letter,
-                    traceShapeOptions: const TraceShapeOptions(innerPaintColor: Color.fromARGB(255, 33, 150, 243))
-                  )
-                ]
-              )
-            ],
-            onGameFinished: (int index) async {
-              _showCorrectAnimation();
-            },
-          )
-        ),
+          child: isChar() 
+            ? TracingCharsGame(
+              traceShapeModel: [
+                TraceCharsModel(
+                  chars: [
+                    TraceCharModel(
+                      char: widget.mainData,
+                      traceShapeOptions: const TraceShapeOptions(innerPaintColor: Color.fromARGB(255, 33, 150, 243))
+                    )
+                  ]
+                )
+              ],
+              onGameFinished: (int index) async {
+                _showCorrectAnimation();
+              },
+            )
+            : TracingWordGame(
+              words: [
+                TraceWordModel(
+                  word: widget.mainData,
+                  traceShapeOptions: const TraceShapeOptions(innerPaintColor: Color.fromARGB(255, 33, 150, 243))
+                )
+              ],
+              onGameFinished: (int index) async {
+                _showCorrectAnimation();
+              },
+            ),
+
+        )
       ],
     );
   }

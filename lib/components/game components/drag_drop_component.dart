@@ -9,8 +9,8 @@ import 'package:verbalautism/components/tts_service.dart';
 
 class DragDropComponent extends StatefulWidget {
   final VoidCallback onCompleted;
-  final String letterLink;
-  final String letter;
+  final String assetLink;
+  final String mainData; // This is the object
   final VoidCallback onCorrectAction;
   final int totalSteps;
   final String directory;
@@ -19,8 +19,8 @@ class DragDropComponent extends StatefulWidget {
   const DragDropComponent({
     super.key, 
     required this.onCompleted, 
-    required this.letterLink, 
-    required this.letter, 
+    required this.assetLink, 
+    required this.mainData, 
     required this.onCorrectAction, 
     required this.totalSteps,
     required this.directory,
@@ -43,8 +43,8 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
   @override
   void initState() {
     super.initState();
-    _ttsService.speak("Drag and Drop the Letter ${widget.letter}");
-    
+    _ttsService.speak("Drag and Drop the ${widget.objectVariation} ${widget.mainData}");
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -82,6 +82,14 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
 
   }
 
+  bool emptyAssetLink(){
+    if (widget.assetLink.isEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     _ttsService.stop();
@@ -90,6 +98,25 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
+    
+    final double screenWidth = MediaQuery.of(context).size.width;
+
+    Map<String, Color> colorMap = {};
+
+    if(widget.objectVariation == "Color"){
+      colorMap = {
+        'blue': Colors.blue,
+        'red': Colors.red,
+        'green': Colors.green,
+        'black': Colors.black,
+        'white': Colors.white,
+        'yellow': Colors.yellow,
+        'purple': Colors.purple,
+        'orange': Colors.orange,
+        'pink': Colors.pink,
+        'brown': Colors.brown,
+      };
+    }
 
     return Container(
       color: Colors.transparent,
@@ -97,8 +124,11 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
       child: Column(
         children: [
           Text(
-            "Drag and Drop the ${widget.objectVariation} ${widget.letter}", 
-            style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white)
+            "Drag and Drop the ${widget.objectVariation} ${widget.mainData}", 
+            style: GoogleFonts.ubuntu(
+              fontSize: screenWidth < 650 ? 35 : 40,
+              color: Colors.white,
+            ),
           ),
       
           const SizedBox(height: 50),
@@ -115,13 +145,29 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                     children: [
                       Transform.scale(
                         scale: 1.5,
-                        child: SvgPicture.asset(
-                          '${widget.directory}${widget.letterLink}.svg',
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          fit: BoxFit.contain,
+                        child: !emptyAssetLink()
+                          ? SvgPicture.asset(
+                            '${widget.directory}${widget.assetLink}.svg',
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            fit: BoxFit.contain,
+                          )
+                          : Padding( // Only for Colors Drag Drop
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.2,
+                                height: MediaQuery.of(context).size.height * 0.2,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
+                                  color: colorMap[widget.mainData.toLowerCase()],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            )
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -129,12 +175,28 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                 // Original image disappers dragging
                 childWhenDragging: Opacity(
                   opacity: 0.0,
-                  child: SvgPicture.asset(
-                    '${widget.directory}${widget.letterLink}.svg',
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    fit: BoxFit.contain,
-                  ),
+                  child: !emptyAssetLink()
+                    ? SvgPicture.asset(
+                      '${widget.directory}${widget.assetLink}.svg',
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      fit: BoxFit.contain,
+                    )
+                    : Padding( // Only for Colors Drag Drop
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          height: MediaQuery.of(context).size.height * 0.2,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 2,
+                            ),
+                            color: colorMap[widget.mainData.toLowerCase()],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      )
                 ),
                 
                 // When not dragging, static image displayed with floating animation
@@ -156,12 +218,28 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                         },
 
                         // Image
-                        child: SvgPicture.asset(
-                          '${widget.directory}${widget.letterLink}.svg',
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          fit: BoxFit.contain,
-                        )
+                        child: !emptyAssetLink()
+                          ? SvgPicture.asset(
+                            '${widget.directory}${widget.assetLink}.svg',
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            fit: BoxFit.contain,
+                          )
+                          : Padding( // Only for Colors Drag Drop
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.2,
+                                height: MediaQuery.of(context).size.height * 0.2,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
+                                  color: colorMap[widget.mainData.toLowerCase()],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            )
                       ),
                       
                       // Drag Animation (centered by Stack's alignment) if first one
@@ -213,13 +291,28 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                           );
                         },
                         child: imageDropped
-                            ? SvgPicture.asset(
-                                '${widget.directory}${widget.letterLink}.svg',
-                                key: const ValueKey('droppedImage'),
-                                width: MediaQuery.of(context).size.width * 0.3,
+                            ? !emptyAssetLink()
+                              ? SvgPicture.asset(
+                                '${widget.directory}${widget.assetLink}.svg',
+                                width: MediaQuery.of(context).size.width * 0.4,
                                 height: MediaQuery.of(context).size.height * 0.4,
                                 fit: BoxFit.contain,
                               )
+                              : Padding( // Only for Colors Drag Drop
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.2,
+                                    height: MediaQuery.of(context).size.height * 0.2,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 2,
+                                      ),
+                                      color: colorMap[widget.mainData.toLowerCase()],
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                )
                             : Center(
                                 key: const ValueKey('dropText'),
                                 child: Text(

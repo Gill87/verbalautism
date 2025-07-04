@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:verbalautism/components/game%20components/drag_drop_multiple_letters_component.dart';
+import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/drag_drop_component.dart';
-import 'package:verbalautism/components/game%20components/tap_multiple_letters_component.dart';
+import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/trace_component.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
@@ -60,7 +60,7 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
     super.initState();
   }
 
-void setOneWrongNumber(){
+  void setOneWrongNumber(){
     randomNumber2 = random.nextInt(26);
 
     while(randomNumber2 == randomNumber){
@@ -292,22 +292,22 @@ void setOneWrongNumber(){
     Widget currentActivity;
     
     if (totalSteps % 3 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, letterLink: "Uppercase_${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
+      currentActivity = TapComponent(onCompleted: nextStep, assetLink: "Uppercase_${letters[randomNumber]}", mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
     } 
     else if (totalSteps % 3 == 2 && totalSteps < 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, letterLink: "Uppercase_${letters[randomNumber]}", letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
+      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: "Uppercase_${letters[randomNumber]}", mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
     } 
     else if(totalSteps % 3 == 0 && totalSteps < 10){
-      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, objectVariation: "Letter",);
+      currentActivity = TraceComponent(onCompleted: nextStep, mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, objectVariation: "Letter",);
     } 
     else if(totalSteps % 3 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Uppercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
+      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: "Uppercase_${letters[randomNumber]}", wrongAssetLinks: wrongLetters, mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
     }
     else if(totalSteps % 3 == 2 && totalSteps >= 10){
-      currentActivity = DragDropMultipleLettersComponent(onCompleted: nextStep, correctLetterLink: "Uppercase_${letters[randomNumber]}", wrongLetterLinks: wrongLetters, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
+      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: "Uppercase_${letters[randomNumber]}", wrongAssetLinks: wrongLetters, mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
     } 
     else {
-      currentActivity = TraceComponent(onCompleted: nextStep, letter: letters[randomNumber], onCorrectAction: triggerCorrectFlash, objectVariation: "Letter",);
+      currentActivity = TraceComponent(onCompleted: nextStep, mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, objectVariation: "Letter",);
     }
     
     // final screenWidth = MediaQuery.of(context).size.width;

@@ -8,14 +8,14 @@ import 'package:verbalautism/components/tts_service.dart';
 
 class TapComponent extends StatefulWidget {
   final VoidCallback onCompleted;
-  final String letterLink;
-  final String letter;
+  final String assetLink;
+  final String mainData;
   final VoidCallback onCorrectAction;
   final int totalSteps;
   final String directory;
   final String objectVariation;
 
-  const TapComponent({super.key, required this.onCompleted, required this.letterLink, required this.letter, required this.onCorrectAction, required this.totalSteps, required this.directory, required this.objectVariation});
+  const TapComponent({super.key, required this.onCompleted, required this.assetLink, required this.mainData, required this.onCorrectAction, required this.totalSteps, required this.directory, required this.objectVariation});
 
   @override
   State<TapComponent> createState() => _TapComponentState();
@@ -35,7 +35,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
     super.initState();
     
     // Text to speech
-    _ttsService.speak("Tap the ${widget.objectVariation} ${widget.letter}");
+    _ttsService.speak("Tap the ${widget.objectVariation} ${widget.mainData}");
 
     // Floating Animation
     _controller = AnimationController(
@@ -91,10 +91,35 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
     });
   }
 
+  bool emptyAssetLink(){
+    if (widget.assetLink.isEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
     final screenWidth = MediaQuery.of(context).size.width;
+
+    Map<String, Color> colorMap = {};
+
+    if(widget.objectVariation == "Color"){
+      colorMap = {
+        'blue': Colors.blue,
+        'red': Colors.red,
+        'green': Colors.green,
+        'black': Colors.black,
+        'white': Colors.white,
+        'yellow': Colors.yellow,
+        'purple': Colors.purple,
+        'orange': Colors.orange,
+        'pink': Colors.pink,
+        'brown': Colors.brown,
+      };
+    }
 
     return Container(
       color: Colors.transparent,
@@ -103,14 +128,14 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
       child: Column(
         children: [
           Text(
-            "Tap the ${widget.objectVariation} ${widget.letter}",
+            "Tap the ${widget.objectVariation} ${widget.mainData}",
             style: GoogleFonts.ubuntu(
               fontSize: screenWidth <= 700 ? 32 : 40, 
               color: Colors.white
             ),
           ),
 
-          // AnimatedText(text: "Tap the Letter ${widget.letter}"),
+          // AnimatedText(text: "Tap the ${widget.objectVariation} ${widget.mainData}"),
 
           const SizedBox(height: 50),
 
@@ -133,11 +158,27 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
                           ),
                         );
                       },
-                      child: SvgPicture.asset(
-                        '${widget.directory}${widget.letterLink}.svg',
+                      child: !emptyAssetLink()
+                      ? SvgPicture.asset( 
+                        '${widget.directory}${widget.assetLink}.svg',
                         width: MediaQuery.of(context).size.width * 0.2,
                         height: MediaQuery.of(context).size.height * 0.4,
                         fit: BoxFit.contain,
+                      ) 
+                      : Padding(      // Only for Colors Tap
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          height: MediaQuery.of(context).size.height * 0.2,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 2,
+                            ),
+                            color: colorMap[widget.mainData.toLowerCase()],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
                     ),
 
