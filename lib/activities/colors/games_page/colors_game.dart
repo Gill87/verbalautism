@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/game%20components/drag_drop_component.dart';
+import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
+import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class ColorsGame extends StatefulWidget {
@@ -300,12 +302,10 @@ class _ColorsGameState extends State<ColorsGame> {
       currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: "", mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "", objectVariation: "Color",);
     } 
     else if(totalSteps % 2 == 1 && totalSteps >= 10){
-      currentActivity = Container();
-      // currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
+      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
     }
     else {
-      currentActivity = Container();
-      // currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
+      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
     }
 
     return Scaffold(

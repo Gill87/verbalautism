@@ -168,7 +168,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
                       : Padding(      // Only for Colors Tap
                         padding: const EdgeInsets.only(top: 10.0),
                         child: Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: MediaQuery.of(context).size.width * 0.15,
                           height: MediaQuery.of(context).size.height * 0.2,
                           decoration: BoxDecoration(
                             border: Border.all(

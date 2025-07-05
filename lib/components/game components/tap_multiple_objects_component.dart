@@ -109,8 +109,8 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
     });
   }
 
-  bool isEmptyAssetLink() {
-    if (widget.correctAssetLink.isEmpty) {
+  bool isColor() {
+    if (widget.objectVariation == "Color") {
       return true;
     } else {
       return false;
@@ -125,6 +125,24 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
 
   @override
   Widget build(BuildContext context) {
+
+    Map<String, Color> colorMap = {};
+
+    if(widget.objectVariation == "Color"){
+      colorMap = {
+        'blue': Colors.blue,
+        'red': Colors.red,
+        'green': Colors.green,
+        'black': Colors.black,
+        'white': Colors.white,
+        'yellow': Colors.yellow,
+        'purple': Colors.purple,
+        'orange': Colors.orange,
+        'pink': Colors.pink,
+        'brown': Colors.brown,
+      };
+    }
+
     return Container(
       color: Colors.transparent,
       width: MediaQuery.of(context).size.width * 0.8,
@@ -148,12 +166,12 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                       width: MediaQuery.of(context).size.width * 0.2,
                       height: MediaQuery.of(context).size.height * 0.3,
                       decoration: BoxDecoration(
-                        color: Colors.yellow,
+                        color: Colors.transparent,
                         borderRadius: BorderRadius.circular(20), // Rounded corners
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),
-                            blurRadius: 8,
+                            blurRadius: 4,
                             offset: const Offset(0, 4),
                           ),
                         ],
@@ -182,11 +200,27 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                         child: Center(
                           child: Transform.scale(
                               scale: 1.5,
-                              child: SvgPicture.asset(
+                              child: !isColor()
+                              ? SvgPicture.asset(
                                 '${widget.directory}$object.svg',
                                 width: MediaQuery.of(context).size.width * 0.15,
                                 height: MediaQuery.of(context).size.height * 0.25,
                                 fit: BoxFit.contain,
+                              )
+                              : Padding(      // Only for Colors Tap
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.1,
+                                    height: MediaQuery.of(context).size.height * 0.2,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 2,
+                                      ),
+                                      color: colorMap[object.toLowerCase()],
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
                               ),
                             )
                           ),

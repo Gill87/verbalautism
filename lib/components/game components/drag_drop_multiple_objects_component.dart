@@ -32,6 +32,7 @@ class DragDropMultipleObjectsComponent extends StatefulWidget {
   State<DragDropMultipleObjectsComponent> createState() => _DragDropMultipleObjectsComponentState();
 }
 
+
 class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjectsComponent> with SingleTickerProviderStateMixin{
   bool imageDropped = false;
   late List<String> allObjectLinks;
@@ -163,6 +164,14 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
     }
   }
 
+  bool isColor() {
+    if (widget.objectVariation == "Color") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     _ttsService.stop();
@@ -171,7 +180,6 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: Colors.transparent,
       width: MediaQuery.of(context).size.width * 0.97,
@@ -205,14 +213,47 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
   }
 
   Widget _buildDraggable(String assetLink) {
+    // Define color map for color variations for color drag and drop
+    Map<String, Color> colorMap = {};
+
+    if(widget.objectVariation == "Color"){
+      colorMap = {
+        'blue': Colors.blue,
+        'red': Colors.red,
+        'green': Colors.green,
+        'black': Colors.black,
+        'white': Colors.white,
+        'yellow': Colors.yellow,
+        'purple': Colors.purple,
+        'orange': Colors.orange,
+        'pink': Colors.pink,
+        'brown': Colors.brown,
+      };
+    }
 
     // Define object image
-    final svg = SvgPicture.asset(
-      '${widget.directory}$assetLink.svg',
-      width: imageWidth(),
-      height: imageHeight(),
-      fit: BoxFit.contain,
-    );
+    final svg = !isColor() 
+      ? SvgPicture.asset(
+          '${widget.directory}$assetLink.svg',
+          width: imageWidth(),
+          height: imageHeight(),
+          fit: BoxFit.contain,
+        )
+      : Padding(      // Only for Colors Drag and Drop
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.1,
+            height: MediaQuery.of(context).size.height * 0.2,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
+              color: colorMap[assetLink.toLowerCase()],
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
 
     final animatedSvg = AnimatedBuilder(
       animation: _animation,
@@ -234,7 +275,7 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
         child: Transform.scale(
           scale: 1.5,
           child: animatedSvg
-        ),                // same as child -> no offset
+        ), // same as child -> no offset
       ),
 
       // What is shown in the original spot when dragging is occuring (in this case invisible lettter)
@@ -265,6 +306,24 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
 
 
   Widget _buildDragTarget() {
+    
+    // Define color map for color variations for color drag and drop
+    Map<String, Color> colorMap = {};
+
+    if(widget.objectVariation == "Color"){
+      colorMap = {
+        'blue': Colors.blue,
+        'red': Colors.red,
+        'green': Colors.green,
+        'black': Colors.black,
+        'white': Colors.white,
+        'yellow': Colors.yellow,
+        'purple': Colors.purple,
+        'orange': Colors.orange,
+        'pink': Colors.pink,
+        'brown': Colors.brown,
+      };
+    }
     return AnimatedAlign(
       alignment: imageDropped ? Alignment.center : Alignment.centerRight,
       duration: const Duration(milliseconds: 500),
@@ -294,13 +353,29 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
                 );
               },
               child: imageDropped
-                  ? SvgPicture.asset(
-                      '${widget.directory}${widget.correctAssetLinks}.svg',
-                      key: const ValueKey('droppedImage'),
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      fit: BoxFit.contain,
-                    )
+                  ? !isColor() 
+                      ? SvgPicture.asset(
+                          '${widget.directory}${widget.correctAssetLinks}.svg',
+                          key: const ValueKey('droppedImage'),
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          fit: BoxFit.contain,
+                        )
+                      : Padding(      // Only for Colors Drag and Drop
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.1,
+                            height: MediaQuery.of(context).size.height * 0.2,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 2,
+                              ),
+                              color: colorMap[widget.correctAssetLinks.toLowerCase()],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        )
                   : Center(
                       key: const ValueKey('dropText'),
                       child: Text(
