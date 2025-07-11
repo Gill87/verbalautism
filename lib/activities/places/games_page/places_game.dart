@@ -8,23 +8,22 @@ import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
-class ColorsGame extends StatefulWidget {
-  const ColorsGame({
-    super.key,
-    required this.selectedColor,
-
+class PlacesGame extends StatefulWidget {
+  const PlacesGame({
+    required this.selectedPlace,
+    super.key
   });
 
-  final String selectedColor;
+  final String selectedPlace;
 
   @override
-  State<ColorsGame> createState() => _ColorsGameState();
+  State<PlacesGame> createState() => _PlacesGameState();
 }
 
-class _ColorsGameState extends State<ColorsGame> {
-
+class _PlacesGameState extends State<PlacesGame> {
   // List
-  late List<String> colors;
+  late List<String> places;
+  late List<String> assetLinkPlaces;
 
   // Variables
   int displaySteps = 1;
@@ -39,33 +38,44 @@ class _ColorsGameState extends State<ColorsGame> {
   late int randomNumber2;
   late int randomNumber3;
   late int correctIndex;
-  late List<String> wrongColors;
+  late List<String> wrongPlaces;
 
   @override
   void initState() {
-    colors = [
-      "Red",
-      "Blue",
-      "Green",
-      "Yellow",
-      "Orange",
-      "Purple",
-      "Pink",
-      "Brown",
-      "Black",
-      "White"
+    places = [
+      "Airport",
+      "Fire Station",
+      "Grocery",
+      "Hospital",
+      "Library",
+      "Mall",
+      "Police Station",
+      "Post Office",
+      "School"
     ];
 
-    if(widget.selectedColor.isNotEmpty) {
-      correctIndex = colors.indexOf(widget.selectedColor);
+    assetLinkPlaces = [
+      "Airport",
+      "fire_station",
+      "Grocery",
+      "Hospital",
+      "Library",
+      "Mall",
+      "police_station",
+      "post_office",
+      "school"
+    ];
+
+    if(widget.selectedPlace.isNotEmpty) {
+      correctIndex = places.indexOf(widget.selectedPlace);
       randomNumber = correctIndex;
 
       if(correctIndex == -1) {
-        randomNumber = random.nextInt(colors.length);
+        randomNumber = random.nextInt(places.length);
         correctIndex = randomNumber;
       }
     } else {
-      randomNumber = random.nextInt(colors.length);
+      randomNumber = random.nextInt(places.length);
       correctIndex = randomNumber;
     }
     super.initState();
@@ -73,25 +83,25 @@ class _ColorsGameState extends State<ColorsGame> {
 
   void setOneWrongNumber(){
 
-    randomNumber2 = random.nextInt(colors.length);
+    randomNumber2 = random.nextInt(places.length);
 
     while(randomNumber2 == randomNumber){
-      randomNumber2 = random.nextInt(colors.length);
+      randomNumber2 = random.nextInt(places.length);
     }
     
-    wrongColors = [colors[randomNumber2]];
+    wrongPlaces = [assetLinkPlaces[randomNumber2].toLowerCase()];
   }
 
   void setTwoWrongNumbers(){
-    randomNumber2 = random.nextInt(colors.length);
-    randomNumber3 = random.nextInt(colors.length);
+    randomNumber2 = random.nextInt(places.length);
+    randomNumber3 = random.nextInt(places.length);
 
     while(randomNumber == randomNumber2 || randomNumber == randomNumber3 || randomNumber2 == randomNumber3){
-      randomNumber2 = random.nextInt(colors.length);
-      randomNumber3 = random.nextInt(colors.length);
+      randomNumber2 = random.nextInt(places.length);
+      randomNumber3 = random.nextInt(places.length);
     }
 
-    wrongColors = [colors[randomNumber2], colors[randomNumber3]];
+    wrongPlaces = [assetLinkPlaces[randomNumber2].toLowerCase(), assetLinkPlaces[randomNumber3].toLowerCase()];
   }
 
   void nextRoundDialog(int roundNumber){
@@ -296,22 +306,22 @@ class _ColorsGameState extends State<ColorsGame> {
     Widget currentActivity;
     
     if (totalSteps % 2 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, assetLink: "", mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "", objectVariation: "Color",);
+      currentActivity = TapComponent(onCompleted: nextStep, assetLink: assetLinkPlaces[randomNumber].toLowerCase(), mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/places_images/", objectVariation: "Place",);
     } 
     else if (totalSteps % 2 == 0 && totalSteps <= 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: "", mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "", objectVariation: "Color",);
+      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: assetLinkPlaces[randomNumber].toLowerCase(), mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/places_images/", objectVariation: "Place",);
     } 
     else if(totalSteps % 2 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
+      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: assetLinkPlaces[correctIndex].toLowerCase(), wrongAssetLinks: wrongPlaces, mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/places_images/", objectVariation: "Place",);
     }
     else {
-      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
+      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: assetLinkPlaces[correctIndex].toLowerCase(), wrongAssetLinks: wrongPlaces, mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/places_images/", objectVariation: "Place",);
     }
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Center(child: Text("Basic Colors", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
+        title: Center(child: Text("Place", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
       body: Container(
@@ -349,5 +359,4 @@ class _ColorsGameState extends State<ColorsGame> {
       ),
     );
   }
-
 }

@@ -4,7 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:one_clock/one_clock.dart';
 import 'package:verbalautism/activities/abc/base_page/abc.dart';
 import 'package:verbalautism/activities/colors/base_page/colors_base_page.dart';
+import 'package:verbalautism/activities/feelings/base_page/feelings_base_page.dart';
+import 'package:verbalautism/activities/food/base_page/food_base_page.dart';
 import 'package:verbalautism/activities/numbers/base_page/numbers.dart';
+import 'package:verbalautism/activities/objects/base_page/objects_base_page.dart';
+import 'package:verbalautism/activities/places/base_page/places_base_page.dart';
+import 'package:verbalautism/activities/shapes/base_page/shapes_base_page.dart';
 import 'package:verbalautism/components/home%20page%20components/buttons_column.dart';
 import 'package:verbalautism/components/home%20page%20components/schedule_button.dart';
 import 'package:verbalautism/components/home%20page%20components/sound_button.dart';
@@ -61,7 +66,7 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    void onToActivity(){
+    void onToAlphabet(){
       Navigator.push(
         context, 
         MaterialPageRoute(
@@ -84,6 +89,51 @@ class _HomePageState extends State<HomePage> {
         context, 
         MaterialPageRoute(
           builder: (context) => const ColorsBasePage()
+        )
+      );
+    }
+
+    void onToShapes(){
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const ShapesBasePage()
+        )
+      );
+    }
+
+    void onToObjects(){
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const ObjectsBasePage()
+        )
+      );
+    }
+
+    void onToFood(){
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const FoodBasePage()
+        )
+      );
+    }
+
+    void onToPlaces(){
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const PlacesBasePage()
+        )
+      );
+    }
+
+    void onToFeelings(){
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const FeelingsBasePage()
         )
       );
     }
@@ -199,22 +249,22 @@ class _HomePageState extends State<HomePage> {
                       crossAxisCount: isSmallWidth(context) ? 3 : 4,
                       childAspectRatio: 1.75,
                       children: [
-                        SubjectWidget(tapFunction: onToActivity, text: 'A B C', image1: const AssetImage('assets/homepage_images/abc.jpg')),
+                        SubjectWidget(tapFunction: onToAlphabet, text: 'A B C', image1: const AssetImage('assets/homepage_images/abc.jpg')),
                         SubjectWidget(tapFunction: onToColors, text: 'Colors', image1: const AssetImage('assets/homepage_images/colors.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Shapes', image1: const AssetImage('assets/homepage_images/shapes.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Objects', image1: const AssetImage('assets/homepage_images/geography.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Food', image1: const AssetImage('assets/homepage_images/food.jpg')),
+                        SubjectWidget(tapFunction: onToShapes, text: 'Shapes', image1: const AssetImage('assets/homepage_images/shapes.jpg')),
+                        SubjectWidget(tapFunction: onToObjects, text: 'Objects', image1: const AssetImage('assets/homepage_images/geography.jpg')),
+                        SubjectWidget(tapFunction: onToFood, text: 'Food', image1: const AssetImage('assets/homepage_images/food.jpg')),
                         SubjectWidget(tapFunction: onToNumbers,  text: '1 2 3', image1: const AssetImage('assets/homepage_images/123.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Feeling', image1: const AssetImage('assets/homepage_images/flowers.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Places',  image1: const AssetImage('assets/homepage_images/places.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Questions', image1: const AssetImage('assets/homepage_images/questions.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Prepositions', image1: const AssetImage('assets/homepage_images/prepositions.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Sight Words', image1: const AssetImage('assets/homepage_images/sight.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Actions & Verbs', image1: const AssetImage('assets/homepage_images/verbs.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Sequence', image1: const AssetImage('assets/homepage_images/sequence.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Matching Games', image1: const AssetImage('assets/homepage_images/matching.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Tracing Games', image1: const AssetImage('assets/homepage_images/tracing.jpg')),
-                        SubjectWidget(tapFunction: onToActivity, text: 'Hoot Hoot', image1: const AssetImage('assets/homepage_images/birds.jpg')),                      
+                        SubjectWidget(tapFunction: onToFeelings, text: 'Feeling', image1: const AssetImage('assets/homepage_images/flowers.jpg')),
+                        SubjectWidget(tapFunction: onToPlaces, text: 'Places',  image1: const AssetImage('assets/homepage_images/places.jpg')),
+                        SubjectWidget(tapFunction: onToAlphabet, text: 'Questions', image1: const AssetImage('assets/homepage_images/questions.jpg')),
+                        SubjectWidget(tapFunction: onToAlphabet, text: 'Prepositions', image1: const AssetImage('assets/homepage_images/prepositions.jpg')),
+                        SubjectWidget(tapFunction: onToAlphabet, text: 'Sight Words', image1: const AssetImage('assets/homepage_images/sight.jpg')),
+                        SubjectWidget(tapFunction: onToAlphabet, text: 'Actions & Verbs', image1: const AssetImage('assets/homepage_images/verbs.jpg')),
+                        SubjectWidget(tapFunction: onToAlphabet, text: 'Sequence', image1: const AssetImage('assets/homepage_images/sequence.jpg')),
+                        SubjectWidget(tapFunction: onToAlphabet, text: 'Matching Games', image1: const AssetImage('assets/homepage_images/matching.jpg')),
+                        SubjectWidget(tapFunction: onToAlphabet, text: 'Tracing Games', image1: const AssetImage('assets/homepage_images/tracing.jpg')),
+                        SubjectWidget(tapFunction: onToAlphabet, text: 'Hoot Hoot', image1: const AssetImage('assets/homepage_images/birds.jpg')),                      
                       ],
                     ),
                   ),
@@ -254,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       
                       SubjectWidget(
-                        tapFunction: onToActivity, 
+                        tapFunction: onToAlphabet, 
                         text: 'Previous', 
                         image1: const AssetImage('assets/homepage_images/places.jpg'), 
                         width: screenWidth * 0.1, height: screenHeight * 0.2
@@ -263,7 +313,7 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(height: 10,),
 
                       SubjectWidget(
-                        tapFunction: onToActivity, 
+                        tapFunction: onToAlphabet, 
                         text: 'Current', 
                         image1: const AssetImage('assets/homepage_images/geography.jpg'),
                         width: screenWidth * 0.1, 
@@ -274,7 +324,7 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(height: 10,),
 
                       SubjectWidget(
-                        tapFunction: onToActivity, 
+                        tapFunction: onToAlphabet, 
                         text: 'Next', 
                         image1: const AssetImage('assets/homepage_images/sight.jpg'),
                         width: screenWidth* 0.1, 

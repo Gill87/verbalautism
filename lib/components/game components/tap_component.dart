@@ -99,6 +99,14 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
     }
   }
 
+  bool isTooLarge(){
+    if(widget.objectVariation == "Feeling"){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -153,7 +161,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
                         return Transform.translate(
                           offset: Offset(0, -_animation.value),
                           child: Transform.scale(
-                            scale: 1.5,
+                            scale: isTooLarge() ? 1.0 : 1.5,
                             child: child,
                           ),
                         );

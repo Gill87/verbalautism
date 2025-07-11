@@ -8,23 +8,21 @@ import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
-class ColorsGame extends StatefulWidget {
-  const ColorsGame({
-    super.key,
-    required this.selectedColor,
-
+class FeelingsGame extends StatefulWidget {
+  const FeelingsGame({
+    required this.selectedFeeling,
+    super.key
   });
 
-  final String selectedColor;
+  final String selectedFeeling;
 
   @override
-  State<ColorsGame> createState() => _ColorsGameState();
+  State<FeelingsGame> createState() => _FeelingsGameState();
 }
 
-class _ColorsGameState extends State<ColorsGame> {
-
+class _FeelingsGameState extends State<FeelingsGame> {
   // List
-  late List<String> colors;
+  late List<String> feelings;
 
   // Variables
   int displaySteps = 1;
@@ -39,33 +37,29 @@ class _ColorsGameState extends State<ColorsGame> {
   late int randomNumber2;
   late int randomNumber3;
   late int correctIndex;
-  late List<String> wrongColors;
+  late List<String> wrongObjects;
 
   @override
   void initState() {
-    colors = [
-      "Red",
-      "Blue",
-      "Green",
-      "Yellow",
-      "Orange",
-      "Purple",
-      "Pink",
-      "Brown",
-      "Black",
-      "White"
+    feelings = [
+      "Happy",
+      "Angry",
+      "Sad",
+      "Curious",
+      "Sick",
+      "Surprised"
     ];
 
-    if(widget.selectedColor.isNotEmpty) {
-      correctIndex = colors.indexOf(widget.selectedColor);
+    if(widget.selectedFeeling.isNotEmpty) {
+      correctIndex = feelings.indexOf(widget.selectedFeeling);
       randomNumber = correctIndex;
 
       if(correctIndex == -1) {
-        randomNumber = random.nextInt(colors.length);
+        randomNumber = random.nextInt(feelings.length);
         correctIndex = randomNumber;
       }
     } else {
-      randomNumber = random.nextInt(colors.length);
+      randomNumber = random.nextInt(feelings.length);
       correctIndex = randomNumber;
     }
     super.initState();
@@ -73,25 +67,25 @@ class _ColorsGameState extends State<ColorsGame> {
 
   void setOneWrongNumber(){
 
-    randomNumber2 = random.nextInt(colors.length);
+    randomNumber2 = random.nextInt(feelings.length);
 
     while(randomNumber2 == randomNumber){
-      randomNumber2 = random.nextInt(colors.length);
+      randomNumber2 = random.nextInt(feelings.length);
     }
     
-    wrongColors = [colors[randomNumber2]];
+    wrongObjects = [feelings[randomNumber2].toLowerCase()];
   }
 
   void setTwoWrongNumbers(){
-    randomNumber2 = random.nextInt(colors.length);
-    randomNumber3 = random.nextInt(colors.length);
+    randomNumber2 = random.nextInt(feelings.length);
+    randomNumber3 = random.nextInt(feelings.length);
 
     while(randomNumber == randomNumber2 || randomNumber == randomNumber3 || randomNumber2 == randomNumber3){
-      randomNumber2 = random.nextInt(colors.length);
-      randomNumber3 = random.nextInt(colors.length);
+      randomNumber2 = random.nextInt(feelings.length);
+      randomNumber3 = random.nextInt(feelings.length);
     }
 
-    wrongColors = [colors[randomNumber2], colors[randomNumber3]];
+    wrongObjects = [feelings[randomNumber2].toLowerCase(), feelings[randomNumber3].toLowerCase()];
   }
 
   void nextRoundDialog(int roundNumber){
@@ -296,22 +290,22 @@ class _ColorsGameState extends State<ColorsGame> {
     Widget currentActivity;
     
     if (totalSteps % 2 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, assetLink: "", mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "", objectVariation: "Color",);
+      currentActivity = TapComponent(onCompleted: nextStep, assetLink: feelings[randomNumber].toLowerCase(), mainData: feelings[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/feelings_images/", objectVariation: "Feeling",);
     } 
     else if (totalSteps % 2 == 0 && totalSteps <= 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: "", mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "", objectVariation: "Color",);
+      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: feelings[randomNumber].toLowerCase(), mainData: feelings[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/feelings_images/", objectVariation: "Feeling",);
     } 
     else if(totalSteps % 2 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
+      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: feelings[correctIndex].toLowerCase(), wrongAssetLinks: wrongObjects, mainData: feelings[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/feelings_images/", objectVariation: "Feeling",);
     }
     else {
-      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
+      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: feelings[correctIndex].toLowerCase(), wrongAssetLinks: wrongObjects, mainData: feelings[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/feelings_images/", objectVariation: "Feeling",);
     }
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Center(child: Text("Basic Colors", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
+        title: Center(child: Text("Feelings", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
       body: Container(
@@ -349,5 +343,4 @@ class _ColorsGameState extends State<ColorsGame> {
       ),
     );
   }
-
 }

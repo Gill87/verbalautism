@@ -22,17 +22,17 @@ class ButtonsColumn extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const CircularButton(text: "Hi", image: AssetImage("assets/letter_colors/glitter_6.jpg"), audioAsset: "audio_files/hi.mp3",),
+              const CircularButton(text: "Hi", image: AssetImage("assets/sound_colors/glitter_6.jpg"), audioAsset: "audio_files/hi.mp3",),
               SizedBox(height: isSmallHeight(context) ? 5 : 10),
-              const CircularButton(text: "Please", image: AssetImage("assets/letter_colors/glitter_2.jpg"), audioAsset: "audio_files/please.mp3"),
+              const CircularButton(text: "Please", image: AssetImage("assets/sound_colors/glitter_2.jpg"), audioAsset: "audio_files/please.mp3"),
               SizedBox(height: isSmallHeight(context) ? 5 : 10), 
-              const CircularButton(text: "Thanks", image: AssetImage("assets/letter_colors/glitter_3.jpg"), audioAsset: "audio_files/thanks.mp3"),
+              const CircularButton(text: "Thanks", image: AssetImage("assets/sound_colors/glitter_3.jpg"), audioAsset: "audio_files/thanks.mp3"),
               SizedBox(height: isSmallHeight(context) ? 5 : 10),
-              const CircularButton(text: "Sorry", image: AssetImage("assets/letter_colors/glitter_4.jpg"),audioAsset: "audio_files/sorry.mp3"),
+              const CircularButton(text: "Sorry", image: AssetImage("assets/sound_colors/glitter_4.jpg"),audioAsset: "audio_files/sorry.mp3"),
               SizedBox(height: isSmallHeight(context) ? 5 : 10),
-              const CircularButton(text: "Bye", image: AssetImage("assets/letter_colors/glitter_5.jpg"), audioAsset: "audio_files/bye.mp3"),
+              const CircularButton(text: "Bye", image: AssetImage("assets/sound_colors/glitter_5.jpg"), audioAsset: "audio_files/bye.mp3"),
               SizedBox(height: isSmallHeight(context) ? 5 : 10),
-              const CircularButton(text: "Stop", image: AssetImage("assets/letter_colors/glitter_1.jpg"), audioAsset: "audio_files/stop.mp3"),
+              const CircularButton(text: "Stop", image: AssetImage("assets/sound_colors/glitter_1.jpg"), audioAsset: "audio_files/stop.mp3"),
             ],
           )
         )

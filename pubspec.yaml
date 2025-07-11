@@ -80,9 +80,14 @@ flutter:
     - assets/loginpage_images/
     - assets/background_images/
     - assets/lottie_animations/
-    - assets/letter_colors/
+    - assets/sound_colors/
     - assets/audio_files/
     - assets/number_images/
+    - assets/feelings_images/
+    - assets/food_images/
+    - assets/objects_images/
+    - assets/shapes_images/
+    - assets/places_images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

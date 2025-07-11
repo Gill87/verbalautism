@@ -8,23 +8,21 @@ import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
-class ColorsGame extends StatefulWidget {
-  const ColorsGame({
+class FoodGame extends StatefulWidget {
+  const FoodGame({
     super.key,
-    required this.selectedColor,
-
+    required this.selectedFood,
   });
 
-  final String selectedColor;
+  final String selectedFood;
 
   @override
-  State<ColorsGame> createState() => _ColorsGameState();
+  State<FoodGame> createState() => _FoodGameState();
 }
 
-class _ColorsGameState extends State<ColorsGame> {
-
+class _FoodGameState extends State<FoodGame> {
   // List
-  late List<String> colors;
+  late List<String> foods;
 
   // Variables
   int displaySteps = 1;
@@ -39,33 +37,32 @@ class _ColorsGameState extends State<ColorsGame> {
   late int randomNumber2;
   late int randomNumber3;
   late int correctIndex;
-  late List<String> wrongColors;
+  late List<String> wrongFoods;
 
   @override
   void initState() {
-    colors = [
-      "Red",
-      "Blue",
-      "Green",
-      "Yellow",
+    foods = [
+      "Apple",
+      "Banana",
+      "Bread",
+      "Cereal",
+      "Egg",
+      "Milk",
       "Orange",
-      "Purple",
-      "Pink",
-      "Brown",
-      "Black",
-      "White"
+      "Rice",
+      "Strawberry"
     ];
 
-    if(widget.selectedColor.isNotEmpty) {
-      correctIndex = colors.indexOf(widget.selectedColor);
+    if(widget.selectedFood.isNotEmpty) {
+      correctIndex = foods.indexOf(widget.selectedFood);
       randomNumber = correctIndex;
 
       if(correctIndex == -1) {
-        randomNumber = random.nextInt(colors.length);
+        randomNumber = random.nextInt(foods.length);
         correctIndex = randomNumber;
       }
     } else {
-      randomNumber = random.nextInt(colors.length);
+      randomNumber = random.nextInt(foods.length);
       correctIndex = randomNumber;
     }
     super.initState();
@@ -73,25 +70,25 @@ class _ColorsGameState extends State<ColorsGame> {
 
   void setOneWrongNumber(){
 
-    randomNumber2 = random.nextInt(colors.length);
+    randomNumber2 = random.nextInt(foods.length);
 
     while(randomNumber2 == randomNumber){
-      randomNumber2 = random.nextInt(colors.length);
+      randomNumber2 = random.nextInt(foods.length);
     }
     
-    wrongColors = [colors[randomNumber2]];
+    wrongFoods = [foods[randomNumber2].toLowerCase()];
   }
 
   void setTwoWrongNumbers(){
-    randomNumber2 = random.nextInt(colors.length);
-    randomNumber3 = random.nextInt(colors.length);
+    randomNumber2 = random.nextInt(foods.length);
+    randomNumber3 = random.nextInt(foods.length);
 
     while(randomNumber == randomNumber2 || randomNumber == randomNumber3 || randomNumber2 == randomNumber3){
-      randomNumber2 = random.nextInt(colors.length);
-      randomNumber3 = random.nextInt(colors.length);
+      randomNumber2 = random.nextInt(foods.length);
+      randomNumber3 = random.nextInt(foods.length);
     }
 
-    wrongColors = [colors[randomNumber2], colors[randomNumber3]];
+    wrongFoods = [foods[randomNumber2].toLowerCase(), foods[randomNumber3].toLowerCase()];
   }
 
   void nextRoundDialog(int roundNumber){
@@ -296,22 +293,22 @@ class _ColorsGameState extends State<ColorsGame> {
     Widget currentActivity;
     
     if (totalSteps % 2 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, assetLink: "", mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "", objectVariation: "Color",);
+      currentActivity = TapComponent(onCompleted: nextStep, assetLink: foods[randomNumber].toLowerCase(), mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/food_images/", objectVariation: "Food",);
     } 
     else if (totalSteps % 2 == 0 && totalSteps <= 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: "", mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "", objectVariation: "Color",);
+      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: foods[randomNumber].toLowerCase(), mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/food_images/", objectVariation: "Food",);
     } 
     else if(totalSteps % 2 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
+      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: foods[correctIndex].toLowerCase(), wrongAssetLinks: wrongFoods, mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/food_images/", objectVariation: "Food",);
     }
     else {
-      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: colors[correctIndex], wrongAssetLinks: wrongColors, mainData: colors[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "", objectVariation: "Color",);
+      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: foods[correctIndex].toLowerCase(), wrongAssetLinks: wrongFoods, mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/food_images/", objectVariation: "Food",);
     }
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Center(child: Text("Basic Colors", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
+        title: Center(child: Text("Foods", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
       body: Container(
@@ -349,5 +346,4 @@ class _ColorsGameState extends State<ColorsGame> {
       ),
     );
   }
-
 }
