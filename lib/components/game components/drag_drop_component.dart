@@ -90,6 +90,14 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
     }
   }
 
+  bool isTooLarge(){
+    if(widget.objectVariation == "Feeling" || widget.objectVariation == "Object" || widget.objectVariation == "Food" || widget.objectVariation == "Place"){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     _ttsService.stop();
@@ -144,7 +152,7 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                   child: Stack(
                     children: [
                       Transform.scale(
-                        scale: 1.5,
+                        scale: isTooLarge() ? 1.0 : 1.5,
                         child: !emptyAssetLink()
                           ? SvgPicture.asset(
                             '${widget.directory}${widget.assetLink}.svg',
@@ -211,7 +219,7 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                           return Transform.translate(
                             offset: Offset(0, -_animation.value),
                             child: Transform.scale(
-                              scale: 1,
+                              scale: isTooLarge() ? 0.75 : 1,
                               child: child
                             ),
                           );

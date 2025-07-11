@@ -100,7 +100,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
   }
 
   bool isTooLarge(){
-    if(widget.objectVariation == "Feeling"){
+    if(widget.objectVariation == "Feeling" || widget.objectVariation == "Object" || widget.objectVariation == "Food" || widget.objectVariation == "Place"){
       return true;
     } else {
       return false;

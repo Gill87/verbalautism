@@ -117,6 +117,14 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
     }
   }
 
+  bool isTooLarge() {
+    if (widget.objectVariation == "Feeling" || widget.objectVariation == "Object" || widget.objectVariation == "Food" || widget.objectVariation == "Place") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     _ttsService.stop();
@@ -157,7 +165,7 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
             mainAxisAlignment: MainAxisAlignment.center,
             children: allObjectLinks.map((object) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: EdgeInsets.symmetric(horizontal: isTooLarge() ? 25 : 15),
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
