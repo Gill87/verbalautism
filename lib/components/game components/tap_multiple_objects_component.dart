@@ -176,13 +176,13 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(20), // Rounded corners
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.black.withOpacity(0.1),
+                        //     blurRadius: 4,
+                        //     offset: const Offset(0, 4),
+                        //   ),
+                        // ],
                       ),
                     child: AnimatedBuilder(
                       animation: _animation,
@@ -197,13 +197,13 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                         height: MediaQuery.of(context).size.height * 0.3,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.black.withOpacity(0.1),
+                          //     blurRadius: 8,
+                          //     offset: const Offset(0, 4),
+                          //   ),
+                          // ],
                         ),
                         child: Center(
                           child: Transform.scale(

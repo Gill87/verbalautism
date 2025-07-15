@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/feelings/games_page/feelings_game.dart';
 
@@ -22,24 +23,76 @@ class _FeelingsBasePageState extends State<FeelingsBasePage> {
         ),
       ),
       
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/background_images/32442923_7895078.jpg"),
-            fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/background_images/32442923_7895078.jpg"),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            alignment: WrapAlignment.center,
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height - AppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
             children: [
-              _buildCard(
-                context,
-                label: "Basic Feelings",
-                onTap: onTapCard(context, "Basic Feelings"),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const FeelingsGame(selectedFeeling: "")),
+                ),
+                child: Text("Random Feeling", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
+              ),
+              const SizedBox(height: 20),
+              Center(
+                child: Wrap(
+                  spacing: 20,
+                  runSpacing: 20,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    _buildCard(
+                      context,
+                      image: "assets/feelings_images/happy.svg",
+                      label: "Happy",
+                      onTap: onTapCard(context, "Happy"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/feelings_images/sad.svg",
+                      label: "Sad",
+                      onTap: onTapCard(context, "Sad"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/feelings_images/angry.svg",
+                      label: "Angry",
+                      onTap: onTapCard(context, "Angry"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/feelings_images/curious.svg",
+                      label: "Curious",
+                      onTap: onTapCard(context, "Curious"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/feelings_images/sick.svg",
+                      label: "Sick",
+                      onTap: onTapCard(context, "Sick"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/feelings_images/surprised.svg",
+                      label: "Surprised",
+                      onTap: onTapCard(context, "Surprised"),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -48,8 +101,8 @@ class _FeelingsBasePageState extends State<FeelingsBasePage> {
     );
   }
 
-  Widget _buildCard(BuildContext context,
-      {required String label, required VoidCallback onTap}) {
+Widget _buildCard(BuildContext context,
+      {required String label, required String image, required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
@@ -59,12 +112,23 @@ class _FeelingsBasePageState extends State<FeelingsBasePage> {
         color: Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
-          width: MediaQuery.of(context).size.width * 0.4,
-          height: MediaQuery.of(context).size.height * 0.3,
-          padding: const EdgeInsets.all(16),
+          width: 200,
+          height: 230,
+          padding: const EdgeInsets.all(8),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [          
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+                Transform.scale(
+                  scale: 1.5,
+                  child: SvgPicture.asset(
+                    image,
+                    width: 100,
+                    height: 100,
+                  ),
+                ),   
+                
+                const SizedBox(height: 30),
+           
                 Text(
                   label,
                   style: GoogleFonts.ubuntu(
@@ -80,64 +144,11 @@ class _FeelingsBasePageState extends State<FeelingsBasePage> {
     );
   }
 
-    void Function() onTapCard(BuildContext context, String label) {
+  void Function() onTapCard(BuildContext context, String label) {
     return () async {
-      String? selected = await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Select a Color", style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
-            content: Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243),
-),
-                  onPressed: () => Navigator.of(context).pop("Happy"),
-                  child: Text("Happy", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
+      String? selected = label;
 
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Sad"),
-                  child: Text("Sad", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Angry"),
-                  child: Text("Angry", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Curious"),
-                  child: Text("Curious", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Sick"),
-                  child: Text("Sick", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Surprised"),
-                  child: Text("Surprised", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                  onPressed: () => Navigator.of(context).pop(""),
-                  child: Text("Random", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-
-      if (selected != null) {
+      if (selected != "") {
         Navigator.push(
           context,
           MaterialPageRoute(

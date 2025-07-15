@@ -44,9 +44,12 @@ class _HomePageState extends State<HomePage> {
       screenWidth <= 920;
 
     double rightSideLength(){
-      if(screenWidth <= 730){
+      if(screenWidth <= 630){
+        return screenWidth * 0;
+      } else if(screenWidth <= 730){
         return screenWidth * 0.005;
-      } else if(screenWidth <= 800){
+      }
+      else if(screenWidth <= 800){
         return screenWidth * 0.02;
       }
       else if(screenWidth <= 920){

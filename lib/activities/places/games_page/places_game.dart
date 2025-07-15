@@ -45,7 +45,7 @@ class _PlacesGameState extends State<PlacesGame> {
     places = [
       "Airport",
       "Fire Station",
-      "Grocery",
+      "Grocery Store",
       "Hospital",
       "Library",
       "Mall",
@@ -57,7 +57,7 @@ class _PlacesGameState extends State<PlacesGame> {
     assetLinkPlaces = [
       "Airport",
       "fire_station",
-      "Grocery",
+      "grocery_store",
       "Hospital",
       "Library",
       "Mall",

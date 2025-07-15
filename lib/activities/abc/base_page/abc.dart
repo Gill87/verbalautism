@@ -19,48 +19,53 @@ class Activity1 extends StatelessWidget {
           style: GoogleFonts.ubuntu(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/background_images/32442923_7895078.jpg"),
-            fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/background_images/32442923_7895078.jpg"),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            alignment: WrapAlignment.center,
-            children: [
-              _buildCard(
-                context,
-                label: "Uppercase",
-                image: "assets/abc_images/Uppercase_A.svg",
-                onTap: onTapCard(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height - AppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              alignment: WrapAlignment.center,
+              children: [
+                _buildCard(
                   context,
-                  "Uppercase",
+                  label: "Uppercase",
+                  image: "assets/abc_images/Uppercase_A.svg",
+                  onTap: onTapCard(
+                    context,
+                    "Uppercase",
+                  ),
                 ),
-              ),
-              _buildCard(
-                context,
-                label: "Lowercase",
-                image: "assets/abc_images/Lowercase_A.svg",
-                onTap: onTapCard(
+                _buildCard(
                   context,
-                  "Lowercase",
+                  label: "Lowercase",
+                  image: "assets/abc_images/Lowercase_A.svg",
+                  onTap: onTapCard(
+                    context,
+                    "Lowercase",
+                  ),
                 ),
-              ),
-              _buildCard(
-                context,
-                label: "Mixed",
-                image: "assets/abc_images/MixedLettersImage.svg",
-                onTap: () => Navigator.push(
+                _buildCard(
                   context,
-                  MaterialPageRoute(builder: (context) => const AbcMixedGame()),
+                  label: "Mixed",
+                  image: "assets/abc_images/MixedLettersImage.svg",
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AbcMixedGame()),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

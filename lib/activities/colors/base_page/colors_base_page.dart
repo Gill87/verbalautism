@@ -18,39 +18,125 @@ class _ColorsBasePageState extends State<ColorsBasePage> {
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
         centerTitle: true,
         title: Text(
-          "Colors",
+          "${MediaQuery.of(context).size.width}",
           style: GoogleFonts.ubuntu(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/background_images/32442923_7895078.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            alignment: WrapAlignment.center,
-            children: [
-              _buildCard(
-                context,
-                label: "Basic Colors",
-                onTap: onTapCard(context, "Basic Colors"),
+      body: SingleChildScrollView(
+        child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/background_images/32442923_7895078.jpg"),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ],
-          ),
-        ),
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height - AppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+              ),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ColorsGame(selectedColor: "")),
+                    ),
+                    child: Text("Random Color", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
+                  ),
+              
+                  const SizedBox(height: 20),
+              
+                  Center(
+                    child: Wrap(
+                      spacing: 20,
+                      runSpacing: 20,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        _buildCard(
+                          context,
+                          label: "Red",
+                          mainColor: Colors.red,
+                          onTap: onTapCard(context, "Red"),
+                        ),
+                        _buildCard(
+                          context,
+                          label: "Blue",
+                          mainColor: Colors.blue,
+                          onTap: onTapCard(context, "Blue"),
+                        ),
+                            
+                        _buildCard(
+                          context,
+                          label: "Purple",
+                          mainColor: Colors.purple,
+                          onTap: onTapCard(context, "Purple"),
+                        ),
+                            
+                        _buildCard(
+                          context,
+                          label: "Green",
+                          mainColor: Colors.green,
+                          onTap: onTapCard(context, "Green"),
+                        ),
+                            
+                        _buildCard(
+                          context,
+                          label: "Yellow",
+                          mainColor: Colors.yellow,
+                          onTap: onTapCard(context, "Yellow"),
+                        ),
+                            
+                        _buildCard(
+                          context,
+                          label: "White",
+                          mainColor: Colors.white,
+                          onTap: onTapCard(context, "White"),
+                        ),
+                            
+                        _buildCard(
+                          context,
+                          label: "Orange",
+                          mainColor: Colors.orange,
+                          onTap: onTapCard(context, "Orange"),
+                        ),
+                            
+                        _buildCard(
+                          context,
+                          label: "Pink",
+                          mainColor: Colors.pink,
+                          onTap: onTapCard(context, "Pink"),
+                        ),
+                            
+                        _buildCard(
+                          context,
+                          label: "Brown",
+                          mainColor: Colors.brown,
+                          onTap: onTapCard(context, "Brown"),
+                        ),
+                            
+                        _buildCard(
+                          context,
+                          label: "Black",
+                          mainColor: Colors.black,
+                          onTap: onTapCard(context, "Black"),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
       ),
     );
   }
 
   Widget _buildCard(BuildContext context,
-      {required String label, required VoidCallback onTap}) {
+      {required String label, required VoidCallback onTap, required Color mainColor}) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
@@ -58,35 +144,43 @@ class _ColorsBasePageState extends State<ColorsBasePage> {
       child: Card(
         elevation: 10,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        color: Colors.black,
+        color: mainColor,
         child: Container(
-          width: MediaQuery.of(context).size.width * 0.4,
-          height: MediaQuery.of(context).size.height * 0.3,
-          padding: const EdgeInsets.all(16),
+          width: 150,
+          height: 150,
+          padding: const EdgeInsets.all(8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [          
-              ShaderMask(
-                shaderCallback: (bounds) => const LinearGradient(
-                  colors: [
-                    Colors.red,
-                    Colors.orange,
-                    Colors.yellow,
-                    Colors.green,
-                    Colors.blue,
-                    Colors.indigo,
-                    Colors.purple,
-                  ],
-                ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
-                child: Text(
-                  label,
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white, // Needs to be white for ShaderMask
-                  ),
+              // ShaderMask(
+              //   shaderCallback: (bounds) => const LinearGradient(
+              //     colors: [
+              //       Colors.red,
+              //       Colors.orange,
+              //       Colors.yellow,
+              //       Colors.green,
+              //       Colors.blue,
+              //       Colors.indigo,
+              //       Colors.purple,
+              //     ],
+              //   ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+                // child: Text(
+                //   label,
+                //   style: GoogleFonts.ubuntu(
+                //     fontSize: 24,
+                //     fontWeight: FontWeight.bold,
+                //     color: Colors.white, // Needs to be white for ShaderMask
+                //   ),
+                // ),
+              // ),
+              Text(
+                label,
+                style: GoogleFonts.ubuntu(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.indigo,
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -96,85 +190,9 @@ class _ColorsBasePageState extends State<ColorsBasePage> {
 
   void Function() onTapCard(BuildContext context, String label) {
     return () async {
-      String? selected = await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Select a Color", style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
-            content: Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                  onPressed: () => Navigator.of(context).pop("Red"),
-                  child: Text("Red", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
+      String? selected = label;
 
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                  onPressed: () => Navigator.of(context).pop("Green"),
-                  child: Text("Green", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
-                  onPressed: () => Navigator.of(context).pop("Yellow"),
-                  child: Text("Yellow", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                  onPressed: () => Navigator.of(context).pop("Orange"),
-                  child: Text("Orange", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                  onPressed: () => Navigator.of(context).pop("Blue"),
-                  child: Text("Blue", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
-                  onPressed: () => Navigator.of(context).pop("Purple"),
-                  child: Text("Purple", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
-                  onPressed: () => Navigator.of(context).pop("Brown"),
-                  child: Text("Brown", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
-                  onPressed: () => Navigator.of(context).pop("Pink"),
-                  child: Text("Pink", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                  onPressed: () => Navigator.of(context).pop("White"),
-                  child: Text("White", style: GoogleFonts.ubuntu(color: Colors.black, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  onPressed: () => Navigator.of(context).pop("Black"),
-                  child: Text("Black", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-                  onPressed: () => Navigator.of(context).pop(""),
-                  child: Text("Random", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-
-      if (selected != null) {
+      if (selected != "") {
         Navigator.push(
           context,
           MaterialPageRoute(

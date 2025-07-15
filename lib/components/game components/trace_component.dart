@@ -27,6 +27,9 @@ class _TraceComponentState extends State<TraceComponent> {
 
   final TtsService _ttsService = TtsService();
 
+  Map<String, MathShapes> shapesMap = {};
+
+
   @override
   void initState() {
     _ttsService.speak("Trace the ${widget.objectVariation} ${widget.mainData}");
@@ -57,17 +60,30 @@ class _TraceComponentState extends State<TraceComponent> {
     });
   }
 
-  @override
-  void dispose() {
-    _ttsService.stop();
-    super.dispose();
-  }
-
   bool isChar(){
     if(widget.mainData.length == 1){
       return true;
     }
     return false;
+  }
+
+  bool isShape(){
+    if(widget.objectVariation == "Shape"){
+      shapesMap = {
+        'circle': MathShapes.circle,
+        'triangle': MathShapes.triangle1,
+        'rectangle': MathShapes.rectangle,
+      };
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _ttsService.stop();
+    super.dispose();
   }
 
   @override
@@ -108,17 +124,33 @@ class _TraceComponentState extends State<TraceComponent> {
                 _showCorrectAnimation();
               },
             )
-            : TracingWordGame(
-              words: [
-                TraceWordModel(
-                  word: widget.mainData,
-                  traceShapeOptions: const TraceShapeOptions(innerPaintColor: Color.fromARGB(255, 33, 150, 243))
-                )
-              ],
-              onGameFinished: (int index) async {
-                _showCorrectAnimation();
-              },
-            ),
+            : isShape() 
+              ? TracingGeometricShapesGame(
+                  traceGeoMetricShapeModels: [
+                    TraceGeoMetricShapeModel(
+                      shapes: [
+                        MathShapeWithOption(
+                          shape: shapesMap[widget.mainData] ?? MathShapes.circle,
+                          traceShapeOptions: const TraceShapeOptions(innerPaintColor: Color.fromARGB(255, 33, 150, 243))
+                        )
+                      ]
+                    ),
+                  ],
+                  onGameFinished: (int index) async {
+                    _showCorrectAnimation();
+                  },              
+              )
+              : TracingWordGame(
+                  words: [
+                    TraceWordModel(
+                      word: widget.mainData,
+                      traceShapeOptions: const TraceShapeOptions(innerPaintColor: Color.fromARGB(255, 33, 150, 243))
+                    )
+                  ],
+                  onGameFinished: (int index) async {
+                    _showCorrectAnimation();
+                  },
+              )
 
         )
       ],

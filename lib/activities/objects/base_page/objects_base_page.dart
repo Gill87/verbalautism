@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/objects/games_page/object_game.dart';
 
@@ -22,24 +23,104 @@ class _ObjectsBasePageState extends State<ObjectsBasePage> {
         ),
       ),
       
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/background_images/32442923_7895078.jpg"),
-            fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/background_images/32442923_7895078.jpg"),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            alignment: WrapAlignment.center,
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height - AppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
             children: [
-              _buildCard(
-                context,
-                label: "Common Objects",
-                onTap: onTapCard(context, "Common Objects"),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ObjectGame(selectedObject: "")),
+                ),
+                child: Text("Random Object", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
+              ),
+              
+              const SizedBox(height: 20),
+
+              Center(
+                child: Wrap(
+                  spacing: 20,
+                  runSpacing: 20,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    _buildCard(
+                      context,
+                      label: "Book",
+                      image: "assets/objects_images/book.svg",
+                      onTap: onTapCard(context, "Book"),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "Car",
+                      image: "assets/objects_images/car.svg",
+                      onTap: onTapCard(context, "Car"),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "Clock",
+                      image: "assets/objects_images/clock.svg",
+                      onTap: onTapCard(context, "Clock"),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "Computer",
+                      image: "assets/objects_images/computer.svg",
+                      onTap: onTapCard(context, "Computer"),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "Crayon",
+                      image: "assets/objects_images/crayon.svg",
+                      onTap: onTapCard(context, "Crayon"),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "Pen",
+                      image: "assets/objects_images/pen.svg",
+                      onTap: onTapCard(context, "Pen"),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "Pencil",
+                      image: "assets/objects_images/pencil.svg",
+                      onTap: onTapCard(context, "Pencil"),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "Scissors",
+                      image: "assets/objects_images/scissors.svg",
+                      onTap: onTapCard(context, "Scissors"),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "TV",
+                      image: "assets/objects_images/tv.svg",
+                      onTap: onTapCard(context, "TV"),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -49,7 +130,7 @@ class _ObjectsBasePageState extends State<ObjectsBasePage> {
   }
 
   Widget _buildCard(BuildContext context,
-      {required String label, required VoidCallback onTap}) {
+      {required String label, required String image, required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
@@ -59,12 +140,23 @@ class _ObjectsBasePageState extends State<ObjectsBasePage> {
         color: Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
-          width: MediaQuery.of(context).size.width * 0.4,
-          height: MediaQuery.of(context).size.height * 0.3,
+          width: 200,
+          height: 230,
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [          
+            children: [
+                Transform.scale(
+                  scale: 1.5,
+                  child: SvgPicture.asset(
+                    image,
+                    width: 100,
+                    height: 100,
+                  ),
+                ),   
+
+                const SizedBox(height: 10),
+                           
                 Text(
                   label,
                   style: GoogleFonts.ubuntu(
@@ -79,92 +171,22 @@ class _ObjectsBasePageState extends State<ObjectsBasePage> {
       ),
     );
   }
-
-    void Function() onTapCard(BuildContext context, String label) {
-    return () async {
-      String? selected = await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Select an Object", style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
-            content: Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Book"),
-                  child: Text("Book", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Car"),
-                  child: Text("Car", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Clock"),
-                  child: Text("Clock", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Computer"),
-                  child: Text("Computer", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Crayon"),
-                  child: Text("Crayon", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Pen"),
-                  child: Text("Pen", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Pencil"),
-                  child: Text("Pencil", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("Scissors"),
-                  child: Text("Scissors", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 33, 150, 243)),
-                  onPressed: () => Navigator.of(context).pop("TV"),
-                  child: Text("TV", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                  onPressed: () => Navigator.of(context).pop(""),
-                  child: Text("Random", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-
-      if (selected != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ObjectGame(selectedObject: selected),
-          ),
-        );
-      }
-
-    };
-  }
 }
+
+void Function() onTapCard(BuildContext context, String label) {
+  return () async {
+    String? selected = label;
+
+    if (selected != "") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ObjectGame(selectedObject: selected),
+        ),
+      );
+    }
+
+  };
+}
+
 

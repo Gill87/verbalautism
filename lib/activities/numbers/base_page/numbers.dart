@@ -17,78 +17,83 @@ class Numbers extends StatelessWidget {
         ),
       ),
       
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/background_images/32442923_7895078.jpg"),
-            fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/background_images/32442923_7895078.jpg"),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            alignment: WrapAlignment.center,
-            children: [
-              _buildCard(
-                context,
-                label: "0-9",
-                onTap: onTapCard(context, "0-9", 0, 9),
-              ),
-              _buildCard(
-                context,
-                label: "10-19",
-                onTap: onTapCard(context, "10-19", 10, 19),
-              ),
-              _buildCard(
-                context,
-                label: "20-29",
-                onTap: onTapCard(context, "20-29", 20, 29),
-              ),
-
-              _buildCard(
-                context,
-                label: "30-39",
-                onTap: onTapCard(context, "30-39", 30, 39),
-              ),
-              
-              _buildCard(
-                context,
-                label: "40-49",
-                onTap: onTapCard(context, "40-49", 40, 49),
-              ),
-
-              _buildCard(
-                context,
-                label: "50-59",
-                onTap: onTapCard(context, "50-59", 50, 59),
-              ),
-
-              _buildCard(
-                context,
-                label: "60-69",
-                onTap: onTapCard(context, "60-69", 60, 69),
-              ),
-
-              _buildCard(
-                context,
-                label: "70-79",
-                onTap: onTapCard(context, "70-79", 70, 79),
-              ),
-
-              _buildCard(
-                context,
-                label: "80-89",
-                onTap: onTapCard(context, "80-89", 80, 89),
-              ),
-
-              _buildCard(
-                context,
-                label: "90-99",
-                onTap: onTapCard(context, "90-99", 90, 99),
-              ),
-            ],
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height - AppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              alignment: WrapAlignment.center,
+              children: [
+                _buildCard(
+                  context,
+                  label: "0 - 9",
+                  onTap: onTapCard(context, "0-9", 0, 9),
+                ),
+                _buildCard(
+                  context,
+                  label: "10 - 19",
+                  onTap: onTapCard(context, "10-19", 10, 19),
+                ),
+                _buildCard(
+                  context,
+                  label: "20 - 29",
+                  onTap: onTapCard(context, "20-29", 20, 29),
+                ),
+        
+                _buildCard(
+                  context,
+                  label: "30 - 39",
+                  onTap: onTapCard(context, "30-39", 30, 39),
+                ),
+                
+                _buildCard(
+                  context,
+                  label: "40 - 49",
+                  onTap: onTapCard(context, "40-49", 40, 49),
+                ),
+        
+                _buildCard(
+                  context,
+                  label: "50 - 59",
+                  onTap: onTapCard(context, "50-59", 50, 59),
+                ),
+        
+                _buildCard(
+                  context,
+                  label: "60 - 69",
+                  onTap: onTapCard(context, "60-69", 60, 69),
+                ),
+        
+                _buildCard(
+                  context,
+                  label: "70 - 79",
+                  onTap: onTapCard(context, "70-79", 70, 79),
+                ),
+        
+                _buildCard(
+                  context,
+                  label: "80 - 89",
+                  onTap: onTapCard(context, "80-89", 80, 89),
+                ),
+        
+                _buildCard(
+                  context,
+                  label: "90 - 99",
+                  onTap: onTapCard(context, "90-99", 90, 99),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -106,8 +111,8 @@ class Numbers extends StatelessWidget {
         color: Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
-          width: (MediaQuery.of(context).size.width - 80) / 6,
-          height: MediaQuery.of(context).size.height * 0.3,
+          width: 150,
+          height: 150,
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
