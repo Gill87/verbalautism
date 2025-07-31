@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:one_clock/one_clock.dart';
 import 'package:verbalautism/activities/abc/base_page/abc.dart';
+import 'package:verbalautism/activities/actions/base_page/actions_base_page.dart';
 import 'package:verbalautism/activities/colors/base_page/colors_base_page.dart';
 import 'package:verbalautism/activities/feelings/base_page/feelings_base_page.dart';
 import 'package:verbalautism/activities/food/base_page/food_base_page.dart';
@@ -141,6 +142,14 @@ class _HomePageState extends State<HomePage> {
       );
     }
   
+    void onToActions(){
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const ActionsBasePage()
+        )
+      );
+    }
     return SafeArea(
       child: Scaffold(
 
@@ -263,7 +272,7 @@ class _HomePageState extends State<HomePage> {
                         SubjectWidget(tapFunction: onToAlphabet, text: 'Questions', image1: const AssetImage('assets/homepage_images/questions.jpg')),
                         SubjectWidget(tapFunction: onToAlphabet, text: 'Prepositions', image1: const AssetImage('assets/homepage_images/prepositions.jpg')),
                         SubjectWidget(tapFunction: onToAlphabet, text: 'Sight Words', image1: const AssetImage('assets/homepage_images/sight.jpg')),
-                        SubjectWidget(tapFunction: onToAlphabet, text: 'Actions & Verbs', image1: const AssetImage('assets/homepage_images/verbs.jpg')),
+                        SubjectWidget(tapFunction: onToActions, text: 'Action Verbs', image1: const AssetImage('assets/homepage_images/verbs.jpg')),
                         SubjectWidget(tapFunction: onToAlphabet, text: 'Sequence', image1: const AssetImage('assets/homepage_images/sequence.jpg')),
                         SubjectWidget(tapFunction: onToAlphabet, text: 'Matching Games', image1: const AssetImage('assets/homepage_images/matching.jpg')),
                         SubjectWidget(tapFunction: onToAlphabet, text: 'Tracing Games', image1: const AssetImage('assets/homepage_images/tracing.jpg')),

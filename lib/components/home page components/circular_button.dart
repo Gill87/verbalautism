@@ -14,7 +14,7 @@ class CircularButton extends StatefulWidget {
 }
 
 class _CircularButtonState extends State<CircularButton> {
-
+  
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   Future<void> _playAudio() async {
@@ -25,30 +25,78 @@ class _CircularButtonState extends State<CircularButton> {
     }
 
     // Play the audio
-    await _audioPlayer.play(AssetSource(widget.audioAsset));  
+    await _audioPlayer.play(AssetSource(widget.audioAsset));
   }
-  
+
+  // Calculate responsive button size based on screen height
+  double _getButtonSize(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    
+    // Define size breakpoints
+    if (screenHeight <= 500) {
+      return 50; // Very small screens
+    } else if (screenHeight <= 600) {
+      return 60; // Small screens
+    } else if (screenHeight <= 700) {
+      return 70; // Medium screens
+    } else if (screenHeight <= 800) {
+      return 75; // Default size
+    } else {
+      return 85; // Large screens
+    }
+  }
+
+  // Calculate responsive font size
+  double _getFontSize(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    
+    if (screenHeight <= 500) {
+      return 12;
+    } else if (screenHeight <= 600) {
+      return 14;
+    } else if (screenHeight <= 700) {
+      return 16;
+    } else {
+      return 17; // Default
+    }
+  }
+
+  // Calculate responsive padding
+  double _getPadding(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    
+    if (screenHeight <= 500) {
+      return 4;
+    } else if (screenHeight <= 600) {
+      return 6;
+    } else {
+      return 8; // Default
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    
+    final buttonSize = _getButtonSize(context);
+    final fontSize = _getFontSize(context);
+    final padding = _getPadding(context);
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: _playAudio,
         child: Container(
-          width: 75,
-          height: 75,
-          padding: const EdgeInsets.all(8),
+          width: buttonSize,
+          height: buttonSize,
+          padding: EdgeInsets.all(padding),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
-            image: DecorationImage(image: widget.image, fit: BoxFit.cover),
-            
+            image: DecorationImage(image: widget.image, fit: BoxFit.cover),                      
           ),
           child: Center(
             child: Text(
               widget.text,
               style: GoogleFonts.ubuntu(
-                fontSize:17, 
+                fontSize: fontSize,
                 color: Colors.white,
                 shadows: [
                   Shadow(
