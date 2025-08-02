@@ -11,6 +11,7 @@ import 'package:verbalautism/activities/numbers/base_page/numbers.dart';
 import 'package:verbalautism/activities/objects/base_page/objects_base_page.dart';
 import 'package:verbalautism/activities/places/base_page/places_base_page.dart';
 import 'package:verbalautism/activities/shapes/base_page/shapes_base_page.dart';
+import 'package:verbalautism/activities/sight_word/base_page/sight_word_base_page.dart';
 import 'package:verbalautism/components/home%20page%20components/buttons_column.dart';
 import 'package:verbalautism/components/home%20page%20components/schedule_button.dart';
 import 'package:verbalautism/components/home%20page%20components/sound_button.dart';
@@ -150,6 +151,16 @@ class _HomePageState extends State<HomePage> {
         )
       );
     }
+
+    void onToSightWords(){
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => const SightWordBasePage()
+        )
+      );
+    }
+    
     return SafeArea(
       child: Scaffold(
 
@@ -271,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                         SubjectWidget(tapFunction: onToPlaces, text: 'Places',  image1: const AssetImage('assets/homepage_images/places.jpg')),
                         SubjectWidget(tapFunction: onToAlphabet, text: 'Questions', image1: const AssetImage('assets/homepage_images/questions.jpg')),
                         SubjectWidget(tapFunction: onToAlphabet, text: 'Prepositions', image1: const AssetImage('assets/homepage_images/prepositions.jpg')),
-                        SubjectWidget(tapFunction: onToAlphabet, text: 'Sight Words', image1: const AssetImage('assets/homepage_images/sight.jpg')),
+                        SubjectWidget(tapFunction: onToSightWords, text: 'Sight Words', image1: const AssetImage('assets/homepage_images/sight.jpg')),
                         SubjectWidget(tapFunction: onToActions, text: 'Action Verbs', image1: const AssetImage('assets/homepage_images/verbs.jpg')),
                         SubjectWidget(tapFunction: onToAlphabet, text: 'Sequence', image1: const AssetImage('assets/homepage_images/sequence.jpg')),
                         SubjectWidget(tapFunction: onToAlphabet, text: 'Matching Games', image1: const AssetImage('assets/homepage_images/matching.jpg')),

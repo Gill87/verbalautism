@@ -172,6 +172,14 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
     }
   }
 
+  bool isTooLarge(){
+    if(widget.objectVariation == "Sight Word"){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     _ttsService.stop();
@@ -273,7 +281,7 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
       feedback: Material(
         color: Colors.transparent,  // no background
         child: Transform.scale(
-          scale: 1.5,
+          scale: isTooLarge() ? 1.25 : 1.5,
           child: animatedSvg
         ), // same as child -> no offset
       ),
