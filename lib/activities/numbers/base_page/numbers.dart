@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:verbalautism/activities/numbers/games_pages/numbers_game.dart';
+import 'package:verbalautism/activities/numbers/base_page/numbers_selection_page.dart';
+
 class Numbers extends StatelessWidget {
   const Numbers({super.key});
 
@@ -133,47 +134,19 @@ class Numbers extends StatelessWidget {
   }
 }
 
+// Updated onTapCard function
 void Function() onTapCard(BuildContext context, String label, int min, int max) {
-  return () async {
-    int? selected = await showDialog<int>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Select a number from $label", style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold)),
-          content: Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              // Numbers min to max
-              for (int i = min; i <= max; i++)
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                  onPressed: () => Navigator.of(context).pop(i),
-                  child: Text("$i", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold),),
-                ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                onPressed: () => Navigator.of(context).pop(-1),
-                child: Text("Random", style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold),),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-
-    if (selected != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NumbersGame(
-            min: min,
-            max: max,
-            selectedNumber: selected,
-          ),
+  return () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NumberSelectionPage(
+          rangeLabel: label,
+          min: min,
+          max: max,
         ),
-      );
-    }
+      ),
+    );
   };
 }
 

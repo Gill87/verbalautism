@@ -178,7 +178,7 @@ class _ColorsBasePageState extends State<ColorsBasePage> {
                 style: GoogleFonts.ubuntu(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Colors.indigo,
+                  color: (label == "White" || label == "Yellow") ? Colors.black : Colors.white,
                 ),
               )
             ],

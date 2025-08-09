@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:verbalautism/activities/food/games_page/food_game.dart';
+import 'package:verbalautism/activities/food/base_page/food_selection_page.dart';
 
 class FoodBasePage extends StatefulWidget {
   const FoodBasePage({super.key});
@@ -25,6 +25,7 @@ class _FoodBasePageState extends State<FoodBasePage> {
       
       body: SingleChildScrollView(
         child: Container(
+          alignment: Alignment.center,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/background_images/32442923_7895078.jpg"),
@@ -37,19 +38,6 @@ class _FoodBasePageState extends State<FoodBasePage> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const FoodGame(selectedFood: "")),
-                ),
-                child: Text("Random Food", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
-              ),
-              const SizedBox(height: 20,),
-              
               Center(
                 child: Wrap(
                   spacing: 20,
@@ -58,59 +46,59 @@ class _FoodBasePageState extends State<FoodBasePage> {
                   children: [
                     _buildCard(
                       context,
-                      image: "assets/food_images/apple.svg",
-                      label: "Apple",
-                      onTap: onTapCard(context, "Apple"),
-                    ),
-
-                    _buildCard(
-                      context,
-                      image: "assets/food_images/banana.svg",
-                      label: "Banana",
-                      onTap: onTapCard(context, "Banana"),
-                    ),
-
-                    _buildCard(
-                      context,
                       image: "assets/food_images/cereal.svg",
-                      label: "Cereal",
-                      onTap: onTapCard(context, "Cereal"),
-                    ),
-
-                    _buildCard(
-                      context,
-                      image: "assets/food_images/egg.svg",
-                      label: "Egg",
-                      onTap: onTapCard(context, "Egg"),
-                    ),
-
-                    _buildCard(
-                      context,
-                      image: "assets/food_images/milk.svg",
-                      label: "Milk",
-                      onTap: onTapCard(context, "Milk"),
-                    ),
-
-                    _buildCard(
-                      context,
-                      image: "assets/food_images/orange.svg",
-                      label: "Orange",
-                      onTap: onTapCard(context, "Orange"),
+                      label: "Breakfast",
+                      onTap: onTapCard(context, "Breakfast"),
                     ),
 
                     _buildCard(
                       context,
                       image: "assets/food_images/rice.svg",
-                      label: "Rice",
-                      onTap: onTapCard(context, "Rice"),
+                      label: "Lunch/Dinner",
+                      onTap: onTapCard(context, "Lunch/Dinner"),
                     ),
 
                     _buildCard(
                       context,
-                      image: "assets/food_images/strawberry.svg",
-                      label: "Strawberry",
-                      onTap: onTapCard(context, "Strawberry"),
+                      image: "assets/food_images/apple.svg",
+                      label: "Snacks",
+                      onTap: onTapCard(context, "Snacks"),
                     ),
+
+                    // _buildCard(
+                    //   context,
+                    //   image: "assets/food_images/egg.svg",
+                    //   label: "Egg",
+                    //   onTap: onTapCard(context, "Egg"),
+                    // ),
+
+                    // _buildCard(
+                    //   context,
+                    //   image: "assets/food_images/milk.svg",
+                    //   label: "Milk",
+                    //   onTap: onTapCard(context, "Milk"),
+                    // ),
+
+                    // _buildCard(
+                    //   context,
+                    //   image: "assets/food_images/orange.svg",
+                    //   label: "Orange",
+                    //   onTap: onTapCard(context, "Orange"),
+                    // ),
+
+                    // _buildCard(
+                    //   context,
+                    //   image: "assets/food_images/rice.svg",
+                    //   label: "Rice",
+                    //   onTap: onTapCard(context, "Rice"),
+                    // ),
+
+                    // _buildCard(
+                    //   context,
+                    //   image: "assets/food_images/strawberry.svg",
+                    //   label: "Strawberry",
+                    //   onTap: onTapCard(context, "Strawberry"),
+                    // ),
                   ],
                 ),
               ),
@@ -164,7 +152,8 @@ Widget _buildCard(BuildContext context,
     );
   }
 
-    void Function() onTapCard(BuildContext context, String label) {
+
+  void Function() onTapCard(BuildContext context, String label) {
     return () async {
       String? selected = label;
 
@@ -172,12 +161,10 @@ Widget _buildCard(BuildContext context,
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FoodGame(selectedFood: selected),
+            builder: (context) => FoodSelectionPage(selectedMeal: selected),
           ),
         );
       }
-
     };
   }
 }
-

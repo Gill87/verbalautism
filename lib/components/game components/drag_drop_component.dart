@@ -98,9 +98,19 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
     }
   }
 
+  bool isShape(){
+    if(widget.objectVariation == "Shape"){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     _ttsService.stop();
+    _controller.dispose();
+    _animation.removeListener(() {}); // Remove listener to avoid memory leaks
     super.dispose();
   }
 
@@ -156,8 +166,12 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                         child: !emptyAssetLink()
                           ? SvgPicture.asset(
                             '${widget.directory}${widget.assetLink}.svg',
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            height: MediaQuery.of(context).size.height * 0.4,
+                            width: isShape()
+                              ? MediaQuery.of(context).size.width * 0.3
+                              : MediaQuery.of(context).size.width * 0.4,
+                            height: isShape()
+                              ? MediaQuery.of(context).size.height * 0.3
+                              : MediaQuery.of(context).size.height * 0.4,
                             fit: BoxFit.contain,
                           )
                           : Padding( // Only for Colors Drag Drop
@@ -186,8 +200,12 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                   child: !emptyAssetLink()
                     ? SvgPicture.asset(
                       '${widget.directory}${widget.assetLink}.svg',
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: MediaQuery.of(context).size.height * 0.4,
+                      width: isShape()
+                        ? MediaQuery.of(context).size.width * 0.3
+                        : MediaQuery.of(context).size.width * 0.4,
+                      height: isShape()
+                        ? MediaQuery.of(context).size.height * 0.3
+                        : MediaQuery.of(context).size.height * 0.4,
                       fit: BoxFit.contain,
                     )
                     : Padding( // Only for Colors Drag Drop
@@ -229,8 +247,12 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                         child: !emptyAssetLink()
                           ? SvgPicture.asset(
                             '${widget.directory}${widget.assetLink}.svg',
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            height: MediaQuery.of(context).size.height * 0.4,
+                            width: isShape()
+                              ? MediaQuery.of(context).size.width * 0.3
+                              : MediaQuery.of(context).size.width * 0.4,
+                            height: isShape()
+                              ? MediaQuery.of(context).size.height * 0.3
+                              : MediaQuery.of(context).size.height * 0.4,
                             fit: BoxFit.contain,
                           )
                           : Padding( // Only for Colors Drag Drop

@@ -130,8 +130,8 @@ class _TraceComponentState extends State<TraceComponent> {
                     TraceGeoMetricShapeModel(
                       shapes: [
                         MathShapeWithOption(
-                          shape: shapesMap[widget.mainData] ?? MathShapes.circle,
-                          traceShapeOptions: const TraceShapeOptions(innerPaintColor: Color.fromARGB(255, 33, 150, 243))
+                          shape: shapesMap[widget.mainData.toLowerCase()] ?? MathShapes.circle,
+                          traceShapeOptions: const TraceShapeOptions(innerPaintColor: Color.fromARGB(255, 33, 150, 243), indexColor: Colors.white)
                         )
                       ]
                     ),

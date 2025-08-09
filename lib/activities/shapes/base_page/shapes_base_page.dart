@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:verbalautism/activities/places/games_page/places_game.dart';
 import 'package:verbalautism/activities/shapes/games_page/shapes_game.dart';
 
 class ShapesBasePage extends StatefulWidget {
@@ -45,9 +44,9 @@ class _ShapesBasePageState extends State<ShapesBasePage> {
                 ),
                 onPressed: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const PlacesGame(selectedPlace: "")),
+                  MaterialPageRoute(builder: (context) => const ShapesGame(selectedShape: "")),
                 ),
-                child: Text("Random Place", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
+                child: Text("Random Shape", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
               ),
 
               const SizedBox(height: 50,),
@@ -106,7 +105,7 @@ class _ShapesBasePageState extends State<ShapesBasePage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
                 Transform.scale(
-                  scale: 1.5,
+                  scale: label == "Circle" ? 1.25 : 1.5,
                   child: SvgPicture.asset(
                     image,
                     width: 100,

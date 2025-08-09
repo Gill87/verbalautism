@@ -148,10 +148,10 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
           const SizedBox(height: 50),
 
           Center(
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: _showCorrectAnimation,
+            child: GestureDetector(
+              onTap: _showCorrectAnimation,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -170,7 +170,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
                       ? SvgPicture.asset( 
                         '${widget.directory}${widget.assetLink}.svg',
                         width: MediaQuery.of(context).size.width * 0.2,
-                        height: MediaQuery.of(context).size.height * 0.4,
+                        height: MediaQuery.of(context).size.height * 0.2,
                         fit: BoxFit.contain,
                       ) 
                       : Padding(      // Only for Colors Tap
@@ -189,7 +189,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
                         ),
                       ),
                     ),
-
+                
                     // Optionally show tap animation
                     if (showTapAnimation && !tapClicked && widget.totalSteps == 1)
                       const TapAnimation(),
