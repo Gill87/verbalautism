@@ -23,7 +23,6 @@ class PlacesGame extends StatefulWidget {
 class _PlacesGameState extends State<PlacesGame> {
   // List
   late List<String> places;
-  late List<String> assetLinkPlaces;
 
   // Variables
   int displaySteps = 1;
@@ -40,6 +39,14 @@ class _PlacesGameState extends State<PlacesGame> {
   late int correctIndex;
   late List<String> wrongPlaces;
 
+  String convertToAssetLink(String placeName){
+    if(placeName.contains(" ")) {
+      placeName = placeName.replaceAll(" ", "_");
+    }
+    placeName = placeName.toLowerCase();
+    return placeName;
+  }
+
   @override
   void initState() {
     places = [
@@ -52,18 +59,6 @@ class _PlacesGameState extends State<PlacesGame> {
       "Police Station",
       "Post Office",
       "School"
-    ];
-
-    assetLinkPlaces = [
-      "Airport",
-      "fire_station",
-      "grocery_store",
-      "Hospital",
-      "Library",
-      "Mall",
-      "police_station",
-      "post_office",
-      "school"
     ];
 
     if(widget.selectedPlace.isNotEmpty) {
@@ -88,8 +83,8 @@ class _PlacesGameState extends State<PlacesGame> {
     while(randomNumber2 == randomNumber){
       randomNumber2 = random.nextInt(places.length);
     }
-    
-    wrongPlaces = [assetLinkPlaces[randomNumber2].toLowerCase()];
+
+    wrongPlaces = [convertToAssetLink(places[randomNumber2])];
   }
 
   void setTwoWrongNumbers(){
@@ -101,7 +96,7 @@ class _PlacesGameState extends State<PlacesGame> {
       randomNumber3 = random.nextInt(places.length);
     }
 
-    wrongPlaces = [assetLinkPlaces[randomNumber2].toLowerCase(), assetLinkPlaces[randomNumber3].toLowerCase()];
+    wrongPlaces = [convertToAssetLink(places[randomNumber2]), convertToAssetLink(places[randomNumber3])];
   }
 
   void nextRoundDialog(int roundNumber){
@@ -306,16 +301,16 @@ class _PlacesGameState extends State<PlacesGame> {
     Widget currentActivity;
     
     if (totalSteps % 2 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, assetLink: assetLinkPlaces[randomNumber].toLowerCase(), mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/places_images/", objectVariation: "Place",);
+      currentActivity = TapComponent(onCompleted: nextStep, assetLink: convertToAssetLink(places[randomNumber]), mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/places_images/", objectVariation: "Place",);
     } 
     else if (totalSteps % 2 == 0 && totalSteps <= 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: assetLinkPlaces[randomNumber].toLowerCase(), mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/places_images/", objectVariation: "Place",);
+      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: convertToAssetLink(places[randomNumber]), mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/places_images/", objectVariation: "Place",);
     } 
     else if(totalSteps % 2 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: assetLinkPlaces[correctIndex].toLowerCase(), wrongAssetLinks: wrongPlaces, mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/places_images/", objectVariation: "Place",);
+      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: convertToAssetLink(places[correctIndex]), wrongAssetLinks: wrongPlaces, mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/places_images/", objectVariation: "Place",);
     }
     else {
-      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: assetLinkPlaces[correctIndex].toLowerCase(), wrongAssetLinks: wrongPlaces, mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/places_images/", objectVariation: "Place",);
+      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: convertToAssetLink(places[correctIndex]), wrongAssetLinks: wrongPlaces, mainData: places[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/places_images/", objectVariation: "Place",);
     }
 
     return Scaffold(

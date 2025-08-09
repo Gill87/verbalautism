@@ -70,11 +70,16 @@ class _FoodSelectionPageState extends State<FoodSelectionPage> {
         {"name": "Cereal", "image": "assets/food_images/cereal.svg"},
         {"name": "Milk", "image": "assets/food_images/milk.svg"},
         {"name": "Egg", "image": "assets/food_images/egg.svg"},
+        {"name": "Pancakes", "image": "assets/food_images/pancakes.svg"},
+        {"name": "Bacon", "image": "assets/food_images/bacon.svg"},
       ];
     } else if (widget.selectedMeal == "Lunch/Dinner") {
       foods = [
         {"name": "Rice", "image": "assets/food_images/rice.svg"},
         {"name": "Bread", "image": "assets/food_images/bread.svg"},
+        {"name": "Pizza", "image": "assets/food_images/pizza.svg"},
+        {"name": "Sandwich", "image": "assets/food_images/sandwich.svg"},
+        {"name": "Pie", "image": "assets/food_images/pie.svg"},
       ];
     } else if (widget.selectedMeal == "Snacks") {
       foods = [
@@ -82,6 +87,7 @@ class _FoodSelectionPageState extends State<FoodSelectionPage> {
         {"name": "Banana", "image": "assets/food_images/banana.svg"},
         {"name": "Strawberry", "image": "assets/food_images/strawberry.svg"},
         {"name": "Orange", "image": "assets/food_images/orange.svg"},
+        {"name": "Chips", "image": "assets/food_images/chips.svg"},
       ];
     } else {
       foods = [];

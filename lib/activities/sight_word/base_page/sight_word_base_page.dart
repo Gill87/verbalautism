@@ -110,6 +110,49 @@ class _SightWordBasePageState extends State<SightWordBasePage> {
                       label: "We",
                       onTap: onTapCard(context, "We"),
                     ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/you.svg",
+                      label: "You",
+                      onTap: onTapCard(context, "You"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/by.svg",
+                      label: "By",
+                      onTap: onTapCard(context, "By"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/do.svg",
+                      label: "Do",
+                      onTap: onTapCard(context, "Do"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/give.svg",
+                      label: "Give",
+                      onTap: onTapCard(context, "Give"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/from.svg",
+                      label: "From",
+                      onTap: onTapCard(context, "From"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/go.svg",
+                      label: "Go",
+                      onTap: onTapCard(context, "Go"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/of.svg",
+                      label: "Of",
+                      onTap: onTapCard(context, "Of"),
+                    ),
+
                   ],
                 ),
               ),
@@ -131,8 +174,8 @@ class _SightWordBasePageState extends State<SightWordBasePage> {
         color: Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
-          width: 200,
-          height: 230,
+          width: 150,
+          height: 150,
           padding: const EdgeInsets.all(16),
           child: Center(
             child: Text(

@@ -39,18 +39,34 @@ class _FoodGameState extends State<FoodGame> {
   late int correctIndex;
   late List<String> wrongFoods;
 
+
+  String convertToAssetLink(String foodName){
+    if(foodName.contains(" ")) {
+      foodName = foodName.replaceAll(" ", "_");
+    }
+    foodName = foodName.toLowerCase();
+    return foodName;
+  }
+
   @override
   void initState() {
     foods = [
       "Apple",
       "Banana",
       "Bread",
+      "Bacon",
       "Cereal",
+      "Chips",
       "Egg",
       "Milk",
       "Orange",
       "Rice",
-      "Strawberry"
+      "Strawberry",
+      "Burrito",
+      "Pancakes",
+      "Pie",
+      "Pizza",
+      "Sandwich",
     ];
 
     if(widget.selectedFood.isNotEmpty) {
@@ -293,16 +309,16 @@ class _FoodGameState extends State<FoodGame> {
     Widget currentActivity;
     
     if (totalSteps % 2 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, assetLink: foods[randomNumber].toLowerCase(), mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/food_images/", objectVariation: "Food",);
+      currentActivity = TapComponent(onCompleted: nextStep, assetLink: convertToAssetLink(foods[randomNumber]), mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/food_images/", objectVariation: "Food",);
     } 
     else if (totalSteps % 2 == 0 && totalSteps <= 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: foods[randomNumber].toLowerCase(), mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/food_images/", objectVariation: "Food",);
+      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: convertToAssetLink(foods[randomNumber]), mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/food_images/", objectVariation: "Food",);
     } 
     else if(totalSteps % 2 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: foods[correctIndex].toLowerCase(), wrongAssetLinks: wrongFoods, mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/food_images/", objectVariation: "Food",);
+      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: convertToAssetLink(foods[correctIndex]), wrongAssetLinks: wrongFoods, mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/food_images/", objectVariation: "Food",);
     }
     else {
-      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: foods[correctIndex].toLowerCase(), wrongAssetLinks: wrongFoods, mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/food_images/", objectVariation: "Food",);
+      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: convertToAssetLink(foods[correctIndex]), wrongAssetLinks: wrongFoods, mainData: foods[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/food_images/", objectVariation: "Food",);
     }
 
     return Scaffold(

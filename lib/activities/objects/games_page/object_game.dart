@@ -39,6 +39,14 @@ class _ObjectGameState extends State<ObjectGame> {
   late int correctIndex;
   late List<String> wrongObjects;
 
+  String convertToAssetLink(String objectName){
+    if(objectName.contains(" ")) {
+      objectName = objectName.replaceAll(" ", "_");
+    }
+    objectName = objectName.toLowerCase();
+    return objectName;
+  }
+
   @override
   void initState() {
     objects = [
@@ -51,6 +59,9 @@ class _ObjectGameState extends State<ObjectGame> {
       "Pencil",
       "Scissors",
       "TV",
+      "Ruler",
+      "Chair",
+      "Teddy Bear",
     ];
 
     if(widget.selectedObject.isNotEmpty) {
@@ -75,8 +86,8 @@ class _ObjectGameState extends State<ObjectGame> {
     while(randomNumber2 == randomNumber){
       randomNumber2 = random.nextInt(objects.length);
     }
-    
-    wrongObjects = [objects[randomNumber2].toLowerCase()];
+
+    wrongObjects = [convertToAssetLink(objects[randomNumber2])];
   }
 
   void setTwoWrongNumbers(){
@@ -88,7 +99,7 @@ class _ObjectGameState extends State<ObjectGame> {
       randomNumber3 = random.nextInt(objects.length);
     }
 
-    wrongObjects = [objects[randomNumber2].toLowerCase(), objects[randomNumber3].toLowerCase()];
+    wrongObjects = [convertToAssetLink(objects[randomNumber2]), convertToAssetLink(objects[randomNumber3])];
   }
 
   void nextRoundDialog(int roundNumber){
@@ -293,16 +304,16 @@ class _ObjectGameState extends State<ObjectGame> {
     Widget currentActivity;
     
     if (totalSteps % 2 == 1 && totalSteps <= 10) {
-      currentActivity = TapComponent(onCompleted: nextStep, assetLink: objects[randomNumber].toLowerCase(), mainData: objects[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/objects_images/", objectVariation: "Object",);
+      currentActivity = TapComponent(onCompleted: nextStep, assetLink: convertToAssetLink(objects[randomNumber]), mainData: objects[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/objects_images/", objectVariation: "Object",);
     } 
     else if (totalSteps % 2 == 0 && totalSteps <= 10) {
-      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: objects[randomNumber].toLowerCase(), mainData: objects[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/objects_images/", objectVariation: "Object",);
+      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: convertToAssetLink(objects[randomNumber]), mainData: objects[correctIndex], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/objects_images/", objectVariation: "Object",);
     } 
     else if(totalSteps % 2 == 1 && totalSteps >= 10){
-      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: objects[correctIndex].toLowerCase(), wrongAssetLinks: wrongObjects, mainData: objects[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/objects_images/", objectVariation: "Object",);
+      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: convertToAssetLink(objects[correctIndex]), wrongAssetLinks: wrongObjects, mainData: objects[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/objects_images/", objectVariation: "Object",);
     }
     else {
-      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: objects[correctIndex].toLowerCase(), wrongAssetLinks: wrongObjects, mainData: objects[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/objects_images/", objectVariation: "Object",);
+      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: convertToAssetLink(objects[correctIndex]), wrongAssetLinks: wrongObjects, mainData: objects[correctIndex], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/objects_images/", objectVariation: "Object",);
     }
 
     return Scaffold(

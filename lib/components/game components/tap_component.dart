@@ -100,7 +100,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
   }
 
   bool isTooLarge(){
-    if(widget.objectVariation == "Feeling" || widget.objectVariation == "Object" || widget.objectVariation == "Food" || widget.objectVariation == "Place" || widget.objectVariation == "Sight Word"){
+    if(widget.objectVariation == "Sight Word"){
       return true;
     } else {
       return false;
@@ -161,7 +161,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
                         return Transform.translate(
                           offset: Offset(0, -_animation.value),
                           child: Transform.scale(
-                            scale: isTooLarge() ? 1.0 : 1.5,
+                            scale: 1.5,
                             child: child,
                           ),
                         );
@@ -169,8 +169,12 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
                       child: !emptyAssetLink()
                       ? SvgPicture.asset( 
                         '${widget.directory}${widget.assetLink}.svg',
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        height: MediaQuery.of(context).size.height * 0.2,
+                        width:  isTooLarge() 
+                        ? MediaQuery.of(context).size.width * 0.2 
+                        : MediaQuery.of(context).size.width * 0.25,
+                        height: isTooLarge()
+                        ? MediaQuery.of(context).size.height * 0.2
+                        : MediaQuery.of(context).size.height * 0.25,
                         fit: BoxFit.contain,
                       ) 
                       : Padding(      // Only for Colors Tap

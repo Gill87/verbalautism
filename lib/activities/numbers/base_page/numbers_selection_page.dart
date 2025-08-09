@@ -102,13 +102,13 @@ class NumberSelectionPage extends StatelessWidget {
         color: isRandom ? Colors.orange : Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Container(
-          width: isRandom ? 100 : 80,
-          height: isRandom ? 75 : 80,
+          width: isRandom ? 100 : 125,
+          height: isRandom ? 75 : 125,
           child: Center(
             child: Text(
               number,
               style: GoogleFonts.ubuntu(
-                fontSize: isRandom ? 18 : 24,
+                fontSize: isRandom ? 18 : 36,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),

@@ -64,41 +64,6 @@ class _FoodBasePageState extends State<FoodBasePage> {
                       label: "Snacks",
                       onTap: onTapCard(context, "Snacks"),
                     ),
-
-                    // _buildCard(
-                    //   context,
-                    //   image: "assets/food_images/egg.svg",
-                    //   label: "Egg",
-                    //   onTap: onTapCard(context, "Egg"),
-                    // ),
-
-                    // _buildCard(
-                    //   context,
-                    //   image: "assets/food_images/milk.svg",
-                    //   label: "Milk",
-                    //   onTap: onTapCard(context, "Milk"),
-                    // ),
-
-                    // _buildCard(
-                    //   context,
-                    //   image: "assets/food_images/orange.svg",
-                    //   label: "Orange",
-                    //   onTap: onTapCard(context, "Orange"),
-                    // ),
-
-                    // _buildCard(
-                    //   context,
-                    //   image: "assets/food_images/rice.svg",
-                    //   label: "Rice",
-                    //   onTap: onTapCard(context, "Rice"),
-                    // ),
-
-                    // _buildCard(
-                    //   context,
-                    //   image: "assets/food_images/strawberry.svg",
-                    //   label: "Strawberry",
-                    //   onTap: onTapCard(context, "Strawberry"),
-                    // ),
                   ],
                 ),
               ),

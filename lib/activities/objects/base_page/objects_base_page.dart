@@ -119,6 +119,35 @@ class _ObjectsBasePageState extends State<ObjectsBasePage> {
                       image: "assets/objects_images/tv.svg",
                       onTap: onTapCard(context, "TV"),
                     ),
+                    
+                    _buildCard(
+                      context,
+                      label: "Backpack",
+                      image: "assets/objects_images/backpack.svg",
+                      onTap: onTapCard(context, "Backpack"),
+                    ),
+
+                    _buildCard(
+                      context,
+                      label: "Chair",
+                      image: "assets/objects_images/chair.svg",
+                      onTap: onTapCard(context, "Chair"),
+                    ),
+
+                    _buildCard(
+                      context,
+                      label: "Teddy Bear",
+                      image: "assets/objects_images/teddy_bear.svg",
+                      onTap: onTapCard(context, "Teddy Bear"),
+                    ),
+
+                    _buildCard(
+                      context,
+                      label: "Ruler",
+                      image: "assets/objects_images/ruler.svg",
+                      onTap: onTapCard(context, "Ruler"),
+                    ),
+
                   ],
                 ),
               ),
