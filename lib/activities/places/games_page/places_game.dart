@@ -58,7 +58,8 @@ class _PlacesGameState extends State<PlacesGame> {
       "Mall",
       "Police Station",
       "Post Office",
-      "School"
+      "School",
+      "Barn",
     ];
 
     if(widget.selectedPlace.isNotEmpty) {

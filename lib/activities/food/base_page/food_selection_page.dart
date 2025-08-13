@@ -50,7 +50,7 @@ class _FoodSelectionPageState extends State<FoodSelectionPage> {
                 Text(
                   label,
                   style: GoogleFonts.ubuntu(
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                 ),
@@ -72,6 +72,10 @@ class _FoodSelectionPageState extends State<FoodSelectionPage> {
         {"name": "Egg", "image": "assets/food_images/egg.svg"},
         {"name": "Pancakes", "image": "assets/food_images/pancakes.svg"},
         {"name": "Bacon", "image": "assets/food_images/bacon.svg"},
+        {"name": "Hash Brown", "image": "assets/food_images/hash_brown.svg"},
+        {"name": "Waffles", "image": "assets/food_images/waffles.svg"},
+        {"name": "Yogurt", "image": "assets/food_images/yogurt.svg"},
+        {"name": "Bagel", "image": "assets/food_images/bagel.svg"},
       ];
     } else if (widget.selectedMeal == "Lunch/Dinner") {
       foods = [
@@ -80,6 +84,15 @@ class _FoodSelectionPageState extends State<FoodSelectionPage> {
         {"name": "Pizza", "image": "assets/food_images/pizza.svg"},
         {"name": "Sandwich", "image": "assets/food_images/sandwich.svg"},
         {"name": "Pie", "image": "assets/food_images/pie.svg"},
+        {"name": "Chicken Wings", "image": "assets/food_images/chicken_wings.svg"},
+        {"name": "Dumplings", "image": "assets/food_images/dumplings.svg"},
+        {"name": "Fish and Chips", "image": "assets/food_images/fish_and_chips.svg"},
+        {"name": "Hot Dog", "image": "assets/food_images/hot_dog.svg"},
+        {"name": "Mac and Cheese", "image": "assets/food_images/mac_and_cheese.svg"},
+        {"name": "Ramen", "image": "assets/food_images/ramen.svg"},
+        {"name": "Salad", "image": "assets/food_images/salad.svg"},
+        {"name": "Sushi", "image": "assets/food_images/sushi.svg"},
+        {"name": "Tacos", "image": "assets/food_images/tacos.svg"},
       ];
     } else if (widget.selectedMeal == "Snacks") {
       foods = [
@@ -87,7 +100,11 @@ class _FoodSelectionPageState extends State<FoodSelectionPage> {
         {"name": "Banana", "image": "assets/food_images/banana.svg"},
         {"name": "Strawberry", "image": "assets/food_images/strawberry.svg"},
         {"name": "Orange", "image": "assets/food_images/orange.svg"},
+        {"name": "Grapes", "image": "assets/food_images/grapes.svg"},
         {"name": "Chips", "image": "assets/food_images/chips.svg"},
+        {"name": "Brownies", "image": "assets/food_images/brownies.svg"},
+        {"name": "French Fries", "image": "assets/food_images/french_fries.svg"},
+        {"name": "Corn", "image": "assets/food_images/corn.svg"},
       ];
     } else {
       foods = [];

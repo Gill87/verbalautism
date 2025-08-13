@@ -52,7 +52,12 @@ class _ActionsGameState extends State<ActionsGame> {
       "Run",
       "Sleep",
       "Swim",
-      "Throw"
+      "Throw",
+      "Sing",
+      "Dance",
+      "Dig",
+      "Build",
+      "Slide",
     ];
 
     if(widget.selectedAction.isNotEmpty) {

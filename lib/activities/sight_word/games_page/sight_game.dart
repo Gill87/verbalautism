@@ -57,6 +57,17 @@ class _SightWordGameState extends State<SightWordGame> {
       "From",
       "Go",
       "Of",
+      "On",
+      "This",
+      "That",
+      "Will",
+      "With",
+      "Use",
+      "Help",
+      "Us",
+      "Made",
+      "Or",
+      "Tell"
     ];
 
     if(widget.selectedSightWord.isNotEmpty) {

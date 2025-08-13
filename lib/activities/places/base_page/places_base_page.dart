@@ -118,6 +118,13 @@ class _PlacesBasePageState extends State<PlacesBasePage> {
                       label: "Airport",
                       onTap: onTapCard(context, "Airport"),
                     ),
+
+                    _buildCard(
+                      context,
+                      image: "assets/places_images/barn.svg",
+                      label: "Barn",
+                      onTap: onTapCard(context, "Barn"),
+                    ),
                   ],
                 ),
               ),

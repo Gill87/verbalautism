@@ -152,6 +152,68 @@ class _SightWordBasePageState extends State<SightWordBasePage> {
                       label: "Of",
                       onTap: onTapCard(context, "Of"),
                     ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/on.svg",
+                      label: "On",
+                      onTap: onTapCard(context, "On"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/that.svg",
+                      label: "That",
+                      onTap: onTapCard(context, "That"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/this.svg",
+                      label: "This",
+                      onTap: onTapCard(context, "This"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/with.svg",
+                      label: "With",
+                      onTap: onTapCard(context, "With"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/or.svg",
+                      label: "Or",
+                      onTap: onTapCard(context, "Or"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/will.svg",
+                      label: "Will",
+                      onTap: onTapCard(context, "Will"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/help.svg",
+                      label: "Help",
+                      onTap: onTapCard(context, "Help"),
+                    ),
+
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/tell.svg",
+                      label: "Tell",
+                      onTap: onTapCard(context, "Tell"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/made.svg",
+                      label: "Made",
+                      onTap: onTapCard(context, "Made"),
+                    ),
+                    _buildCard(
+                      context,
+                      image: "assets/sight_word_images/use.svg",
+                      label: "Use",
+                      onTap: onTapCard(context, "Use"),
+                    ),
+                    
 
                   ],
                 ),

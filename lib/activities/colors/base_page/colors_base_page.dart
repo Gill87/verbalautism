@@ -18,7 +18,7 @@ class _ColorsBasePageState extends State<ColorsBasePage> {
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
         centerTitle: true,
         title: Text(
-          "${MediaQuery.of(context).size.width}",
+          "Colors",
           style: GoogleFonts.ubuntu(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
@@ -152,27 +152,6 @@ class _ColorsBasePageState extends State<ColorsBasePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [          
-              // ShaderMask(
-              //   shaderCallback: (bounds) => const LinearGradient(
-              //     colors: [
-              //       Colors.red,
-              //       Colors.orange,
-              //       Colors.yellow,
-              //       Colors.green,
-              //       Colors.blue,
-              //       Colors.indigo,
-              //       Colors.purple,
-              //     ],
-              //   ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
-                // child: Text(
-                //   label,
-                //   style: GoogleFonts.ubuntu(
-                //     fontSize: 24,
-                //     fontWeight: FontWeight.bold,
-                //     color: Colors.white, // Needs to be white for ShaderMask
-                //   ),
-                // ),
-              // ),
               Text(
                 label,
                 style: GoogleFonts.ubuntu(

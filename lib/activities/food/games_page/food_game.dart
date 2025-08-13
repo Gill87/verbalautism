@@ -67,6 +67,23 @@ class _FoodGameState extends State<FoodGame> {
       "Pie",
       "Pizza",
       "Sandwich",
+      "Brownies",
+      "Chicken Wings",
+      "Corn",
+      "Dumplings",
+      "Fish and Chips"
+      "French Fries",
+      "Grapes",
+      "Hot Dog",
+      "Mac and Cheese",
+      "Ramen",
+      "Salad",
+      "Sushi",
+      "Tacos",
+      "Hash Brown",
+      "Waffles",
+      "Yogurt",
+      "Bagel"
     ];
 
     if(widget.selectedFood.isNotEmpty) {
