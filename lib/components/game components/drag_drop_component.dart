@@ -34,6 +34,8 @@ class DragDropComponent extends StatefulWidget {
 class _DragDropComponentState extends State<DragDropComponent> with SingleTickerProviderStateMixin {
 
   bool imageDropped = false;
+  bool isProcessing = false;
+
 
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -57,12 +59,19 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
   }
   
   void _showCorrectAnimation(){
+    // NEW: Prevent multiple calls
+    if (isProcessing) return;
     
+    setState(() {
+      isProcessing = true;
+    });
+
     // Flash Green
     widget.onCorrectAction();
 
     showDialog(
       barrierColor: Colors.transparent,
+      barrierDismissible: false, // NEW: Prevent dismissing dialog by tapping
       context: context,
       builder: (context) {
         return const Dialog(
@@ -74,12 +83,14 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
 
     // Close the animation after a short delay
     Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
+      if (mounted && isProcessing) { // NEW: Additional safety check
         Navigator.of(context).pop();
+        setState(() {
+          isProcessing = false; // NEW: Reset processing flag
+        });
         widget.onCompleted();
       }
     });
-
   }
 
   bool emptyAssetLink(){

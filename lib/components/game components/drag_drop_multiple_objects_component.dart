@@ -35,6 +35,7 @@ class DragDropMultipleObjectsComponent extends StatefulWidget {
 
 class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjectsComponent> with SingleTickerProviderStateMixin{
   bool imageDropped = false;
+  bool isProcessing = false;
   late List<String> allObjectLinks;
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -62,10 +63,18 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
 
 
   void _showCorrectAnimation() {
+    // NEW: Prevent multiple calls
+    if (isProcessing) return;
+    
+    setState(() {
+      isProcessing = true;
+    });
+
     widget.onCorrectAction();
 
     showDialog(
       barrierColor: Colors.transparent,
+      barrierDismissible: false, // NEW: Prevent dismissing dialog by tapping
       context: context,
       builder: (context) {
         return const Dialog(
@@ -76,19 +85,29 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
     );
 
     Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
+      if (mounted && isProcessing) { // NEW: Additional safety check
         Navigator.of(context).pop();
+        setState(() {
+          isProcessing = false; // NEW: Reset processing flag
+        });
         widget.onCompleted();
       }
     });
   }
 
-
   void _showIncorrectAnimation() {
+    // NEW: Prevent multiple calls
+    if (isProcessing) return;
+    
+    setState(() {
+      isProcessing = true;
+    });
+
     widget.onIncorrectAction();
     
     showDialog(
       barrierColor: Colors.transparent,
+      barrierDismissible: false, // NEW: Prevent dismissing dialog by tapping
       context: context,
       builder: (context) {
         return const Dialog(
@@ -99,12 +118,20 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
     );
 
     Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        Navigator.of(context).pop();      }
+      if (mounted && isProcessing) { // NEW: Additional safety check
+        Navigator.of(context).pop();
+        setState(() {
+          isProcessing = false; // NEW: Reset processing flag
+        });
+        // NEW: Don't call onCompleted for incorrect answers, just reset processing
+      }
     });
   }
 
   void _handleDrop(DragTargetDetails<String> details) {
+    // NEW: Prevent handling drops when processing
+    if (isProcessing) return;
+    
     if (details.data == widget.correctAssetLinks) {
       setState(() {
         imageDropped = true;
@@ -182,6 +209,8 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
 
   @override
   void dispose() {
+    _controller.dispose();
+    _animation.removeListener(() {});
     _ttsService.stop();
     super.dispose();
   }

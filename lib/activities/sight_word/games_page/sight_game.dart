@@ -85,6 +85,12 @@ class _SightWordGameState extends State<SightWordGame> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // Clean up any resources
+    super.dispose();
+  }
+
   void setOneWrongNumber(){
 
     randomNumber2 = random.nextInt(sightWords.length);

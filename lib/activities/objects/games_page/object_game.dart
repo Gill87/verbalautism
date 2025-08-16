@@ -79,6 +79,11 @@ class _ObjectGameState extends State<ObjectGame> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void setOneWrongNumber(){
 
     randomNumber2 = random.nextInt(objects.length);

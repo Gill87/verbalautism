@@ -71,6 +71,12 @@ class _ColorsGameState extends State<ColorsGame> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // Clean up any resources
+    super.dispose();
+  }
+
   void setOneWrongNumber(){
 
     randomNumber2 = random.nextInt(colors.length);

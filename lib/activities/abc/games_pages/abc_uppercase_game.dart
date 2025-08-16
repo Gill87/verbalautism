@@ -60,6 +60,11 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void setOneWrongNumber(){
     randomNumber2 = random.nextInt(26);
 

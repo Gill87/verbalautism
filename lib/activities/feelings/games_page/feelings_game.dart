@@ -65,6 +65,12 @@ class _FeelingsGameState extends State<FeelingsGame> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   void setOneWrongNumber(){
 
     randomNumber2 = random.nextInt(feelings.length);

@@ -75,6 +75,12 @@ class _ActionsGameState extends State<ActionsGame> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // Clean up any resources
+    super.dispose();
+  }
+  
   void setOneWrongNumber(){
 
     randomNumber2 = random.nextInt(actions.length);

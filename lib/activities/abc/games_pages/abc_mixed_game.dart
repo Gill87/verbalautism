@@ -66,6 +66,11 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
     wrongLetters = ["$namingLetter2${letters[randomNumber2]}"];
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void setTwoWrongNumbers(){
     int randomLetterNumber = random.nextInt(2);
     int randomLetterNumber2 = random.nextInt(2);

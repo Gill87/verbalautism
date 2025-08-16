@@ -64,6 +64,11 @@ class _ShapesGameState extends State<ShapesGame> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+  
   void setOneWrongNumber(){
     randomNumber2 = random.nextInt(3);
 

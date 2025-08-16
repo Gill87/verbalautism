@@ -71,7 +71,7 @@ class _FoodGameState extends State<FoodGame> {
       "Chicken Wings",
       "Corn",
       "Dumplings",
-      "Fish and Chips"
+      "Fish and Chips",
       "French Fries",
       "Grapes",
       "Hot Dog",
@@ -101,6 +101,11 @@ class _FoodGameState extends State<FoodGame> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void setOneWrongNumber(){
 
     randomNumber2 = random.nextInt(foods.length);
@@ -108,8 +113,8 @@ class _FoodGameState extends State<FoodGame> {
     while(randomNumber2 == randomNumber){
       randomNumber2 = random.nextInt(foods.length);
     }
-    
-    wrongFoods = [foods[randomNumber2].toLowerCase()];
+
+    wrongFoods = [convertToAssetLink(foods[randomNumber2])];
   }
 
   void setTwoWrongNumbers(){
@@ -121,7 +126,7 @@ class _FoodGameState extends State<FoodGame> {
       randomNumber3 = random.nextInt(foods.length);
     }
 
-    wrongFoods = [foods[randomNumber2].toLowerCase(), foods[randomNumber3].toLowerCase()];
+    wrongFoods = [convertToAssetLink(foods[randomNumber2]), convertToAssetLink(foods[randomNumber3])];
   }
 
   void nextRoundDialog(int roundNumber){

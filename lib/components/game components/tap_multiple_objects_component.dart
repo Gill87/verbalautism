@@ -37,6 +37,8 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
   late Animation<double> _animation;
 
   final TtsService _ttsService = TtsService();
+  
+  bool isProcessing = false; // NEW: Prevent interactions during processing
 
   @override
   void initState() {
@@ -58,6 +60,9 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
   }
 
   void _handleTap(String tappedLetter) {
+    // NEW: Prevent handling taps when processing
+    if (isProcessing) return;
+    
     if (tappedLetter == widget.correctAssetLink) {
       _showCorrectAnimation();
     } else {
@@ -66,11 +71,18 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
   }
 
   void _showIncorrectAnimation(){
+    // NEW: Prevent multiple calls
+    if (isProcessing) return;
+    
+    setState(() {
+      isProcessing = true;
+    });
 
     widget.onIncorrectAction();
 
     showDialog(
       barrierColor: Colors.transparent,
+      barrierDismissible: false, // NEW: Prevent dismissing dialog by tapping
       context: context,
       builder: (context) {
         return const Center(
@@ -80,19 +92,30 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
     );
 
     Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
+      if (mounted && isProcessing) { // NEW: Additional safety check
         Navigator.of(context).pop();
+        setState(() {
+          isProcessing = false; // NEW: Reset processing flag
+        });
+        // NEW: Don't call onCompleted for incorrect answers, just reset processing
       }
     });
-    
   }
 
+
   void _showCorrectAnimation() {
+    // NEW: Prevent multiple calls
+    if (isProcessing) return;
+    
+    setState(() {
+      isProcessing = true;
+    });
 
     widget.onCorrectAction();
     
     showDialog(
       barrierColor: Colors.transparent,
+      barrierDismissible: false, // NEW: Prevent dismissing dialog by tapping
       context: context,
       builder: (context) {
         return const Center(
@@ -102,8 +125,11 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
     );
 
     Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
+      if (mounted && isProcessing) { // NEW: Additional safety check
         Navigator.of(context).pop();
+        setState(() {
+          isProcessing = false; // NEW: Reset processing flag
+        });
         widget.onCompleted();
       }
     });
@@ -128,6 +154,8 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
   @override
   void dispose() {
     _ttsService.stop();
+    _controller.dispose();
+    _animation.removeListener(() {});
     super.dispose();
   }
 
@@ -167,9 +195,10 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: isTooLarge() ? 25 : 15),
                 child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () => _handleTap(object),
+                    // NEW: Change cursor when processing
+                    cursor: isProcessing ? SystemMouseCursors.basic : SystemMouseCursors.click,                  child: GestureDetector(
+                   // NEW: Disable tap when processing
+                    onTap: isProcessing ? null : () => _handleTap(object),                    
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.2,
                       height: MediaQuery.of(context).size.height * 0.3,

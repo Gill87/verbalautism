@@ -24,6 +24,7 @@ class TapComponent extends StatefulWidget {
 class _TapComponentState extends State<TapComponent> with SingleTickerProviderStateMixin {
   bool tapClicked = false;
   bool showTapAnimation = false;
+  bool isProcessing = false;
 
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -58,14 +59,18 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
   @override
   void dispose() {
     _controller.dispose();
+    _animation.removeListener(() {});
     _ttsService.stop();
     super.dispose();
   }
 
   void _showCorrectAnimation() {
-    tapClicked = true;
-
+    // ENHANCED: Check both tapClicked AND isProcessing
+    if(tapClicked || isProcessing) return;
+    
     setState(() {
+      tapClicked = true;
+      isProcessing = true; // NEW: Set processing flag
       showTapAnimation = false;
     });
 
@@ -75,6 +80,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
 
     showDialog(
       barrierColor: Colors.transparent,
+      barrierDismissible: false, // NEW: Prevent dismissing dialog by tapping
       context: context,
       builder: (context) {
         return const Center(
@@ -84,8 +90,11 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
     );
 
     Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
+      if (mounted && isProcessing) { // NEW: Additional check
         Navigator.of(context).pop();
+        setState(() {
+          isProcessing = false; // NEW: Reset processing flag
+        });
         widget.onCompleted();
       }
     });
