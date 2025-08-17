@@ -25,6 +25,8 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   List <String> letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
   
   // Variables
+  int incorrectAnswer = 0;
+  bool alreadyGotIncorrect = false;
   int displaySteps = 1;
   int totalSteps = 1;
   int round = 1;
@@ -139,6 +141,77 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
     });
   }
 
+  void repeatRoundDialog(int roundNumber){
+
+    // Pause
+    setState(() {
+      isPaused = true;
+    });
+  
+    // Reset Incorrect Answers
+    incorrectAnswer = 0;
+
+    // Dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.red, // Red background
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // Soft edges
+        ),
+        title: Center(
+          child: Text(
+            "Try Again!",
+            style: GoogleFonts.ubuntu(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        content: Center(
+          heightFactor: 1, // Keeps content vertically centered
+          child: Text(
+            "Too many incorrect answers. Repeating Round $roundNumber...",
+            style: GoogleFonts.ubuntu(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+
+    // Automatically close the dialog after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pop();
+        setState(() {
+          isPaused = false;
+        });
+      }
+    });
+  }
+
+  void repeatRound(int roundNumber){
+    if(roundNumber == 2){
+      totalSteps = 10;
+      displaySteps = 1;
+      round = 2;
+      incorrectAnswer = 0;
+      repeatRoundDialog(2);
+    } else {
+      totalSteps = 20;
+      displaySteps = 1;
+      round = 3;
+      incorrectAnswer = 0;
+      repeatRoundDialog(3);
+    }
+  }
+
   void round2(){
     if(totalSteps == 10){
       nextRoundDialog(2);
@@ -161,12 +234,27 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
 
       // Check round 2
       if(totalSteps >= 10 && totalSteps < 20){
+        displaySteps = totalSteps % 10;
         round2();
+      }
+
+      // Check Incorrect Answers at the end of Round 2
+      if(totalSteps == 20 && round == 2){
+        if(incorrectAnswer > 2){
+          repeatRound(2);
+        }
       }
 
       // Check round 3
       if(totalSteps >= 20){
         round3();
+      }
+
+      // Check Incorrect Answers at the end of Round 3
+      if(totalSteps == 30 && round == 3){
+        if(incorrectAnswer > 2){
+          repeatRound(3);
+        }
       }
       
       // Check total steps
@@ -265,6 +353,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   Color containerColor = Colors.black;
 
   void triggerCorrectFlash() {
+    alreadyGotIncorrect = false;
     setState(() {
       containerColor = Colors.lightGreen;
     });
@@ -279,6 +368,10 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   }
 
   void triggerIncorrectFlash() {
+    if(!alreadyGotIncorrect){
+      ++incorrectAnswer;
+      alreadyGotIncorrect = true;
+    }
     setState(() {
       containerColor = Colors.red;
     });
