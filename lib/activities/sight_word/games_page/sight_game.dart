@@ -3,12 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:verbalautism/components/game%20components/drag_drop_component.dart';
 import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
-
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class SightWordGame extends StatefulWidget {
@@ -264,6 +262,7 @@ class _SightWordGameState extends State<SightWordGame> {
     setTwoWrongNumbers();
     round = 3;
   }
+
   void nextStep() {
     setState(() {
       // ⏱ End timer for current step
@@ -501,6 +500,7 @@ class _SightWordGameState extends State<SightWordGame> {
 
     print("✅ Round result uploaded for $gameType");
   }
+  
   @override
   Widget build(BuildContext context) {
     Widget currentActivity;

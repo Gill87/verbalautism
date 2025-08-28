@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/game%20components/drag_drop_component.dart';
@@ -23,15 +25,19 @@ class AbcLowercaseGame extends StatefulWidget {
 
 class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   List <String> letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-  
+  List<int> stepDurations = []; // store all durations (in seconds)
+
   // Variables
   int incorrectAnswer = 0;
+  int correctAnswer = 0;
   bool alreadyGotIncorrect = false;
   int displaySteps = 1;
   int totalSteps = 1;
   int round = 1;
   final int maxSteps = 30;
   bool isPaused = false;
+  DateTime? stepStartTime;
+  double durationAvg = 0;
 
   // Random Object
   Random random = Random();
@@ -40,6 +46,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   late int randomNumber;
   late int randomNumber2;
   late int randomNumber3;
+  late int correctIndex;
   late List <String> wrongLetters;
 
   @override
@@ -47,14 +54,17 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
     if(widget.selectedLetter != ""){
       // If a letter is selected, find its index
       randomNumber = letters.indexOf(widget.selectedLetter.toUpperCase());
+      correctIndex = randomNumber;
       
       if(randomNumber == -1){
         randomNumber = random.nextInt(26); // Fallback to a random letter if not found
+        correctIndex = randomNumber;
       }
     }
     else {
       // If no letter is selected, choose a random letter
       randomNumber = random.nextInt(26);
+      correctIndex = randomNumber;
     }
 
     super.initState();
@@ -63,6 +73,27 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   @override
   void dispose() {
     super.dispose();
+  }
+  
+  // When a new step starts, record start time
+  void startStepTimer() {
+    stepStartTime = DateTime.now();
+  }
+
+  // When step ends, calculate duration
+  void endStepTimer(int stepNumber) {
+    if (stepStartTime != null) {
+      final duration = DateTime.now().difference(stepStartTime!).inSeconds;
+      stepDurations.add(duration);
+
+      print("⏱ Step $stepNumber took $duration seconds");
+    }
+  }
+
+  double calculateAverageDuration() {
+    if (stepDurations.isEmpty) return 0;
+    final avg = stepDurations.reduce((a, b) => a + b) / stepDurations.length;
+    return double.parse(avg.toStringAsFixed(1));
   }
 
   void setOneWrongNumber(){
@@ -148,7 +179,8 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
       isPaused = true;
     });
   
-    // Reset Incorrect Answers
+    // Reset Counters
+    correctAnswer = 0;
     incorrectAnswer = 0;
 
     // Dialog
@@ -202,12 +234,14 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
       displaySteps = 1;
       round = 2;
       incorrectAnswer = 0;
+      correctAnswer = 0;
       repeatRoundDialog(2);
     } else {
       totalSteps = 20;
       displaySteps = 1;
       round = 3;
       incorrectAnswer = 0;
+      correctAnswer = 0;
       repeatRoundDialog(3);
     }
   }
@@ -229,47 +263,102 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   }
 
   void nextStep() {
-    
     setState(() {
+      // ⏱ End timer for current step
+      endStepTimer(totalSteps);
 
-      // Check round 2
-      if(totalSteps >= 10 && totalSteps < 20){
+      // ✅ End of Round 1
+      if (totalSteps == 10 && round == 1) {
+        uploadRoundResult(
+          gameType: "lowercaseLetters",
+          correct: correctAnswer,
+          incorrect: 0,
+          roundNumber: round,
+          averageDuration: calculateAverageDuration(),
+          word: letters[correctIndex],
+        );
+        stepDurations.clear(); // Clear durations for next round
+      }
+
+      // ✅ Round 2 check
+      if (totalSteps >= 10 && totalSteps < 20) {
         displaySteps = totalSteps % 10;
         round2();
       }
 
-      // Check Incorrect Answers at the end of Round 2
-      if(totalSteps == 20 && round == 2){
-        if(incorrectAnswer > 2){
+      // ❌ Check Incorrect Answers at the end of Round 2
+      if (totalSteps == 20 && round == 2) {
+        if (incorrectAnswer > 2) {
+          uploadRoundResult(
+            gameType: "lowercaseLetters",
+            correct: correctAnswer,
+            incorrect: incorrectAnswer,
+            roundNumber: round,
+            averageDuration: calculateAverageDuration(),
+            word: letters[correctIndex],
+          );
+          stepDurations.clear(); // Clear durations for next round
           repeatRound(2);
+        } else {
+          uploadRoundResult(
+            gameType: "lowercaseLetters",
+            correct: correctAnswer,
+            incorrect: incorrectAnswer,
+            roundNumber: round,
+            averageDuration: calculateAverageDuration(),
+            word: letters[correctIndex],
+          );
+          stepDurations.clear(); // Clear durations for next round
         }
       }
 
-      // Check round 3
-      if(totalSteps >= 20){
+      // ✅ Round 3 check
+      if (totalSteps >= 20) {
         round3();
       }
 
-      // Check Incorrect Answers at the end of Round 3
-      if(totalSteps == 30 && round == 3){
-        if(incorrectAnswer > 2){
+      // ❌ Check Incorrect Answers at the end of Round 3
+      if (totalSteps == 30 && round == 3) {
+        if (incorrectAnswer > 2) {
+          uploadRoundResult(
+            gameType: "lowercaseLetters",
+            correct: correctAnswer,
+            incorrect: incorrectAnswer,
+            roundNumber: round,
+            averageDuration: calculateAverageDuration(),
+            word: letters[correctIndex],
+          );
+          stepDurations.clear(); // Clear durations for next round
           repeatRound(3);
+        } else {
+          uploadRoundResult(
+            gameType: "lowercaseLetters",
+            correct: correctAnswer,
+            incorrect: incorrectAnswer,
+            roundNumber: round,
+            averageDuration: calculateAverageDuration(),
+            word: letters[correctIndex],
+          );
+        stepDurations.clear(); // Clear durations for next round
         }
       }
-      
-      // Check total steps
-      if(totalSteps < maxSteps){
-      // Increment step
+
+      // ✅ Progress through steps
+      if (totalSteps < maxSteps) {
+        // Increment step
         ++totalSteps;
+
+        // ⏱ Start timer for next step
+        startStepTimer();
 
         // Correctly modify display steps number
         displaySteps = totalSteps % 10;
-        if(displaySteps == 0){
+        if (displaySteps == 0) {
           displaySteps = 10;
         }
       }
 
-      // Or Game ends and Restart Game Prompt
+      // 🎯 Game ends and Restart/Home Prompt
       else {
         showDialog(
           context: context,
@@ -278,12 +367,19 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20), // Soft edges
             ),
-            title: Text("Exercise Complete!", style: GoogleFonts.ubuntu(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+            title: Text(
+              "Exercise Complete!",
+              style: GoogleFonts.ubuntu(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
             actions: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white, // Button color
-                  foregroundColor: const Color.fromARGB(255, 33, 150, 243), // Text color
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color.fromARGB(255, 33, 150, 243),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -294,20 +390,10 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                   setState(() {
                     totalSteps = 1;
                     round = 1;
-                    displaySteps = 1; 
+                    displaySteps = 1;
                   });
-                  if(widget.selectedLetter != ""){
-                    // If a letter is selected, find its index
-                    randomNumber = letters.indexOf(widget.selectedLetter.toUpperCase());
-                    
-                    if(randomNumber == -1){
-                      randomNumber = random.nextInt(26); // Fallback to a random letter if not found
-                    }
-                  }
-                  else {
-                    // If no letter is selected, choose a random letter
-                    randomNumber = random.nextInt(26);
-                  }
+                  // Reset the game state
+                  initState();
                 },
                 child: Text(
                   "Restart",
@@ -317,11 +403,10 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                   ),
                 ),
               ),
-              
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white, // Button color
-                  foregroundColor: const Color.fromARGB(255, 33, 150, 243), // Text color
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color.fromARGB(255, 33, 150, 243),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -331,7 +416,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                   Navigator.of(context).pop();
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const HomePage()),
-                  );                
+                  );
                 },
                 child: Text(
                   "Home",
@@ -341,19 +426,22 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                   ),
                 ),
               ),
-
             ],
           ),
-        );    
+        );
       }
-
     });
   }
+
 
   Color containerColor = Colors.black;
 
   void triggerCorrectFlash() {
-    alreadyGotIncorrect = false;
+    if (!alreadyGotIncorrect) {
+      ++correctAnswer;
+    }
+    alreadyGotIncorrect = false;    
+    
     setState(() {
       containerColor = Colors.lightGreen;
     });
@@ -384,6 +472,34 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
       }
     });
   }
+
+  Future<void> uploadRoundResult({
+    required String gameType, // e.g. "sightWord"
+    required int correct,
+    required int incorrect,
+    required int roundNumber,
+    required double averageDuration,
+    required String word,
+  }) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("${gameType}Reports") // e.g. sightWordReports
+        .add({
+      "correct": correct,
+      "incorrect": incorrect,
+      "round": roundNumber,
+      "averageDuration": averageDuration,
+      "word": word,
+      "createdAt": FieldValue.serverTimestamp(),
+    });
+
+    print("✅ Round result uploaded for $gameType");
+  }
+  
   @override
   Widget build(BuildContext context) {
 

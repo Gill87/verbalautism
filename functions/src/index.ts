@@ -73,6 +73,17 @@ async function runWeeklyEmailSummaryLogic() {
 
     const gameTypes = [
       "sightWordReports",
+      "placesReports",
+      "objectsReports",
+      "foodsReports",
+      "feelingsReports",
+      "colorsReports",
+      "actionsReports",
+      "shapesReports",
+      "mixedLettersReports",
+      "uppercaseLettersReports",
+      "lowercaseLettersReports",
+      "numbersReports",
     ];
     const summary: Record<string, unknown> = {};
     const collectionsToDelete: admin.firestore.CollectionReference[] = [];
