@@ -12,6 +12,8 @@ import 'package:verbalautism/activities/objects/base_page/objects_base_page.dart
 import 'package:verbalautism/activities/places/base_page/places_base_page.dart';
 import 'package:verbalautism/activities/shapes/base_page/shapes_base_page.dart';
 import 'package:verbalautism/activities/sight_word/base_page/sight_word_base_page.dart';
+import 'package:verbalautism/components/audio%20services/audio_cubit.dart';
+import 'package:verbalautism/components/audio%20services/audio_service.dart';
 import 'package:verbalautism/components/home%20page%20components/buttons_column.dart';
 import 'package:verbalautism/components/home%20page%20components/schedule_button.dart';
 import 'package:verbalautism/components/home%20page%20components/sound_button.dart';
@@ -28,6 +30,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
+  AudioCubit audioCubit = AudioCubit();
+  late bool isMusicPlaying = audioCubit.state.isMusicPlaying;
 
   // Sign out method
   void signUserOut(){
@@ -35,6 +39,11 @@ class _HomePageState extends State<HomePage> {
     authCubit.logout();
   }
 
+  @override
+  void initState() {
+    AudioService().playBackgroundMusic(); // if music is enabled, play music
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,21 +201,27 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         ScheduleButton(tapFunction: () {}),
 
-                        IconButton(icon: const Icon(Icons.music_note), onPressed: () {}),
+                        // Music Control
+                        IconButton(
+                          icon: isMusicPlaying 
+                            ? const Icon(Icons.music_note) 
+                            : const Icon(Icons.music_off),
+                          onPressed: () {
+                            audioCubit.toggleMusic();
 
-                        IconButton(icon: const Icon(Icons.leaderboard), onPressed: () {}),
+                            if (audioCubit.state.isMusicPlaying) {
+                              AudioService().playBackgroundMusic();
+                            } else {
+                              AudioService().stopMusic();
+                            }
 
-
-                        const DropdownMenu(
-                          width: 125,
-                          dropdownMenuEntries: <DropdownMenuEntry<String>>[
-                            DropdownMenuEntry(value: '', label: 'Danny'),
-                            DropdownMenuEntry(value: '', label: 'Guri'),
-                            DropdownMenuEntry(value: '', label: 'Rohan'),
-                            DropdownMenuEntry(value: '', label: 'Katherine'),
-                          ],
+                            setState(() {
+                              isMusicPlaying = audioCubit.state.isMusicPlaying;
+                            });
+                          },
                         ),
 
+                        IconButton(icon: const Icon(Icons.leaderboard), onPressed: () {}),
 
                         MouseRegion(
                           cursor: SystemMouseCursors.click,

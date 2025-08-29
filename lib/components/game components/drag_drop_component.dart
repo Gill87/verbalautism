@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/drag_animation.dart';
-import 'package:verbalautism/components/tts_service.dart';
+import 'package:verbalautism/components/audio%20services/tts_service.dart';
 
 class DragDropComponent extends StatefulWidget {
   final VoidCallback onCompleted;

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,6 +39,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   bool isPaused = false;
   DateTime? stepStartTime;
   double durationAvg = 0;
+  Timer? stepTimer;
 
   // Random Object
   Random random = Random();
@@ -67,21 +69,90 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
       correctIndex = randomNumber;
     }
 
+    // Ensure first trial gets a timer after the first frame is rendered.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startStepTimer();
+    });
+
     super.initState();
   }
 
   @override
   void dispose() {
+    stepTimer?.cancel(); // Cancel any active timer
     super.dispose();
+  }
+
+  void screenTimeoutDialog(){
+    // Dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.red, // Red background
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // Soft edges
+        ),
+        title: Center(
+          child: Text(
+            "Session Timed Out",
+            style: GoogleFonts.ubuntu(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        content: Center(
+          heightFactor: 1, // Keeps content vertically centered
+          child: Text(
+            "No activity detected for 2 minutes. Returning to Home Page...",
+            style: GoogleFonts.ubuntu(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+
+    // Automatically close the dialog after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pop();
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomePage()),
+          (route) => false,
+        );
+      }
+    });
   }
   
   // When a new step starts, record start time
   void startStepTimer() {
     stepStartTime = DateTime.now();
+    
+    // cancel any previous timer
+    stepTimer?.cancel();
+
+    // don't count time while paused dialogs are up
+    if (isPaused) return;
+
+    // hard 2-minute timeout for THIS trial
+    stepTimer = Timer(const Duration(minutes: 2), () {
+      if (!mounted) return;
+
+      screenTimeoutDialog();
+    });
   }
 
   // When step ends, calculate duration
   void endStepTimer(int stepNumber) {
+
+    stepTimer?.cancel(); // Cancel timeout if trial finished normally
+
     if (stepStartTime != null) {
       final duration = DateTime.now().difference(stepStartTime!).inSeconds;
       stepDurations.add(duration);
@@ -391,6 +462,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                     totalSteps = 1;
                     round = 1;
                     displaySteps = 1;
+                    stepTimer?.cancel();
                   });
                   // Reset the game state
                   initState();

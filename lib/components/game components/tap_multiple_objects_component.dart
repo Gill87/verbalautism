@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/incorrect_animation.dart';
-import 'package:verbalautism/components/tts_service.dart';
+import 'package:verbalautism/components/audio%20services/tts_service.dart';
 
 class TapMultipleObjectsComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -98,6 +98,7 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
           isProcessing = false; // NEW: Reset processing flag
         });
         // NEW: Don't call onCompleted for incorrect answers, just reset processing
+        widget.onCompleted();
       }
     });
   }

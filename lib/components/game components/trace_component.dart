@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tracing_game/tracing_game.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
-import 'package:verbalautism/components/tts_service.dart';
+import 'package:verbalautism/components/audio%20services/tts_service.dart';
 
 class TraceComponent extends StatefulWidget {
   final VoidCallback onCompleted;

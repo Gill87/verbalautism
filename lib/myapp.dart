@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:verbalautism/components/audio%20services/audio_cubit.dart';
 import 'package:verbalautism/features/auth/data/firebase_auth_repo.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_states.dart';
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
       providers: [
         // Auth Cubit
         BlocProvider <AuthCubit> (create: (context) => AuthCubit(authRepo: firebaseAuthRepo)..checkAuth()),
+        
+        // Audio Cubit
+        BlocProvider<AudioCubit> (create: (context) => AudioCubit()),
 
       ], 
 
