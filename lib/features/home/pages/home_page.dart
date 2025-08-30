@@ -20,6 +20,7 @@ import 'package:verbalautism/components/home%20page%20components/sound_button.da
 import 'package:verbalautism/components/home%20page%20components/subject_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:verbalautism/features/schedule/schedule_calendar_page.dart';
 import 'package:verbalautism/features/stats/stats_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -203,7 +204,9 @@ class _HomePageState extends State<HomePage> {
 
                         // Schedule Button
                         ScheduleButton(
-                          tapFunction: () {}
+                          tapFunction: () {
+                            onScheduleButtonTap(context);
+                          }
                         ),
 
                         // Music Control

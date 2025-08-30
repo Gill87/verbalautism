@@ -14,8 +14,9 @@ class _StatsPageState extends State<StatsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Weekly Stats Overview', style: GoogleFonts.ubuntu()),
+        title: Text('Weekly Stats Overview', style: GoogleFonts.ubuntu(color: Colors.white, fontWeight: FontWeight.bold)),
         centerTitle: true,
+        backgroundColor: Colors.blue,
       ),
       body: const Center(
         child: Text('Stats Page Content Here'),
