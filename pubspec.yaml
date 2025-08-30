@@ -49,6 +49,7 @@ dependencies:
   audioplayers: ^6.4.0
   flutter_tts: ^4.2.3
   animated_text_kit: ^4.2.3
+  google_sign_in_web: ^0.12.4+4
 
 
 dev_dependencies:

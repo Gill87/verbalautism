@@ -72,9 +72,27 @@ class AuthCubit extends Cubit<AuthState>{
     emit(Unauthenticated());
   }
 
-  // Google Sign In
-  Future <void> googleSignIn() async {
-    await authRepo.googleSignIn();
+  // Google Sign In - Updated method in AuthCubit
+  Future<void> googleSignIn() async {
+    try {
+      emit(AuthLoading());
+      
+      // Call the repository method
+      await authRepo.googleSignIn();
+      
+      // After successful Google sign in, get the current user
+      final user = await authRepo.getCurrentUser();
+      
+      if (user != null) {
+        _currentUser = user;
+        emit(Authenticated(user));
+      } else {
+        emit(Unauthenticated());
+      }
+    } catch (e) {
+      emit(AuthError(e.toString()));
+      emit(Unauthenticated());
+    }
   }
 
 }

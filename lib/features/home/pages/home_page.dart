@@ -20,6 +20,7 @@ import 'package:verbalautism/components/home%20page%20components/sound_button.da
 import 'package:verbalautism/components/home%20page%20components/subject_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
+import 'package:verbalautism/features/stats/stats_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -199,7 +200,11 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ScheduleButton(tapFunction: () {}),
+
+                        // Schedule Button
+                        ScheduleButton(
+                          tapFunction: () {}
+                        ),
 
                         // Music Control
                         IconButton(
@@ -221,7 +226,18 @@ class _HomePageState extends State<HomePage> {
                           },
                         ),
 
-                        IconButton(icon: const Icon(Icons.leaderboard), onPressed: () {}),
+                        // Stats Button
+                        IconButton(
+                          icon: const Icon(Icons.leaderboard), 
+                          onPressed: () {
+                            Navigator.push(
+                              context, 
+                              MaterialPageRoute(
+                                builder: (context) => const StatsPage()
+                              )
+                            );
+                          }
+                        ),
 
                         MouseRegion(
                           cursor: SystemMouseCursors.click,

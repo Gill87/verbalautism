@@ -223,7 +223,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         cursor: SystemMouseCursors.click,
                         child: Text(
                           'Login Now',
-                          style: GoogleFonts.ubuntu(color: Colors.black, fontSize: 14, decoration: TextDecoration.underline, decorationColor: Colors.black),
+                          style: GoogleFonts.ubuntu(color: Colors.black, fontSize: 16, decoration: TextDecoration.underline, decorationColor: Colors.black),
                         ),
                       ),
                     )

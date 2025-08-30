@@ -53,7 +53,6 @@ class _LoginPageState extends State<LoginPage> {
     authCubit.googleSignIn();
   }
  
-
   @override
   Widget build(BuildContext context) {
     
@@ -70,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const SizedBox(height: 20,),
 
-                // logo
+                  // logo
                   Image.asset(
                     'assets/loginpage_images/logo.png',
                     height: smallHeight(context) ? 125 : 150,
@@ -194,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
           
                 // google button
                 GestureDetector(
-                  onTap: () => googleSignIn,
+                  onTap: () => googleSignIn(),
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: MouseRegion(

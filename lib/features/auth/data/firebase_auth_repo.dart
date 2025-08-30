@@ -96,10 +96,49 @@ class FirebaseAuthRepo implements AuthRepo{
   }
 
   @override
-  Future<void> googleSignIn() async {
+  Future<AppUser?> googleSignIn() async {
     try {
-      await AuthService().signInWithGoogle();
-    } catch(e){
+      // Use your AuthService for Google Sign In
+      final UserCredential? userCred = await AuthService().signInWithGoogle();
+      
+      if (userCred?.user == null) {
+        return null;
+      }
+      
+      final firebaseUser = userCred!.user!;
+      
+      // Check if user document exists in Firestore
+      DocumentSnapshot userDoc = await firebaseFirestore
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .get();
+      
+      AppUser user;
+      
+      if (!userDoc.exists) {
+        // Create new user document if it doesn't exist
+        user = AppUser(
+          uid: firebaseUser.uid,
+          email: firebaseUser.email!,
+          name: firebaseUser.displayName ?? 'User',
+        );
+        
+        // Save to Firestore
+        await firebaseFirestore
+            .collection('users')
+            .doc(user.uid)
+            .set(user.toJson());
+      } else {
+        // User exists, create AppUser from existing data
+        user = AppUser(
+          uid: firebaseUser.uid,
+          email: firebaseUser.email!,
+          name: userDoc['name'] ?? firebaseUser.displayName ?? 'User',
+        );
+      }
+      
+      return user;
+    } catch (e) {
       throw Exception("Google Sign In Failed: $e");
     }
   }
