@@ -1,18 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 // Schedule Event Model
 class ScheduleEvent {
+  final String id;
   final String gameTitle;
   final TimeOfDay time;
   final String gameRoute;
+  final DateTime date;
 
   ScheduleEvent({
+    required this.id,
     required this.gameTitle,
     required this.time,
     required this.gameRoute,
+    required this.date,
   });
+
+  // Convert to Firestore document
+  Map<String, dynamic> toMap() {
+    return {
+      'gameTitle': gameTitle,
+      'timeHour': time.hour,
+      'timeMinute': time.minute,
+      'gameRoute': gameRoute,
+      'date': Timestamp.fromDate(date),
+      'createdAt': Timestamp.now(),
+    };
+  }
+
+  // Create from Firestore document
+  factory ScheduleEvent.fromMap(String id, Map<String, dynamic> map) {
+    return ScheduleEvent(
+      id: id,
+      gameTitle: map['gameTitle'] ?? '',
+      time: TimeOfDay(
+        hour: map['timeHour'] ?? 0,
+        minute: map['timeMinute'] ?? 0,
+      ),
+      gameRoute: map['gameRoute'] ?? '',
+      date: DateTime(
+        map['year'] ?? DateTime.now().year,
+        map['month'] ?? DateTime.now().month,
+        map['day'] ?? DateTime.now().day,
+      ),
+    );
+  }
 }
 
 // Schedule Calendar Page
@@ -27,6 +63,11 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   Map<DateTime, List<ScheduleEvent>> _events = {};
+  bool _isLoading = true;
+
+  // Firestore instance
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Available games list
   final List<Map<String, String>> _availableGames = [
@@ -42,6 +83,80 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
     {'title': 'Sight Words', 'route': 'sight_words'},
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadEvents();
+  }
+
+  // Get current user's schedule collection reference
+  CollectionReference get _userScheduleCollection {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw Exception('User not authenticated');
+    }
+    return _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('schedule_events');
+  }
+
+  // Load events from Firestore
+  Future<void> _loadEvents() async {
+    try {
+      setState(() => _isLoading = true);
+      
+      final user = _auth.currentUser;
+      if (user == null) {
+        setState(() => _isLoading = false);
+        return;
+      }
+
+      final querySnapshot = await _userScheduleCollection.get();
+      
+      final Map<DateTime, List<ScheduleEvent>> loadedEvents = {};
+      
+      for (var doc in querySnapshot.docs) {
+        final event = ScheduleEvent.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+        final dateKey = DateTime(event.date.year, event.date.month, event.date.day);
+        
+        if (loadedEvents[dateKey] != null) {
+          loadedEvents[dateKey]!.add(event);
+        } else {
+          loadedEvents[dateKey] = [event];
+        }
+      }
+
+      setState(() {
+        _events = loadedEvents;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isLoading = false);
+      _showErrorSnackBar('Failed to load events: $e');
+    }
+  }
+
+  // Add event to Firestore
+  Future<void> _addEventToFirestore(DateTime date, ScheduleEvent event) async {
+    try {
+      await _userScheduleCollection.add(event.toMap());
+      _showSuccessSnackBar('Activity scheduled successfully!');
+    } catch (e) {
+      _showErrorSnackBar('Failed to schedule activity: $e');
+    }
+  }
+
+  // Delete event from Firestore
+  Future<void> _deleteEventFromFirestore(String eventId) async {
+    try {
+      await _userScheduleCollection.doc(eventId).delete();
+      _showSuccessSnackBar('Activity removed successfully!');
+    } catch (e) {
+      _showErrorSnackBar('Failed to remove activity: $e');
+    }
+  }
+
   List<ScheduleEvent> _getEventsForDay(DateTime day) {
     return _events[DateTime(day.year, day.month, day.day)] ?? [];
   }
@@ -56,9 +171,21 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
     setState(() {});
   }
 
+  void _removeEvent(DateTime date, int index) {
+    final dateKey = DateTime(date.year, date.month, date.day);
+    if (_events[dateKey] != null) {
+      _events[dateKey]!.removeAt(index);
+      if (_events[dateKey]!.isEmpty) {
+        _events.remove(dateKey);
+      }
+    }
+    setState(() {});
+  }
+
   void _showAddEventDialog(DateTime selectedDate) {
     TimeOfDay selectedTime = TimeOfDay.now();
     String? selectedGame;
+    bool isSubmitting = false;
 
     showDialog(
       context: context,
@@ -93,7 +220,7 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
                   'Time: ${selectedTime.format(context)}',
                   style: GoogleFonts.ubuntu(),
                 ),
-                onTap: () async {
+                onTap: isSubmitting ? null : () async {
                   final TimeOfDay? picked = await showTimePicker(
                     context: context,
                     initialTime: selectedTime,
@@ -115,8 +242,9 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
+                  enabled: !isSubmitting,
                 ),
-                value: selectedGame,
+                initialValue: selectedGame,
                 items: _availableGames.map((game) {
                   return DropdownMenuItem<String>(
                     value: game['route'],
@@ -126,37 +254,74 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
                     ),
                   );
                 }).toList(),
-                onChanged: (value) {
+                onChanged: isSubmitting ? null : (value) {
                   setDialogState(() {
                     selectedGame = value;
                   });
                 },
               ),
+
+              if (isSubmitting) ...[
+                const SizedBox(height: 16),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                    SizedBox(width: 8),
+                    Text('Scheduling...'),
+                  ],
+                ),
+              ],
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: isSubmitting ? null : () => Navigator.pop(context),
               child: Text(
                 'Cancel',
                 style: GoogleFonts.ubuntu(color: Colors.grey),
               ),
             ),
             ElevatedButton(
-              onPressed: selectedGame != null
-                  ? () {
+              onPressed: (selectedGame != null && !isSubmitting)
+                  ? () async {
+                      setDialogState(() => isSubmitting = true);
+                      
                       final gameTitle = _availableGames
                           .firstWhere((game) => game['route'] == selectedGame)['title']!;
                       
-                      _addEvent(
-                        selectedDate,
-                        ScheduleEvent(
+                      final newEvent = ScheduleEvent(
+                        id: '', // Will be set by Firestore
+                        gameTitle: gameTitle,
+                        time: selectedTime,
+                        gameRoute: selectedGame!,
+                        date: selectedDate,
+                      );
+
+                      try {
+                        await _addEventToFirestore(selectedDate, newEvent);
+                        
+                        // Add to local state with temporary ID
+                        final eventWithId = ScheduleEvent(
+                          id: DateTime.now().millisecondsSinceEpoch.toString(),
                           gameTitle: gameTitle,
                           time: selectedTime,
                           gameRoute: selectedGame!,
-                        ),
-                      );
-                      Navigator.pop(context);
+                          date: selectedDate,
+                        );
+                        
+                        _addEvent(selectedDate, eventWithId);
+                        Navigator.pop(context);
+                        
+                        // Reload events to get proper Firestore IDs
+                        _loadEvents();
+                      } catch (e) {
+                        setDialogState(() => isSubmitting = false);
+                      }
                     }
                   : null,
               style: ElevatedButton.styleFrom(
@@ -174,8 +339,45 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
     );
   }
 
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Schedule Activities',
+            style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -185,6 +387,13 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
         centerTitle: true,
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _loadEvents,
+            tooltip: 'Refresh',
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -316,9 +525,9 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
             leading: CircleAvatar(
               backgroundColor: Colors.blue,
               child: Text(
-                event.time.format(context),
+                "",
                 style: GoogleFonts.ubuntu(
-                  fontSize: 10,
+                  fontSize: 18,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -334,25 +543,92 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
             ),
             trailing: IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: () {
-                setState(() {
-                  final dateKey = DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
-                  _events[dateKey]?.removeAt(index);
-                  if (_events[dateKey]?.isEmpty ?? false) {
-                    _events.remove(dateKey);
-                  }
-                });
-              },
+              onPressed: () => _showDeleteConfirmation(event, index),
             ),
           ),
         );
       },
     );
   }
+
+  void _showDeleteConfirmation(ScheduleEvent event, int index) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Remove Activity',
+          style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'Are you sure you want to remove "${event.gameTitle}" from your schedule?',
+          style: GoogleFonts.ubuntu(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.ubuntu(color: Colors.grey),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              
+              try {
+                await _deleteEventFromFirestore(event.id);
+                _removeEvent(_selectedDay!, index);
+              } catch (e) {
+                _showErrorSnackBar('Failed to remove activity: $e');
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: Text(
+              'Remove',
+              style: GoogleFonts.ubuntu(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 // Updated tapFunction for ScheduleButton in HomePage
 void onScheduleButtonTap(BuildContext context) {
+  // // Check if user is authenticated
+  // final user = FirebaseAuth.instance.currentUser;
+  
+  // if (user == null) {
+  //   // Show login prompt or navigate to login page
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       title: Text(
+  //         'Login Required',
+  //         style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold),
+  //       ),
+  //       content: Text(
+  //         'Please log in to access your schedule.',
+  //         style: GoogleFonts.ubuntu(),
+  //       ),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () => Navigator.pop(context),
+  //           child: Text(
+  //             'OK',
+  //             style: GoogleFonts.ubuntu(),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  //   return;
+  // }
+
   Navigator.push(
     context,
     MaterialPageRoute(
