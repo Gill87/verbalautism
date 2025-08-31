@@ -3,53 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-// Schedule Event Model
-class ScheduleEvent {
-  final String id;
-  final String gameTitle;
-  final TimeOfDay time;
-  final String gameRoute;
-  final DateTime date;
-
-  ScheduleEvent({
-    required this.id,
-    required this.gameTitle,
-    required this.time,
-    required this.gameRoute,
-    required this.date,
-  });
-
-  // Convert to Firestore document
-  Map<String, dynamic> toMap() {
-    return {
-      'gameTitle': gameTitle,
-      'timeHour': time.hour,
-      'timeMinute': time.minute,
-      'gameRoute': gameRoute,
-      'date': Timestamp.fromDate(date),
-      'createdAt': Timestamp.now(),
-    };
-  }
-
-  // Create from Firestore document
-  factory ScheduleEvent.fromMap(String id, Map<String, dynamic> map) {
-    return ScheduleEvent(
-      id: id,
-      gameTitle: map['gameTitle'] ?? '',
-      time: TimeOfDay(
-        hour: map['timeHour'] ?? 0,
-        minute: map['timeMinute'] ?? 0,
-      ),
-      gameRoute: map['gameRoute'] ?? '',
-      date: DateTime(
-        map['year'] ?? DateTime.now().year,
-        map['month'] ?? DateTime.now().month,
-        map['day'] ?? DateTime.now().day,
-      ),
-    );
-  }
-}
+import '../schedule/schedule_event.dart';
 
 // Schedule Calendar Page
 class ScheduleCalendarPage extends StatefulWidget {

@@ -16,6 +16,7 @@ import 'package:verbalautism/components/audio%20services/audio_cubit.dart';
 import 'package:verbalautism/components/audio%20services/audio_service.dart';
 import 'package:verbalautism/components/home%20page%20components/buttons_column.dart';
 import 'package:verbalautism/components/home%20page%20components/schedule_button.dart';
+import 'package:verbalautism/components/home%20page%20components/schedule_summary.dart';
 import 'package:verbalautism/components/home%20page%20components/sound_button.dart';
 import 'package:verbalautism/components/home%20page%20components/subject_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,6 +39,7 @@ class _HomePageState extends State<HomePage> {
   // Sign out method
   void signUserOut(){
     final authCubit = context.read<AuthCubit>();
+    AudioService().stopMusic();
     authCubit.logout();
   }
 
@@ -51,7 +53,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     bool isSmallWidth(BuildContext context) =>
       screenWidth <= 920;
@@ -354,33 +355,9 @@ class _HomePageState extends State<HomePage> {
                           datetime: DateTime.now(),
                       ),
                       
-                      SubjectWidget(
-                        tapFunction: onToAlphabet, 
-                        text: 'Previous', 
-                        image1: const AssetImage('assets/homepage_images/places.jpg'), 
-                        width: screenWidth * 0.1, height: screenHeight * 0.2
-                      ),
+                      const SizedBox(height: 20,),
 
-                      const SizedBox(height: 10,),
-
-                      SubjectWidget(
-                        tapFunction: onToAlphabet, 
-                        text: 'Current', 
-                        image1: const AssetImage('assets/homepage_images/geography.jpg'),
-                        width: screenWidth * 0.1, 
-                        height: screenHeight * 0.2
-                      
-                      ),
-                      
-                      const SizedBox(height: 10,),
-
-                      SubjectWidget(
-                        tapFunction: onToAlphabet, 
-                        text: 'Next', 
-                        image1: const AssetImage('assets/homepage_images/sight.jpg'),
-                        width: screenWidth* 0.1, 
-                        height: screenHeight * 0.2
-                      ),
+                      const ScheduleSummary(),
                                 
                     ],
                   ),
