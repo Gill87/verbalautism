@@ -33,6 +33,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
   late bool isMusicPlaying = AudioService().isMusicPlaying;
+  bool adminAccess = false;
 
   // Selection state management
   bool isSelectionMode = false;
@@ -161,6 +162,98 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     exitSelectionMode();
+  }
+
+  Future<void> adminAccessDialog() async {
+    final TextEditingController controller = TextEditingController();
+    bool showError = false;
+
+    await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            
+            return AlertDialog(
+              backgroundColor: Colors.blue,
+              title: Text(
+                "Admin Access Needed",
+                style: GoogleFonts.ubuntu(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    cursorColor: Colors.white,
+                    style: GoogleFonts.ubuntu(color: Colors.white),
+                    controller: controller,
+                    decoration: InputDecoration(
+                      hintText: "Enter User Email",
+                      hintStyle: GoogleFonts.ubuntu(color: Colors.white),
+                      errorText: showError ? 'Incorrect email address' : null,
+                      errorStyle: GoogleFonts.ubuntu(color: Colors.red[300]),
+                    ),
+                  ),
+
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context), // cancel
+                  child: Text(
+                    "Cancel",
+                    style: GoogleFonts.ubuntu(color: Colors.white),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (controller.text == user.email) {
+                      setState(() {
+                        adminAccess = true;
+                      });
+                      Navigator.pop(context);
+                      // Show success message
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Admin access granted successfully!',
+                            style: GoogleFonts.ubuntu(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.green,
+                          duration: const Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    } else {
+                      // Show error inline
+                      setDialogState(() {
+                        showError = true;
+                      });
+                      // Clear error after 2 seconds
+                      Future.delayed(const Duration(seconds: 2), () {
+                        if (context.mounted) {
+                          setDialogState(() {
+                            showError = false;
+                          });
+                        }
+                      });
+                    }
+                  },
+                  child: Text(
+                    "Get Admin Access",
+                    style: GoogleFonts.ubuntu(color: Colors.black),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -298,7 +391,11 @@ class _HomePageState extends State<HomePage> {
                         // Schedule Button
                         ScheduleButton(
                           tapFunction: () {
-                            onScheduleButtonTap(context);
+                            if(adminAccess){
+                              onScheduleButtonTap(context);
+                            } else {
+                              adminAccessDialog();
+                            }
                           }
                         ),
 
@@ -332,7 +429,13 @@ class _HomePageState extends State<HomePage> {
                         MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: TextButton(
-                            onPressed: isSelectionMode ? null : enterSelectionMode,
+                            onPressed: () {
+                              if(adminAccess){
+                                isSelectionMode ? null : enterSelectionMode();
+                              } else {
+                                adminAccessDialog();
+                              }
+                            },
                             child: Text(
                               'Select Activity',
                               style: GoogleFonts.ubuntu(
@@ -347,7 +450,13 @@ class _HomePageState extends State<HomePage> {
                         MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: TextButton(
-                            onPressed: isSelectionMode ? null : resetActivities,
+                            onPressed: () {
+                              if(adminAccess){
+                                isSelectionMode ? null : resetActivities();
+                              } else {
+                                adminAccessDialog();
+                              }
+                            },
                             child: Text(
                               'Reset',
                               style: GoogleFonts.ubuntu(
