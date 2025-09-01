@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/abc/base_page/letters_selection_page.dart';
 import 'package:verbalautism/activities/abc/games_pages/abc_mixed_game.dart';
 
-class Activity1 extends StatelessWidget {
-  const Activity1({super.key});
+class AbcBasePage extends StatelessWidget {
+  const AbcBasePage({super.key});
 
   @override
   Widget build(BuildContext context) {
