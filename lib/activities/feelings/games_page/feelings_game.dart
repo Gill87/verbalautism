@@ -31,7 +31,6 @@ class _FeelingsGameState extends State<FeelingsGame> {
   // Variables
   int incorrectAnswer = 0;
   int correctAnswer = 0;
-  bool alreadyGotIncorrect = false;
   int displaySteps = 1;
   int totalSteps = 1;
   int round = 1;
@@ -345,7 +344,6 @@ class _FeelingsGameState extends State<FeelingsGame> {
           averageDuration: calculateAverageDuration(),
           word: feelings[correctIndex],
         );
-        stepDurations.clear(); // Clear durations for next round
       }
 
       // ✅ Round 2 check
@@ -365,7 +363,6 @@ class _FeelingsGameState extends State<FeelingsGame> {
             averageDuration: calculateAverageDuration(),
             word: feelings[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(2);
         } else {
           uploadRoundResult(
@@ -376,7 +373,6 @@ class _FeelingsGameState extends State<FeelingsGame> {
             averageDuration: calculateAverageDuration(),
             word: feelings[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -396,7 +392,6 @@ class _FeelingsGameState extends State<FeelingsGame> {
             averageDuration: calculateAverageDuration(),
             word: feelings[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(3);
         } else {
           uploadRoundResult(
@@ -407,7 +402,6 @@ class _FeelingsGameState extends State<FeelingsGame> {
             averageDuration: calculateAverageDuration(),
             word: feelings[correctIndex],
           );
-        stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -504,10 +498,7 @@ class _FeelingsGameState extends State<FeelingsGame> {
   Color containerColor = Colors.black;
 
   void triggerCorrectFlash() {
-    if (!alreadyGotIncorrect) {
-      ++correctAnswer;
-    }
-    alreadyGotIncorrect = false;
+    ++correctAnswer;
 
     setState(() {
       containerColor = Colors.lightGreen;
@@ -523,10 +514,7 @@ class _FeelingsGameState extends State<FeelingsGame> {
   }
 
   void triggerIncorrectFlash() {
-    if(!alreadyGotIncorrect){
-      ++incorrectAnswer;
-      alreadyGotIncorrect = true;
-    }
+    ++incorrectAnswer;
 
     setState(() {
       containerColor = Colors.red;
@@ -564,7 +552,10 @@ class _FeelingsGameState extends State<FeelingsGame> {
       "word": word,
       "createdAt": FieldValue.serverTimestamp(),
     });
-
+    
+    incorrectAnswer = 0;
+    correctAnswer = 0;
+    stepDurations.clear(); // Clear durations for next round
     print("✅ Round result uploaded for $gameType");
   }
 

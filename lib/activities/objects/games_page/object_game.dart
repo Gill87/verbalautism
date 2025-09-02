@@ -31,7 +31,6 @@ class _ObjectGameState extends State<ObjectGame> {
   // Variables
   int incorrectAnswer = 0;
   int correctAnswer = 0;
-  bool alreadyGotIncorrect = false;
   int displaySteps = 1;
   int totalSteps = 1;
   int round = 1;
@@ -62,6 +61,7 @@ class _ObjectGameState extends State<ObjectGame> {
   void initState() {
     objects = [
       "Book",
+      "Backpack",
       "Car",
       "Clock",
       "Computer",
@@ -359,7 +359,6 @@ class _ObjectGameState extends State<ObjectGame> {
           averageDuration: calculateAverageDuration(),
           word: objects[correctIndex],
         );
-        stepDurations.clear(); // Clear durations for next round
       }
 
       // ✅ Round 2 check
@@ -379,7 +378,6 @@ class _ObjectGameState extends State<ObjectGame> {
             averageDuration: calculateAverageDuration(),
             word: objects[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(2);
         } else {
           uploadRoundResult(
@@ -390,7 +388,6 @@ class _ObjectGameState extends State<ObjectGame> {
             averageDuration: calculateAverageDuration(),
             word: objects[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -410,7 +407,6 @@ class _ObjectGameState extends State<ObjectGame> {
             averageDuration: calculateAverageDuration(),
             word: objects[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(3);
         } else {
           uploadRoundResult(
@@ -421,7 +417,6 @@ class _ObjectGameState extends State<ObjectGame> {
             averageDuration: calculateAverageDuration(),
             word: objects[correctIndex],
           );
-        stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -518,10 +513,7 @@ class _ObjectGameState extends State<ObjectGame> {
   Color containerColor = Colors.black;
 
   void triggerCorrectFlash() {
-    if (!alreadyGotIncorrect) {
-      ++correctAnswer;
-    }
-    alreadyGotIncorrect = false;
+    ++correctAnswer;
     
     setState(() {
       containerColor = Colors.lightGreen;
@@ -537,10 +529,7 @@ class _ObjectGameState extends State<ObjectGame> {
   }
 
   void triggerIncorrectFlash() {
-    if(!alreadyGotIncorrect){
-      ++incorrectAnswer;
-      alreadyGotIncorrect = true;
-    }
+    ++incorrectAnswer;
 
     setState(() {
       containerColor = Colors.red;
@@ -579,6 +568,9 @@ class _ObjectGameState extends State<ObjectGame> {
       "createdAt": FieldValue.serverTimestamp(),
     });
 
+    incorrectAnswer = 0;
+    correctAnswer = 0;
+    stepDurations.clear(); // Clear durations for next round
     print("✅ Round result uploaded for $gameType");
   }
 

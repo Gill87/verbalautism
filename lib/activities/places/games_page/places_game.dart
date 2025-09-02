@@ -32,7 +32,6 @@ class _PlacesGameState extends State<PlacesGame> {
   int displaySteps = 1;
   int correctAnswer = 0; // Used to track correct answers
   int incorrectAnswer = 0; // Used to track incorrect answers
-  bool alreadyGotIncorrect = false;
   int totalSteps = 1;
   int round = 1;
   final int maxSteps = 30;
@@ -357,7 +356,6 @@ class _PlacesGameState extends State<PlacesGame> {
           averageDuration: calculateAverageDuration(),
           word: places[correctIndex],
         );
-        stepDurations.clear(); // Clear durations for next round
       }
 
       // ✅ Round 2 check
@@ -377,7 +375,6 @@ class _PlacesGameState extends State<PlacesGame> {
             averageDuration: calculateAverageDuration(),
             word: places[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(2);
         } else {
           uploadRoundResult(
@@ -387,8 +384,7 @@ class _PlacesGameState extends State<PlacesGame> {
             roundNumber: round,
             averageDuration: calculateAverageDuration(),
             word: places[correctIndex],
-          );
-          stepDurations.clear(); // Clear durations for next round
+          );        
         }
       }
 
@@ -408,7 +404,6 @@ class _PlacesGameState extends State<PlacesGame> {
             averageDuration: calculateAverageDuration(),
             word: places[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(3);
         } else {
           uploadRoundResult(
@@ -419,7 +414,6 @@ class _PlacesGameState extends State<PlacesGame> {
             averageDuration: calculateAverageDuration(),
             word: places[correctIndex],
           );
-        stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -517,10 +511,7 @@ class _PlacesGameState extends State<PlacesGame> {
   Color containerColor = Colors.black;
 
   void triggerCorrectFlash() {
-    if (!alreadyGotIncorrect) {
-      ++correctAnswer;
-    }
-    alreadyGotIncorrect = false;
+    ++correctAnswer;
     
     setState(() {
       containerColor = Colors.lightGreen;
@@ -536,10 +527,7 @@ class _PlacesGameState extends State<PlacesGame> {
   }
 
   void triggerIncorrectFlash() {
-    if(!alreadyGotIncorrect){
-      ++incorrectAnswer;
-      alreadyGotIncorrect = true;
-    }
+    ++incorrectAnswer;
     
     setState(() {
       containerColor = Colors.red;
@@ -578,6 +566,9 @@ class _PlacesGameState extends State<PlacesGame> {
       "createdAt": FieldValue.serverTimestamp(),
     });
 
+    incorrectAnswer = 0;
+    correctAnswer = 0;
+    stepDurations.clear(); // Clear durations for next round
     print("✅ Round result uploaded for $gameType");
   }
 

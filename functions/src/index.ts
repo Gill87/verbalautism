@@ -13,18 +13,19 @@ import * as admin from "firebase-admin";
 
 admin.initializeApp();
 const db = admin.firestore();
+
 /**
- * Formats a camelCase or PascalCase string into a Title Case label.
- * Inserts spaces before capital letters and capitalizes the first character.
+ * Formats game type names by removing "Reports" and formatting to Title Case.
  * Examples:
- * - "sightWordReports" → "Sight Word Reports"
- * - "totalCorrect" → "Total Correct"
- * - "averageDuration" → "Average Duration"
- * @param {string} key - The camelCase or PascalCase string to format.
- * @return {string} The formatted, human-readable label.
+ * - "sightWordReports" → "Sight Word"
+ * - "placesReports" → "Places"
+ * - "colorsReports" → "Colors"
+ * @param {string} gameType - The game type string to format.
+ * @return {string} The formatted game name without "Reports".
  */
-function formatKey(key: string): string {
-  return key
+function formatGameType(gameType: string): string {
+  return gameType
+    .replace(/Reports$/, "")
     .replace(/([A-Z])/g, " $1")
     .replace(/^./, (str: string) => str.toUpperCase())
     .trim();
@@ -96,13 +97,8 @@ async function runWeeklyEmailSummaryLogic() {
 
       const reportsSnapshot = await gameCollection.get();
 
+      // Skip if no reports for this game
       if (reportsSnapshot.empty) {
-        summary[game] = {
-          roundsPlayed: 0,
-          totalCorrect: 0,
-          totalIncorrect: 0,
-          averageDuration: 0,
-        };
         continue;
       }
 
@@ -133,50 +129,119 @@ async function runWeeklyEmailSummaryLogic() {
       collectionsToDelete.push(gameCollection);
     }
 
+    // Check if there's any activity to report
+    const hasActivity = Object.keys(summary).length > 0;
+
+    let emailContent: string;
+    if (hasActivity) {
+      const tableRows = Object.entries(summary)
+        .map(([key, value], index) => {
+          if (typeof value === "object" && value !== null) {
+            const data = value as {
+              roundsPlayed: number,
+              totalCorrect: number,
+              totalIncorrect: number,
+              averageDuration: number
+            };
+            const rowBg = index % 2 === 0 ? "#f9f9f9" : "#ffffff";
+            const gameName = formatGameType(key);
+            const duration = `${data.averageDuration} seconds`;
+            return `
+              <tr style="background-color: ${rowBg};">
+                <td style="padding: 12px 15px; border-bottom: 1px solid 
+                  #e0e0e0; font-weight: 500; color: #333;">${gameName}</td>
+                <td style="padding: 12px 15px; text-align: center; 
+                  border-bottom: 1px solid #e0e0e0; color: #555;">
+                  ${data.roundsPlayed}</td>
+                <td style="padding: 12px 15px; text-align: center; 
+                  border-bottom: 1px solid #e0e0e0; color: #4CAF50; 
+                  font-weight: 500;">${data.totalCorrect}</td>
+                <td style="padding: 12px 15px; text-align: center; 
+                  border-bottom: 1px solid #e0e0e0; color: #f44336; 
+                  font-weight: 500;">${data.totalIncorrect}</td>
+                <td style="padding: 12px 15px; text-align: center; 
+                  border-bottom: 1px solid #e0e0e0; color: #555;">
+                  ${duration}</td>
+              </tr>
+            `;
+          }
+          return "";
+        })
+        .join("");
+
+      emailContent = `
+        <div style="font-family: Arial, sans-serif; 
+          color: #333; padding: 20px;">
+          <h2 style="color: #4CAF50;">Your Weekly Game Summary</h2>
+          <p>Hi there! Here's what you achieved this week:</p>
+
+          <table style="width: 100%; border-collapse: collapse; 
+            margin: 20px 0; background-color: #fff; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            border-radius: 8px; overflow: hidden;">
+            <thead>
+              <tr style="background: linear-gradient(135deg, #4CAF50, 
+                #45a049); color: white;">
+                <th style="padding: 15px; text-align: left; 
+                  font-weight: 600; border-bottom: 2px solid #fff;">
+                  Game</th>
+                <th style="padding: 15px; text-align: center; 
+                  font-weight: 600; border-bottom: 2px solid #fff;">
+                  Rounds Played</th>
+                <th style="padding: 15px; text-align: center; 
+                  font-weight: 600; border-bottom: 2px solid #fff;">
+                  Correct</th>
+                <th style="padding: 15px; text-align: center; 
+                  font-weight: 600; border-bottom: 2px solid #fff;">
+                  Incorrect</th>
+                <th style="padding: 15px; text-align: center; 
+                  font-weight: 600; border-bottom: 2px solid #fff;">
+                  Avg Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+
+          <p style="margin-top: 20px;">Keep up the great work! 🚀</p>
+          <hr />
+          <p style="font-size: 12px; color: #888;">
+            This is an automated message from your app.
+          </p>
+        </div>
+      `;
+    } else {
+      emailContent = `
+        <div style="font-family: Arial, sans-serif; 
+          color: #333; padding: 20px;">
+          <h2 style="color: #4CAF50;">Your Weekly Game Summary</h2>
+          <p>Hi there!</p>
+          
+          <div style="background-color: #f5f5f5; padding: 15px; 
+            border-radius: 8px; text-align: center;">
+            <p style="font-size: 18px; color: #666; margin: 0;">
+              📊 No activity for this week</p>
+          </div>
+
+          <p style="margin-top: 20px;">
+            We'd love to see you back in the game soon! 🎮</p>
+          <hr />
+          <p style="font-size: 12px; color: #888;">
+            This is an automated message from your app.
+          </p>
+        </div>
+      `;
+    }
 
     await db.collection("mail").add({
       to: email,
       message: {
-        subject: "🎮 Weekly Game Summary",
+        subject: "Verbal Autism Weekly Game Summary 🎮",
         text: "Here's your weekly game summary!",
-        html: `
-          <div style="font-family: Arial, sans-serif; 
-            color: #333; padding: 20px;">
-            <h2 style="color: #4CAF50;">Your Weekly Game Summary</h2>
-            <p>Hi there! Here's what you achieved this week:</p>
-
-            <ul style="line-height: 1.6;">
-              ${Object.entries(summary)
-    .map(([key, value]) => {
-      if (typeof value === "object" && value !== null) {
-        return `
-                      <li>
-                        <strong>${formatKey(key)}:</strong>
-                        <ul style="margin-left: 20px; line-height: 1.4;">
-                          ${Object.entries(value)
-    .map(
-      ([subKey, subVal]) =>
-        `<li><strong>${formatKey(subKey)}:</strong> ${subVal}</li>`
-    )
-    .join("")}
-                        </ul>
-                      </li>
-                    `;
-      } else {
-        return `<li><strong>${formatKey(key)}:</strong> ${value}</li>`;
-      }
-    })
-    .join("")}
-            </ul>
-
-            <p style="margin-top: 20px;">Keep up the great work! 🚀</p>
-            <hr />
-            <p style="font-size: 12px; color: #888;">
-              This is an automated message from your app.
-            </p>
-          </div>
-        `,
+        html: emailContent,
       },
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
     console.log(`✅ Weekly email queued for ${email}`);
@@ -187,8 +252,8 @@ async function runWeeklyEmailSummaryLogic() {
         await deleteAllDocuments(collection);
         console.log(`🗑️ Deleted documents for user ${userId}`);
       } catch (deleteError) {
-        console.error(`❌ Error deleting documents for user ${userId}:`,
-          deleteError);
+        const errorMsg = `❌ Error deleting documents for user ${userId}:`;
+        console.error(errorMsg, deleteError);
         // Continue processing other users even if deletion fails
       }
     }

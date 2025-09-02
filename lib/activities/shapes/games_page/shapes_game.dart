@@ -39,7 +39,6 @@ class _ShapesGameState extends State<ShapesGame> {
   int displaySteps = 1;
   int correctAnswer = 0;
   int incorrectAnswer = 0;
-  bool alreadyGotIncorrect = false;
   int totalSteps = 1;
   int round = 1;
   final int maxSteps = 30;
@@ -349,7 +348,6 @@ class _ShapesGameState extends State<ShapesGame> {
           averageDuration: calculateAverageDuration(),
           word: shapes[correctIndex],
         );
-        stepDurations.clear(); // Clear durations for next round
       }
 
       // ✅ Round 2 check
@@ -369,7 +367,6 @@ class _ShapesGameState extends State<ShapesGame> {
             averageDuration: calculateAverageDuration(),
             word: shapes[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(2);
         } else {
           uploadRoundResult(
@@ -380,7 +377,6 @@ class _ShapesGameState extends State<ShapesGame> {
             averageDuration: calculateAverageDuration(),
             word: shapes[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -400,7 +396,6 @@ class _ShapesGameState extends State<ShapesGame> {
             averageDuration: calculateAverageDuration(),
             word: shapes[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(3);
         } else {
           uploadRoundResult(
@@ -411,7 +406,6 @@ class _ShapesGameState extends State<ShapesGame> {
             averageDuration: calculateAverageDuration(),
             word: shapes[correctIndex],
           );
-        stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -507,10 +501,7 @@ class _ShapesGameState extends State<ShapesGame> {
   Color containerColor = Colors.black;
 
   void triggerCorrectFlash() {
-    if (!alreadyGotIncorrect) {
-      ++correctAnswer;
-    }
-    alreadyGotIncorrect = false;
+    ++correctAnswer;
     
     setState(() {
       containerColor = Colors.lightGreen;
@@ -526,10 +517,8 @@ class _ShapesGameState extends State<ShapesGame> {
   }
 
   void triggerIncorrectFlash() {
-    if(!alreadyGotIncorrect){
-      ++incorrectAnswer;
-      alreadyGotIncorrect = true;
-    }
+    ++incorrectAnswer;
+
     setState(() {
       containerColor = Colors.red;
     });
@@ -566,7 +555,10 @@ class _ShapesGameState extends State<ShapesGame> {
       "word": word,
       "createdAt": FieldValue.serverTimestamp(),
     });
-
+    
+    incorrectAnswer = 0;
+    correctAnswer = 0;
+    stepDurations.clear(); // Clear durations for next round
     print("✅ Round result uploaded for $gameType");
   }
 

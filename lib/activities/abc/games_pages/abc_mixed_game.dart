@@ -30,7 +30,6 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   // Variables
   int incorrectAnswer = 0;
   int correctAnswer = 0;
-  bool alreadyGotIncorrect = false;
   int displaySteps = 1;
   int totalSteps = 1;
   int round = 1;
@@ -363,7 +362,6 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
           averageDuration: calculateAverageDuration(),
           word: letters[correctIndex],
         );
-        stepDurations.clear(); // Clear durations for next round
       }
 
       // ✅ Round 2 check
@@ -383,7 +381,6 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
             averageDuration: calculateAverageDuration(),
             word: letters[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(2);
         } else {
           uploadRoundResult(
@@ -394,7 +391,6 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
             averageDuration: calculateAverageDuration(),
             word: letters[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -414,7 +410,6 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
             averageDuration: calculateAverageDuration(),
             word: letters[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(3);
         } else {
           uploadRoundResult(
@@ -425,7 +420,6 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
             averageDuration: calculateAverageDuration(),
             word: letters[correctIndex],
           );
-        stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -521,10 +515,7 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   Color containerColor = Colors.black;
 
   void triggerCorrectFlash() {
-    if (!alreadyGotIncorrect) {
-      ++correctAnswer;
-    }
-    alreadyGotIncorrect = false;    
+    ++correctAnswer;  
     
     setState(() {
       containerColor = Colors.lightGreen;
@@ -540,11 +531,8 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   }
 
   void triggerIncorrectFlash() {
-    if(!alreadyGotIncorrect){
-      ++incorrectAnswer;
-      alreadyGotIncorrect = true;
-    }
-    
+    ++incorrectAnswer;
+
     setState(() {
       containerColor = Colors.red;
     });
@@ -582,6 +570,9 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
       "createdAt": FieldValue.serverTimestamp(),
     });
 
+    incorrectAnswer = 0;
+    correctAnswer = 0;
+    stepDurations.clear(); // Clear durations for next round
     print("✅ Round result uploaded for $gameType");
   }
   

@@ -31,7 +31,6 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   // Variables
   int incorrectAnswer = 0;
   int correctAnswer = 0;
-  bool alreadyGotIncorrect = false;
   int displaySteps = 1;
   int totalSteps = 1;
   int round = 1;
@@ -348,7 +347,6 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
           averageDuration: calculateAverageDuration(),
           word: letters[correctIndex],
         );
-        stepDurations.clear(); // Clear durations for next round
       }
 
       // ✅ Round 2 check
@@ -368,7 +366,6 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
             averageDuration: calculateAverageDuration(),
             word: letters[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(2);
         } else {
           uploadRoundResult(
@@ -379,7 +376,6 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
             averageDuration: calculateAverageDuration(),
             word: letters[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -399,7 +395,6 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
             averageDuration: calculateAverageDuration(),
             word: letters[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(3);
         } else {
           uploadRoundResult(
@@ -410,7 +405,6 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
             averageDuration: calculateAverageDuration(),
             word: letters[correctIndex],
           );
-        stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -509,10 +503,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   Color containerColor = Colors.black;
 
   void triggerCorrectFlash() {
-    if (!alreadyGotIncorrect) {
-      ++correctAnswer;
-    }
-    alreadyGotIncorrect = false;    
+    ++correctAnswer;
     
     setState(() {
       containerColor = Colors.lightGreen;
@@ -528,10 +519,8 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   }
 
   void triggerIncorrectFlash() {
-    if(!alreadyGotIncorrect){
-      ++incorrectAnswer;
-      alreadyGotIncorrect = true;
-    }
+    ++incorrectAnswer;
+
     setState(() {
       containerColor = Colors.red;
     });
@@ -569,6 +558,9 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
       "createdAt": FieldValue.serverTimestamp(),
     });
 
+    incorrectAnswer = 0;
+    correctAnswer = 0;
+    stepDurations.clear(); // Clear durations for next round
     print("✅ Round result uploaded for $gameType");
   }
   

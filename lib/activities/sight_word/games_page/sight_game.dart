@@ -28,7 +28,6 @@ class _SightWordGameState extends State<SightWordGame> {
   List<int> stepDurations = []; // store all durations (in seconds)
 
   // Variables
-  bool alreadyGotIncorrect = false;
   int correctAnswer = 0;
   int incorrectAnswer = 0;
   int displaySteps = 1;
@@ -343,7 +342,6 @@ class _SightWordGameState extends State<SightWordGame> {
           averageDuration: calculateAverageDuration(),
           word: sightWords[correctIndex],
         );
-        stepDurations.clear(); // Clear durations for next round
       }
 
       // ✅ Round 2 check
@@ -363,7 +361,6 @@ class _SightWordGameState extends State<SightWordGame> {
             averageDuration: calculateAverageDuration(),
             word: sightWords[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(2);
         } else {
           uploadRoundResult(
@@ -374,7 +371,6 @@ class _SightWordGameState extends State<SightWordGame> {
             averageDuration: calculateAverageDuration(),
             word: sightWords[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -394,7 +390,6 @@ class _SightWordGameState extends State<SightWordGame> {
             averageDuration: calculateAverageDuration(),
             word: sightWords[correctIndex],
           );
-          stepDurations.clear(); // Clear durations for next round
           repeatRound(3);
         } else {
           uploadRoundResult(
@@ -405,7 +400,6 @@ class _SightWordGameState extends State<SightWordGame> {
             averageDuration: calculateAverageDuration(),
             word: sightWords[correctIndex],
           );
-        stepDurations.clear(); // Clear durations for next round
         }
       }
 
@@ -502,11 +496,8 @@ class _SightWordGameState extends State<SightWordGame> {
   Color containerColor = Colors.black;
 
   void triggerCorrectFlash() {
-    if (!alreadyGotIncorrect) {
-      ++correctAnswer;
-    }
-    alreadyGotIncorrect = false;
-
+    ++correctAnswer;
+    
     setState(() {
       containerColor = Colors.lightGreen;
     });
@@ -521,10 +512,7 @@ class _SightWordGameState extends State<SightWordGame> {
   }
 
   void triggerIncorrectFlash() {
-    if (!alreadyGotIncorrect) {
-      ++incorrectAnswer;
-      alreadyGotIncorrect = true;
-    }
+    ++incorrectAnswer;
 
     setState(() {
       containerColor = Colors.red;
@@ -562,7 +550,10 @@ class _SightWordGameState extends State<SightWordGame> {
       "word": word,
       "createdAt": FieldValue.serverTimestamp(),
     });
-
+    
+    incorrectAnswer = 0;
+    correctAnswer = 0;
+    stepDurations.clear(); // Clear durations for next round
     print("✅ Round result uploaded for $gameType");
   }
   
