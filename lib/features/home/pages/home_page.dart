@@ -15,9 +15,9 @@ import 'package:verbalautism/activities/sight_word/base_page/sight_word_base_pag
 import 'package:verbalautism/components/audio%20services/audio_service.dart';
 import 'package:verbalautism/components/home%20page%20components/buttons_column.dart';
 import 'package:verbalautism/components/home%20page%20components/schedule_button.dart';
-import 'package:verbalautism/components/home%20page%20components/schedule_summary.dart';
+import 'package:verbalautism/features/schedule/schedule_summary.dart';
 import 'package:verbalautism/components/home%20page%20components/sound_button.dart';
-import 'package:verbalautism/components/home%20page%20components/selectable_subject_widget.dart';
+import 'package:verbalautism/features/schedule/selectable_subject_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:verbalautism/features/schedule/schedule_calendar_page.dart';
@@ -258,7 +258,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    AudioService().playBackgroundMusic(); // if music is enabled, play music
+    AudioService().playBackgroundMusic(); // play music
     super.initState();
   }
 

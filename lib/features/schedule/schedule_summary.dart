@@ -22,8 +22,8 @@ class _ScheduleSummaryState extends State<ScheduleSummary> {
 
   @override
   void initState() {
-    super.initState();
     _loadTodayEvents();
+    super.initState();
   }
 
   // Get current user's schedule collection reference
