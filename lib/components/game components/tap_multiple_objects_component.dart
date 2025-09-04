@@ -200,8 +200,10 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                 padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.075),
                 child: MouseRegion(
                     // NEW: Change cursor when processing
-                    cursor: isProcessing ? SystemMouseCursors.basic : SystemMouseCursors.click,                  child: GestureDetector(
-                   // NEW: Disable tap when processing
+                    cursor: isProcessing ? SystemMouseCursors.basic : SystemMouseCursors.click, 
+
+                    child: GestureDetector(
+                    // NEW: Disable tap when processing
                     onTap: isProcessing ? null : () => _handleTap(object),                    
                     child: Container(
                       width: (allObjectLinks.length > 2) ? screenWidth * 0.1 : screenWidth * 0.2,
@@ -239,31 +241,30 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                           // ],
                         ),
                         child: Center(
-                          child: Transform.scale(
-                              scale: 1.5,
-                              child: !isColor()
-                              ? SvgPicture.asset(
-                                '${widget.directory}$object.svg',
-                                width: screenWidth * 0.15,
-                                height: screenHeight * 0.25,
-                                fit: BoxFit.contain,
-                              )
-                              : Padding(      // Only for Colors Tap
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Container(
-                                    width: screenWidth * 0.1,
-                                    height: screenHeight * 0.2,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 2,
-                                      ),
-                                      color: colorMap[object.toLowerCase()],
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                          child: !isColor()
+                          ? SizedBox(
+                            child: SvgPicture.asset(
+                              '${widget.directory}$object.svg',
+                              width: screenWidth * 0.15 * 1.5,
+                              height: screenHeight * 0.25 * 1.5,
+                              fit: BoxFit.contain,
+                            ),
+                          )
+                          : Padding(      // Only for Colors Tap
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
+                                width: screenWidth * 0.1,
+                                height: screenHeight * 0.2,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2,
                                   ),
+                                  color: colorMap[object.toLowerCase()],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
-                            )
+                          )
                           ),
                       ),
                     )

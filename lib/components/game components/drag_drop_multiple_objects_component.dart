@@ -189,29 +189,29 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
     //   return screenWidth * 0.2;
     // }
     if(allObjectLinks.length > 2){
-      return screenWidth * 0.2;
+      return screenWidth * 0.1;
     } else {
-      return screenWidth * 0.2;
+      return screenWidth * 0.15;
     }  
   }
 
-  double imageHeight(){
-    // final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+  // double imageHeight(){
+  //   // final screenWidth = MediaQuery.of(context).size.width;
+  //   final screenHeight = MediaQuery.of(context).size.height;
 
-    // if(screenWidth <= 1000 && allObjectLinks.length == 3){
-    //   return screenHeight * 0.2;
-    // } else if(screenWidth <= 700 && allObjectLinks.length == 2){
-    //   return screenHeight * 0.25;
-    // } else {
-    //   return screenHeight * 0.3;
-    // }
-    if(allObjectLinks.length > 2){
-      return screenHeight * 0.15;
-    } else {
-      return screenHeight * 0.2;
-    }   
-  }
+  //   // if(screenWidth <= 1000 && allObjectLinks.length == 3){
+  //   //   return screenHeight * 0.2;
+  //   // } else if(screenWidth <= 700 && allObjectLinks.length == 2){
+  //   //   return screenHeight * 0.25;
+  //   // } else {
+  //   //   return screenHeight * 0.3;
+  //   // }
+  //   if(allObjectLinks.length > 2){
+  //     return screenHeight * 0.15;
+  //   } else {
+  //     return screenHeight * 0.2;
+  //   }   
+  // }
 
   bool isColor() {
     if (widget.objectVariation == "Color") {
@@ -302,7 +302,7 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
       ? SvgPicture.asset(
           '${widget.directory}$assetLink.svg',
           width: imageWidth(),
-          height: imageHeight(),
+          // height: imageHeight(),
           fit: BoxFit.contain,
         )
       : Padding(      // Only for Colors Drag and Drop
