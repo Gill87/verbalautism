@@ -17,6 +17,9 @@ class _CircularButtonState extends State<CircularButton> {
   
   final AudioPlayer _audioPlayer = AudioPlayer();
 
+  bool _isHovered = false;
+  bool _isPressed = false;
+
   Future<void> _playAudio() async {
     // If something is already playing, do nothing
     final playerState = _audioPlayer.state;
@@ -80,31 +83,43 @@ class _CircularButtonState extends State<CircularButton> {
     final fontSize = _getFontSize(context);
     final padding = _getPadding(context);
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: _playAudio,
-        child: Container(
-          width: buttonSize,
-          height: buttonSize,
-          padding: EdgeInsets.all(padding),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            image: DecorationImage(image: widget.image, fit: BoxFit.cover),                      
-          ),
-          child: Center(
-            child: Text(
-              widget.text,
-              style: GoogleFonts.ubuntu(
-                fontSize: fontSize,
-                color: Colors.white,
-                shadows: [
-                  Shadow(
-                    offset: const Offset(1.5, 1.5),
-                    blurRadius: 3,
-                    color: Colors.black.withOpacity(0.7),
-                  ),
-                ],
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) {
+        setState(() => _isPressed = false);
+        _playAudio();
+      },
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: AnimatedScale(
+          duration: const Duration(milliseconds: 150),
+          scale: _isPressed ? 0.95 : (_isHovered ? 1.1 : 1.0), // press = shrink, hover = enlarge
+          curve: Curves.easeOut,
+          child: Container(
+            width: buttonSize,
+            height: buttonSize,
+            padding: EdgeInsets.all(padding),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              image: DecorationImage(image: widget.image, fit: BoxFit.cover),                      
+            ),
+            child: Center(
+              child: Text(
+                widget.text,
+                style: GoogleFonts.ubuntu(
+                  fontSize: fontSize,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      offset: const Offset(1.5, 1.5),
+                      blurRadius: 3,
+                      color: Colors.black.withOpacity(0.7),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -17,7 +17,7 @@ import 'package:verbalautism/components/home%20page%20components/buttons_column.
 import 'package:verbalautism/components/home%20page%20components/schedule_button.dart';
 import 'package:verbalautism/features/schedule/schedule_summary.dart';
 import 'package:verbalautism/components/home%20page%20components/sound_button.dart';
-import 'package:verbalautism/features/schedule/selectable_subject_widget.dart';
+import 'package:verbalautism/components/home%20page%20components/selectable_subject_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:verbalautism/features/schedule/schedule_calendar_page.dart';
@@ -112,6 +112,13 @@ class _HomePageState extends State<HomePage> {
       'onTap': 'onToActions'
     },
   ];
+
+  // Initial State
+  @override
+  void initState() {
+    AudioService().playBackgroundMusic(); // play music
+    super.initState();
+  }
 
   // Sign out method
   void signUserOut(){
@@ -256,11 +263,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  void initState() {
-    AudioService().playBackgroundMusic(); // play music
-    super.initState();
-  }
 
   // Navigation methods
   void onToAlphabet(){
@@ -609,7 +611,7 @@ class _HomePageState extends State<HomePage> {
           ? () => toggleActivitySelection(activity['name'])
           : getNavigationFunction(activity['onTap']),
         text: activity['text'],
-        image1: AssetImage(activity['image']),
+        image: AssetImage(activity['image']),
         isSelectionMode: isSelectionMode,
         isSelected: selectedActivities.contains(activity['name']),
         activityName: activity['name'],

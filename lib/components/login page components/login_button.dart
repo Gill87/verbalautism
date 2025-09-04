@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ScheduleButton extends StatefulWidget {
+class LoginButton extends StatefulWidget {
 
   final Function()? tapFunction;
+  final String text;
 
-  const ScheduleButton({super.key, required this.tapFunction});
+  const LoginButton({super.key, required this.tapFunction, required this.text});
 
   @override
-  State<ScheduleButton> createState() => _ScheduleButtonState();
+  State<LoginButton> createState() => _LoginButtonState();
 }
 
-class _ScheduleButtonState extends State<ScheduleButton> {
+class _LoginButtonState extends State<LoginButton> {
 
   bool _isHovered = false;
   bool _isPressed = false;
+
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
-      onTapUp: (_) {
-        setState(() => _isPressed = false);
-        widget.tapFunction?.call();
+      onTapUp: (_) => {
+        setState(() => _isPressed = false),
+        widget.tapFunction?.call()
       },
       onTapCancel: () => setState(() => _isPressed = false),
       child: MouseRegion(
@@ -31,25 +33,23 @@ class _ScheduleButtonState extends State<ScheduleButton> {
         onExit: (_) => setState(() => _isHovered = false),
         child: AnimatedScale(
           duration: const Duration(milliseconds: 150),
+          scale: _isPressed ? 0.95 : (_isHovered ? 1.05 : 1.0), // press = shrink, hover = enlarge
           curve: Curves.easeOut,
-          scale: _isPressed ? 0.95 : (_isHovered ? 1.05 : 1.0),
           child: Container(
-            width: 100,
-            height: 50,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.yellow[800],
-              borderRadius: BorderRadius.circular(15),
+              color:Colors.black,
+              borderRadius: BorderRadius.circular(8),
               ),
             child: Center(
               child: Text(
-                'Schedule',
-                style: GoogleFonts.ubuntu(fontSize: 18, color: Colors.white),
+                widget.text,
+                style: GoogleFonts.ubuntu(fontSize: 24, color: Colors.white),
                 ),
             )
           ),
         ),
       ),
-    );  
+    );
   }
 }

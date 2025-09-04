@@ -7,19 +7,17 @@ class AudioService {
 
   final AudioPlayer _player = AudioPlayer();
   bool _isMusicPlaying = true;
-  bool _isCurrentlyPlaying = false;
 
   bool get isMusicPlaying => _isMusicPlaying;
 
   Future<void> playBackgroundMusic() async {
-    if (_isMusicPlaying && !_isCurrentlyPlaying) {
+    if (_isMusicPlaying) {
       try {
         await _player.setReleaseMode(ReleaseMode.loop);
         await _player.play(
           AssetSource("audio_files/background_music.mp3"),
           volume: 0.5,
         );
-        _isCurrentlyPlaying = true;
       } catch (e) {
         print('Error playing background music: $e');
       }
@@ -29,7 +27,6 @@ class AudioService {
   Future<void> stopMusic() async {
     try {
       await _player.stop();
-      _isCurrentlyPlaying = false;
     } catch (e) {
       print('Error stopping music: $e');
     }

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:verbalautism/components/login%20page%20components/my_button.dart';
+import 'package:verbalautism/components/login%20page%20components/login_button.dart';
 import 'package:verbalautism/components/login%20page%20components/text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
@@ -118,8 +118,8 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () => {
+                      child: TextButton(
+                        onPressed: () => {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const ForgotPasswordPage())
@@ -136,8 +136,8 @@ class _LoginPageState extends State<LoginPage> {
 
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: widget.onTap,
+                      child: TextButton(
+                        onPressed: widget.onTap,
                         child: Text(
                           'Create Account',
                            style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 18, decoration: TextDecoration.underline, decorationColor: Colors.white),
@@ -151,13 +151,10 @@ class _LoginPageState extends State<LoginPage> {
           
                 // sign in button
                 SizedBox(
-                  width: 425.0,
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: MyButton(
-                      tapFunction: signUserIn,
-                      text: 'Sign In',
-                    ),
+                  width: 300.0,
+                  child: LoginButton(
+                    tapFunction: signUserIn,
+                    text: 'Sign In',
                   ),
                 ),
           

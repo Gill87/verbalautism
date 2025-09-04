@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:verbalautism/components/login%20page%20components/my_button.dart';
+import 'package:verbalautism/components/login%20page%20components/login_button.dart';
 import 'package:verbalautism/components/login%20page%20components/text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
@@ -142,13 +142,10 @@ class _RegisterPageState extends State<RegisterPage> {
           
                 // sign up button
                 SizedBox(
-                  width:425.0,
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: MyButton(
-                      tapFunction: register,
-                      text: 'Sign Up',
-                    ),
+                  width: 300.0,
+                  child: LoginButton(
+                    tapFunction: register,
+                    text: 'Sign Up',
                   ),
                 ),
           
@@ -217,8 +214,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
                     const SizedBox(width:4),
 
-                    GestureDetector(
-                      onTap: widget.onTap,
+                    TextButton(
+                      onPressed: widget.onTap,
                       child: MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Text(

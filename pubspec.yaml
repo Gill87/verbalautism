@@ -51,6 +51,7 @@ dependencies:
   animated_text_kit: ^4.2.3
   google_sign_in_web: ^0.12.4+4
   table_calendar: ^3.2.0
+  shared_preferences: ^2.5.3
 
 
 dev_dependencies:

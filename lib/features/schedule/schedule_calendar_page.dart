@@ -310,6 +310,7 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
         content: Text(message),
         backgroundColor: Colors.green,
         behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -436,6 +437,34 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
     );
   }
 
+  // Get activity image based on game route
+  AssetImage _getActivityImage(String gameRoute) {
+    switch (gameRoute) {
+      case 'abc':
+        return const AssetImage('assets/homepage_images/abc.jpg');
+      case 'numbers':
+        return const AssetImage('assets/homepage_images/123.jpg');
+      case 'colors':
+        return const AssetImage('assets/homepage_images/colors.jpg');
+      case 'shapes':
+        return const AssetImage('assets/homepage_images/shapes.jpg');
+      case 'objects':
+        return const AssetImage('assets/homepage_images/geography.jpg');
+      case 'food':
+        return const AssetImage('assets/homepage_images/food.jpg');
+      case 'places':
+        return const AssetImage('assets/homepage_images/places.jpg');
+      case 'feelings':
+        return const AssetImage('assets/homepage_images/flowers.jpg');
+      case 'actions':
+        return const AssetImage('assets/homepage_images/verbs.jpg');
+      case 'sight_words':
+        return const AssetImage('assets/homepage_images/sight.jpg');
+      default:
+        return const AssetImage('assets/homepage_images/abc.jpg');
+    }
+  }
+
   Widget _buildEventsList() {
     final events = _getEventsForDay(_selectedDay!);
     
@@ -478,15 +507,7 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: Colors.blue,
-              child: Text(
-                "",
-                style: GoogleFonts.ubuntu(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              backgroundImage: _getActivityImage(event.gameRoute),
             ),
             title: Text(
               event.gameTitle,
@@ -554,36 +575,6 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
 
 // Updated tapFunction for ScheduleButton in HomePage
 void onScheduleButtonTap(BuildContext context) {
-  // // Check if user is authenticated
-  // final user = FirebaseAuth.instance.currentUser;
-  
-  // if (user == null) {
-  //   // Show login prompt or navigate to login page
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: Text(
-  //         'Login Required',
-  //         style: GoogleFonts.ubuntu(fontWeight: FontWeight.bold),
-  //       ),
-  //       content: Text(
-  //         'Please log in to access your schedule.',
-  //         style: GoogleFonts.ubuntu(),
-  //       ),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () => Navigator.pop(context),
-  //           child: Text(
-  //             'OK',
-  //             style: GoogleFonts.ubuntu(),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  //   return;
-  // }
-
   Navigator.push(
     context,
     MaterialPageRoute(
