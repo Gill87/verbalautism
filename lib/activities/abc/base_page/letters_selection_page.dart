@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/abc/games_pages/abc_lowercase_game.dart';
 import 'package:verbalautism/activities/abc/games_pages/abc_uppercase_game.dart';
+import 'package:verbalautism/components/animations/animated_card.dart';
 
 class LetterSelectionPage extends StatelessWidget {
   final String caseType;
@@ -83,10 +84,8 @@ class LetterSelectionPage extends StatelessWidget {
 
   Widget _buildLetterCard(BuildContext context,
       {required String letter, required VoidCallback onTap, bool isRandom = false}) {
-    return InkWell(
+    return AnimatedCard(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(15),
-      splashColor: Colors.yellow.withOpacity(0.3),
       child: Card(
         elevation: 8,
         color: isRandom ? Colors.orange : Colors.black,

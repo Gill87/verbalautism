@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/numbers/games_pages/numbers_game.dart';
+import 'package:verbalautism/components/animations/animated_card.dart';
 
 class NumberSelectionPage extends StatelessWidget {
   final String rangeLabel;
@@ -93,10 +94,8 @@ class NumberSelectionPage extends StatelessWidget {
 
   Widget _buildNumberCard(BuildContext context,
       {required String number, required VoidCallback onTap, bool isRandom = false}) {
-    return InkWell(
+    return AnimatedCard(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(15),
-      splashColor: Colors.yellow.withOpacity(0.3),
       child: Card(
         elevation: 8,
         color: isRandom ? Colors.orange : Colors.black,

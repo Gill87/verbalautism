@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/actions/games_page/actions_game.dart';
+import 'package:verbalautism/components/animations/animated_card.dart';
 
 class ActionsBasePage extends StatefulWidget {
   const ActionsBasePage({super.key});
@@ -167,10 +168,8 @@ class _ActionsBasePageState extends State<ActionsBasePage> {
 
   Widget _buildCard(BuildContext context,
       {required String label, required String image, required VoidCallback onTap}) {
-    return InkWell(
+    return AnimatedCard(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      splashColor: Colors.yellow.withOpacity(0.3),
       child: Card(
         elevation: 10,
         color: Colors.black,
@@ -192,7 +191,7 @@ class _ActionsBasePageState extends State<ActionsBasePage> {
                 ),
                 
                 const SizedBox(height: 10),
-
+      
                 Text(
                   label,
                   style: GoogleFonts.ubuntu(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/sight_word/games_page/sight_game.dart';
+import 'package:verbalautism/components/animations/animated_card.dart';
 
 class SightWordBasePage extends StatefulWidget {
   const SightWordBasePage({super.key});
@@ -227,10 +228,8 @@ class _SightWordBasePageState extends State<SightWordBasePage> {
 
   Widget _buildCard(BuildContext context,
       {required String label, required String image, required VoidCallback onTap}) {
-    return InkWell(
+    return AnimatedCard(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      splashColor: Colors.yellow.withOpacity(0.3),
       child: Card(
         elevation: 10,
         color: Colors.black,

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:verbalautism/components/animations/animated_card.dart';
 import 'package:verbalautism/activities/abc/base_page/letters_selection_page.dart';
 import 'package:verbalautism/activities/abc/games_pages/abc_mixed_game.dart';
 
-class AbcBasePage extends StatelessWidget {
+class AbcBasePage extends StatefulWidget {
   const AbcBasePage({super.key});
 
+  @override
+  State<AbcBasePage> createState() => _AbcBasePageState();
+}
+
+class _AbcBasePageState extends State<AbcBasePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,10 +79,8 @@ class AbcBasePage extends StatelessWidget {
 
   Widget _buildCard(BuildContext context,
       {required String label, required String image, required VoidCallback onTap}) {
-    return InkWell(
+    return AnimatedCard(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      splashColor: Colors.yellow.withOpacity(0.3),
       child: Card(
         elevation: 10,
         color: Colors.black,
