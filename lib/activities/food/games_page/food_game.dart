@@ -615,7 +615,7 @@ class _FoodGameState extends State<FoodGame> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Center(child: Text("Foods", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
+        title: Text("Foods", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
       body: Container(

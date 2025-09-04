@@ -590,7 +590,7 @@ class _ShapesGameState extends State<ShapesGame> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Center(child: Text("Shapes", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
+        title: Text("Shapes", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
       body: Container(

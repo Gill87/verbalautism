@@ -612,14 +612,12 @@ class _SightWordGameState extends State<SightWordGame> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Center(
-          child: Text(
-            "Sight Words",
-            style: GoogleFonts.ubuntu(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+        title: Text(
+          "Sight Words",
+          style: GoogleFonts.ubuntu(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),

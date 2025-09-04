@@ -589,7 +589,7 @@ class _ActionsGameState extends State<ActionsGame> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Center(child: Text("Actions", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
+        title: Text("Actions", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
       body: Container(

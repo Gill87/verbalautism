@@ -586,7 +586,7 @@ class _ColorsGameState extends State<ColorsGame> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Center(child: Text("Basic Colors", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
+        title: Text("Basic Colors", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
       body: Container(

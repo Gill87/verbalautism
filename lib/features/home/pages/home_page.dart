@@ -220,11 +220,11 @@ class _HomePageState extends State<HomePage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            'Admin access granted successfully!',
+                            'Admin access granted successfully! You can now access admin features.',
                             style: GoogleFonts.ubuntu(color: Colors.white),
                           ),
                           backgroundColor: Colors.green,
-                          duration: const Duration(seconds: 2),
+                          duration: const Duration(seconds: 4),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );

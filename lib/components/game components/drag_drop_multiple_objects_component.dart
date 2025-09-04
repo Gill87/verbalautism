@@ -145,50 +145,72 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
   double horizontalPadding(){
     final screenWidth = MediaQuery.of(context).size.width;
 
-    if(allObjectLinks.length == 3 && screenWidth <= 1050){
-      return 1;
-    } else if(allObjectLinks.length == 2 && screenWidth <= 800){
-      return 1;
+    // if(allObjectLinks.length == 3 && screenWidth <= 1050){
+    //   return 1;
+    // } else if(allObjectLinks.length == 2 && screenWidth <= 800){
+    //   return 1;
+    // } else {
+    //   return screenWidth * 0.01;
+    // }
+
+    if(allObjectLinks.length > 2){
+      return screenWidth * 0.05;
     } else {
-      return screenWidth * 0.01;
+      return screenWidth * 0.05;
     }
   }
 
   double widthSize(){
     final screenWidth = MediaQuery.of(context).size.width;
 
-    if(screenWidth <= 680 && allObjectLinks.length == 3){
-      return screenWidth * 0.005;
-    } else if(screenWidth <= 700 && allObjectLinks.length == 2){
-      return screenWidth * 0.02;
+    // if(screenWidth <= 680 && allObjectLinks.length == 3){
+    //   return screenWidth * 0.005;
+    // } else if(screenWidth <= 700 && allObjectLinks.length == 2){
+    //   return screenWidth * 0.02;
+    // } else {
+    //   return screenWidth * 0.04;
+    // }
+
+    if(allObjectLinks.length > 2 || screenWidth <= 700){
+      return screenWidth * 0.05;
     } else {
-      return screenWidth * 0.04;
+      return screenWidth * 0.1;
     }
   }
 
   double imageWidth(){
     final screenWidth = MediaQuery.of(context).size.width;
 
-    if(screenWidth <= 1000 && allObjectLinks.length == 3){
-      return screenWidth * 0.1;
-    } else if(screenWidth <= 700 && allObjectLinks.length == 2){
-      return screenWidth * 0.15;
+    // if(screenWidth <= 1000 && allObjectLinks.length == 3){
+    //   return screenWidth * 0.1;
+    // } else if(screenWidth <= 700 && allObjectLinks.length == 2){
+    //   return screenWidth * 0.15;
+    // } else {
+    //   return screenWidth * 0.2;
+    // }
+    if(allObjectLinks.length > 2){
+      return screenWidth * 0.2;
     } else {
       return screenWidth * 0.2;
-    }
+    }  
   }
 
   double imageHeight(){
-    final screenWidth = MediaQuery.of(context).size.width;
+    // final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    if(screenWidth <= 1000 && allObjectLinks.length == 3){
-      return screenHeight * 0.2;
-    } else if(screenWidth <= 700 && allObjectLinks.length == 2){
-      return screenHeight * 0.25;
+    // if(screenWidth <= 1000 && allObjectLinks.length == 3){
+    //   return screenHeight * 0.2;
+    // } else if(screenWidth <= 700 && allObjectLinks.length == 2){
+    //   return screenHeight * 0.25;
+    // } else {
+    //   return screenHeight * 0.3;
+    // }
+    if(allObjectLinks.length > 2){
+      return screenHeight * 0.15;
     } else {
-      return screenHeight * 0.3;
-    }
+      return screenHeight * 0.2;
+    }   
   }
 
   bool isColor() {
@@ -224,23 +246,30 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
         children: [
           Text(
             "Drag and Drop the ${widget.objectVariation} ${widget.mainData}",
-            style: GoogleFonts.ubuntu(fontSize: 40, color: Colors.white),
+            style: GoogleFonts.ubuntu(
+              fontSize: (MediaQuery.of(context).size.width < 650) ? 32 : 40, 
+              color: Colors.white
+            ),
           ),
 
-          const SizedBox(height: 50),
+          SizedBox(
+            height: (MediaQuery.of(context).size.height < 500 ) ? 20 : 50,
+          ),
           
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: imageDropped ? [
+            children: imageDropped 
+            ? [
               _buildDragTarget(),
-            ] : [
+            ] 
+            : [
               ...allObjectLinks.map((object) => Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: horizontalPadding(),
                     ),
                     child: _buildDraggable(object),
                   )),
-              SizedBox(width: widthSize(),),
+              SizedBox(width: widthSize()),
               _buildDragTarget(),
             ],
           ),
@@ -343,6 +372,10 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
 
 
   Widget _buildDragTarget() {
+
+    // Media Query Sizes
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     
     // Define color map for color variations for color drag and drop
     Map<String, Color> colorMap = {};
@@ -369,8 +402,8 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
         onAcceptWithDetails: _handleDrop,
         builder: (context, candidateData, rejectedData) {
           return Container(
-            width: MediaQuery.of(context).size.width * 0.35,
-            height: MediaQuery.of(context).size.height * 0.4,
+            width: screenWidth * 0.25,
+            height: screenHeight * 0.4,
             decoration: BoxDecoration(
               color: Colors.yellow,
               borderRadius: BorderRadius.circular(40),
@@ -394,15 +427,15 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
                       ? SvgPicture.asset(
                           '${widget.directory}${widget.correctAssetLinks}.svg',
                           key: const ValueKey('droppedImage'),
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          height: MediaQuery.of(context).size.height * 0.4,
+                          width: screenWidth * 0.3,
+                          height:screenHeight * 0.4,
                           fit: BoxFit.contain,
                         )
                       : Padding(      // Only for Colors Drag and Drop
                           padding: const EdgeInsets.all(10.0),
                           child: Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
-                            height: MediaQuery.of(context).size.height * 0.2,
+                            width: screenWidth * 0.1,
+                            height: screenHeight * 0.2,
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.white,
@@ -417,7 +450,9 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
                       key: const ValueKey('dropText'),
                       child: Text(
                         "Drop Here",
-                        style: GoogleFonts.ubuntu(fontSize: 30),
+                        style: GoogleFonts.ubuntu(
+                          fontSize: (MediaQuery.of(context).size.width < 700) ? 20 : 30
+                        ),
                       ),
                     ),
             ),

@@ -304,7 +304,6 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                     setState(() {
                       imageDropped = true;
                     });
-
                     Future.delayed(const Duration(milliseconds: 500), () {
                       _showCorrectAnimation();
                     });

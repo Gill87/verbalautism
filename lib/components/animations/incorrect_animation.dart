@@ -11,6 +11,7 @@ class IncorrectAnimation extends StatelessWidget {
         "assets/lottie_animations/oops.json",
         width: 300,
         height: 300,
+        repeat: false,
       ),
     );
   }

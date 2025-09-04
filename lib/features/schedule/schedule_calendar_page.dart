@@ -40,6 +40,7 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
   @override
   void initState() {
     super.initState();
+    _selectedDay = DateTime.now();
     _loadEvents();
   }
 

@@ -144,13 +144,13 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
     }
   }
 
-  bool isTooLarge() {
-    if (widget.objectVariation == "Feeling" || widget.objectVariation == "Object" || widget.objectVariation == "Food" || widget.objectVariation == "Place") {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // bool isTooLarge() {
+  //   if (widget.objectVariation == "Feeling" || widget.objectVariation == "Object" || widget.objectVariation == "Food" || widget.objectVariation == "Place") {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -180,9 +180,12 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
       };
     }
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       color: Colors.transparent,
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: screenWidth * 0.85,
       child: Column(
         children: [
           Text(
@@ -194,15 +197,15 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
             mainAxisAlignment: MainAxisAlignment.center,
             children: allObjectLinks.map((object) {
               return Padding(
-                padding: EdgeInsets.symmetric(horizontal: isTooLarge() ? 25 : 15),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.075),
                 child: MouseRegion(
                     // NEW: Change cursor when processing
                     cursor: isProcessing ? SystemMouseCursors.basic : SystemMouseCursors.click,                  child: GestureDetector(
                    // NEW: Disable tap when processing
                     onTap: isProcessing ? null : () => _handleTap(object),                    
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      height: MediaQuery.of(context).size.height * 0.3,
+                      width: (allObjectLinks.length > 2) ? screenWidth * 0.1 : screenWidth * 0.2,
+                      height: (allObjectLinks.length > 2) ? screenHeight * 0.2 : screenHeight * 0.3,
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(20), // Rounded corners
@@ -223,8 +226,8 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                         );
                       },
                       child: Container(
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        height: MediaQuery.of(context).size.height * 0.3,
+                        width: screenWidth * 0.2,
+                        height: screenHeight * 0.3,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           // boxShadow: [
@@ -241,15 +244,15 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                               child: !isColor()
                               ? SvgPicture.asset(
                                 '${widget.directory}$object.svg',
-                                width: MediaQuery.of(context).size.width * 0.15,
-                                height: MediaQuery.of(context).size.height * 0.25,
+                                width: screenWidth * 0.15,
+                                height: screenHeight * 0.25,
                                 fit: BoxFit.contain,
                               )
                               : Padding(      // Only for Colors Tap
                                   padding: const EdgeInsets.all(10.0),
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width * 0.1,
-                                    height: MediaQuery.of(context).size.height * 0.2,
+                                    width: screenWidth * 0.1,
+                                    height: screenHeight * 0.2,
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                         color: Colors.white,

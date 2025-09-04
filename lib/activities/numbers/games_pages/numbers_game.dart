@@ -591,7 +591,7 @@ class _NumbersGameState extends State<NumbersGame> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Center(child: Text("Numbers ${widget.min} - ${widget.max}", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white))),
+        title: Text("Numbers ${widget.min} - ${widget.max}", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
       body: Container(

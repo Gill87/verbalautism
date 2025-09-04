@@ -15,7 +15,16 @@ class TapComponent extends StatefulWidget {
   final String directory;
   final String objectVariation;
 
-  const TapComponent({super.key, required this.onCompleted, required this.assetLink, required this.mainData, required this.onCorrectAction, required this.totalSteps, required this.directory, required this.objectVariation});
+  const TapComponent({
+    super.key, 
+    required this.onCompleted, 
+    required this.assetLink, 
+    required this.mainData, 
+    required this.onCorrectAction, 
+    required this.totalSteps, 
+    required this.directory, 
+    required this.objectVariation
+  });
 
   @override
   State<TapComponent> createState() => _TapComponentState();
@@ -78,6 +87,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
 
     widget.onCorrectAction();  // <-- trigger the flash!
 
+    // Trigger the correct animation dialog
     showDialog(
       barrierColor: Colors.transparent,
       barrierDismissible: false, // NEW: Prevent dismissing dialog by tapping
@@ -95,6 +105,7 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
         setState(() {
           isProcessing = false; // NEW: Reset processing flag
         });
+
         widget.onCompleted();
       }
     });
@@ -108,8 +119,8 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
     }
   }
 
-  bool isTooLarge(){
-    if(widget.objectVariation == "Sight Word"){
+  bool isLetters(){
+    if(widget.objectVariation == "Letter"){
       return true;
     } else {
       return false;
@@ -157,56 +168,53 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
           const SizedBox(height: 50),
 
           Center(
-            child: GestureDetector(
-              onTap: _showCorrectAnimation,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    AnimatedBuilder(
-                      animation: _animation,
-                      builder: (context, child) {
-                        return Transform.translate(
-                          offset: Offset(0, -_animation.value),
-                          child: Transform.scale(
-                            scale: 1.5,
+            
+            child: Transform.scale(
+              scale: isLetters() ? 1.75 : 1.25,
+              child: GestureDetector(
+                onTap: _showCorrectAnimation,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      AnimatedBuilder(
+                        animation: _animation,
+                        builder: (context, child) {
+                          return Transform.translate(
+                            offset: Offset(0, -_animation.value),
                             child: child,
-                          ),
-                        );
-                      },
-                      child: !emptyAssetLink()
-                      ? SvgPicture.asset( 
-                        '${widget.directory}${widget.assetLink}.svg',
-                        width:  isTooLarge() 
-                        ? MediaQuery.of(context).size.width * 0.2 
-                        : MediaQuery.of(context).size.width * 0.25,
-                        height: isTooLarge()
-                        ? MediaQuery.of(context).size.height * 0.2
-                        : MediaQuery.of(context).size.height * 0.25,
-                        fit: BoxFit.contain,
-                      ) 
-                      : Padding(      // Only for Colors Tap
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.15,
-                          height: MediaQuery.of(context).size.height * 0.2,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 2,
+                          );
+                        },
+                        child: !emptyAssetLink()
+                        ? SvgPicture.asset( 
+                          '${widget.directory}${widget.assetLink}.svg',
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          height: MediaQuery.of(context).size.height * 0.25,
+                          fit: BoxFit.contain,
+                        ) 
+                        : Padding(      // Only for Colors Tap
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.15,
+                            height: MediaQuery.of(context).size.height * 0.2,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 2,
+                              ),
+                              color: colorMap[widget.mainData.toLowerCase()],
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            color: colorMap[widget.mainData.toLowerCase()],
-                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),
-                    ),
-                
-                    // Optionally show tap animation
-                    if (showTapAnimation && !tapClicked && widget.totalSteps == 1)
-                      const TapAnimation(),
-                  ],
+                  
+                      // Optionally show tap animation
+                      if (showTapAnimation && !tapClicked && widget.totalSteps == 1)
+                        const TapAnimation(),
+                    ],
+                  ),
                 ),
               ),
             ),

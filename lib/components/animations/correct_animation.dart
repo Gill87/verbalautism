@@ -12,6 +12,7 @@ class CorrectAnimation extends StatelessWidget {
         "assets/lottie_animations/correct.json",
         width: 300,
         height: 300,
+        repeat: false,
       )
     );
   }
