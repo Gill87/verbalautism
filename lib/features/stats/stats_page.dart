@@ -187,7 +187,7 @@ class _StatsPageState extends State<StatsPage> {
                 crossAxisCount: 3,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
-                childAspectRatio: 1.75, // Adjust this to make cards taller/shorter
+                childAspectRatio: 1, // Adjust this to make cards taller/shorter
               ),
               itemCount: gameTypes.length,
               itemBuilder: (context, index) {

@@ -39,7 +39,7 @@ class GameReportCard extends StatelessWidget {
     }
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 12.0),
+      // margin: const EdgeInsets.only(bottom: 12.0),
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
@@ -118,10 +118,10 @@ class GameReportCard extends StatelessWidget {
                 ),
                 Expanded(
                   child: _buildStatItem(
-                    icon: Icons.percent,
-                    label: 'Accuracy',
-                    value: '${accuracy.toStringAsFixed(1)}%',
-                    color: _getAccuracyColor(accuracy),
+                    icon: Icons.timer,
+                    label: 'Avg. Duration',
+                    value: '${averageDuration.toStringAsFixed(1)}s',
+                    color: Colors.grey[600]!,
                   ),
                 ),
               ],
@@ -131,11 +131,11 @@ class GameReportCard extends StatelessWidget {
             // Average duration
             Row(
               children: [
-                Icon(Icons.timer, size: 16, color: Colors.grey[600]),
+                Icon(Icons.bar_chart, size: 16, color: _getAccuracyColor(accuracy)),
                 const SizedBox(width: 8),
                 Text(
-                  'Avg Duration: ${averageDuration.toStringAsFixed(1)}s',
-                  style: GoogleFonts.ubuntu(fontSize: 14),
+                  'Accuracy: ${accuracy.toStringAsFixed(1)}%',
+                  style: GoogleFonts.ubuntu(fontSize: 14, color: _getAccuracyColor(accuracy)),
                 ),
               ],
             ),
@@ -143,6 +143,8 @@ class GameReportCard extends StatelessWidget {
             // Progress bar for accuracy
             const SizedBox(height: 12),
             LinearProgressIndicator(
+              minHeight: 7.5,
+              borderRadius: BorderRadius.circular(12),
               value: accuracy / 100,
               backgroundColor: Colors.grey[300],
               valueColor: AlwaysStoppedAnimation<Color>(_getAccuracyColor(accuracy)),

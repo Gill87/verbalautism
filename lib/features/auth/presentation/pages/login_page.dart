@@ -22,6 +22,8 @@ class _LoginPageState extends State<LoginPage> {
   // username and password text controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  
+  Color _bgColor = Colors.white;
 
   // sign user in method
   void signUserIn() async {
@@ -195,12 +197,22 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.all(10),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
+                      onHover: (_) {
+                        setState(() {
+                          _bgColor = Colors.grey.shade200; // change color on hover
+                        });
+                      },
+                      onExit: (_) {
+                        setState(() {
+                          _bgColor = Colors.white; // reset when mouse leaves
+                        });
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           border:Border.all(color:Colors.grey),
                           borderRadius: BorderRadius.circular(16),
-                          color:Colors.white,
+                          color:_bgColor,
                         ),
                         child: Image.asset(
                           'assets/loginpage_images/google.png',
