@@ -1,22 +1,19 @@
+// tts_service.dart
 import 'package:flutter_tts/flutter_tts.dart';
 
 class TtsService {
   final FlutterTts _flutterTts = FlutterTts();
+  bool _isInitialized = false;
 
-  TtsService() {
-    _initTts();
-  }
+  Future<void> init() async {
+    if (_isInitialized) return; // don’t run twice
 
-  Future<void> _initTts() async {
     await _flutterTts.setPitch(1.1);
-    await _flutterTts.setSpeechRate(0.85); // Slower and more human
+    await _flutterTts.setSpeechRate(0.85);
     await _flutterTts.setVolume(1.0);
     await _flutterTts.setLanguage("en-GB");
 
     List<dynamic> voices = await _flutterTts.getVoices;
-    for (int i = 0; i < voices.length; ++i) {
-      print(voices[i]);
-    }
 
     var selectedVoice = voices.firstWhere(
       (voice) =>
@@ -34,9 +31,14 @@ class TtsService {
     } else {
       print("⚠ No specific female en-GB voice found — using default en-GB.");
     }
+
+    _isInitialized = true;
   }
 
   Future<void> speak(String text) async {
+    if (!_isInitialized) {
+      await init(); // ensure voice is ready
+    }
     await _flutterTts.speak(text);
   }
 

@@ -23,6 +23,7 @@ import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:verbalautism/features/schedule/schedule_calendar_page.dart';
 import 'package:verbalautism/features/stats/stats_page.dart';
 
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -112,6 +113,7 @@ class _HomePageState extends State<HomePage> {
       'onTap': 'onToActions'
     },
   ];
+
 
   // Initial State
   @override
@@ -262,7 +264,6 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
 
   // Navigation methods
   void onToAlphabet(){

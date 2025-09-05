@@ -45,7 +45,7 @@ dependencies:
   lottie: ^3.2.0
   tracing_game: ^0.0.4+1
   one_clock: ^2.0.1
-  flutter_svg: ^2.1.0
+  flutter_svg: ^2.2.1
   audioplayers: ^6.4.0
   flutter_tts: ^4.2.3
   animated_text_kit: ^4.2.3

@@ -181,7 +181,7 @@ class _RegisterPageState extends State<RegisterPage> {
           
                 // google button
                 GestureDetector(
-                  onTap: () => googleSignIn,
+                  onTap: () => googleSignIn(),
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: MouseRegion(

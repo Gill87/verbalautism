@@ -45,8 +45,12 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
     super.initState();
     
     // Text to speech
-    _ttsService.speak("Tap the ${widget.objectVariation} ${widget.mainData}");
-
+    // Ensure TTS is initialized before speaking
+    Future.microtask(() async {
+      await _ttsService.init();
+      _ttsService.speak("Tap the ${widget.objectVariation} ${widget.mainData}");
+    });
+    
     // Floating Animation
     _controller = AnimationController(
       vsync: this,
