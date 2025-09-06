@@ -55,61 +55,61 @@ class _HomePageState extends State<HomePage> {
     {
       'name': 'ABC',
       'text': 'A B C',
-      'image': 'assets/homepage_images/abc.jpg',
+      'image': 'assets/homepage_images/abc.webp',
       'onTap': 'onToAlphabet'
     },
     {
       'name': 'Colors',
       'text': 'Colors',
-      'image': 'assets/homepage_images/colors.jpg',
+      'image': 'assets/homepage_images/colors.webp',
       'onTap': 'onToColors'
     },
     {
       'name': 'Shapes',
       'text': 'Shapes',
-      'image': 'assets/homepage_images/shapes.jpg',
+      'image': 'assets/homepage_images/shapes.webp',
       'onTap': 'onToShapes'
     },
     {
       'name': 'Objects',
       'text': 'Objects',
-      'image': 'assets/homepage_images/geography.jpg',
+      'image': 'assets/homepage_images/objects.webp',
       'onTap': 'onToObjects'
     },
     {
       'name': 'Food',
       'text': 'Food',
-      'image': 'assets/homepage_images/food.jpg',
+      'image': 'assets/homepage_images/food.webp',
       'onTap': 'onToFood'
     },
     {
       'name': 'Numbers',
       'text': '1 2 3',
-      'image': 'assets/homepage_images/123.jpg',
+      'image': 'assets/homepage_images/numbers.webp',
       'onTap': 'onToNumbers'
     },
     {
       'name': 'Feelings',
       'text': 'Feeling',
-      'image': 'assets/homepage_images/flowers.jpg',
+      'image': 'assets/homepage_images/feelings.webp',
       'onTap': 'onToFeelings'
     },
     {
       'name': 'Places',
       'text': 'Places',
-      'image': 'assets/homepage_images/places.jpg',
+      'image': 'assets/homepage_images/places.webp',
       'onTap': 'onToPlaces'
     },
     {
       'name': 'Sight Words',
       'text': 'Sight Words',
-      'image': 'assets/homepage_images/sight.jpg',
+      'image': 'assets/homepage_images/sight.webp',
       'onTap': 'onToSightWords'
     },
     {
       'name': 'Action Verbs',
       'text': 'Action Verbs',
-      'image': 'assets/homepage_images/verbs.jpg',
+      'image': 'assets/homepage_images/action.webp',
       'onTap': 'onToActions'
     },
   ];
@@ -380,7 +380,7 @@ class _HomePageState extends State<HomePage> {
                   // Left: Logo or empty space
                   if (screenWidth > 900)
                     const Image(
-                      image: AssetImage('assets/homepage_images/appbarlogo.png'),
+                      image: AssetImage('assets/homepage_images/appbarlogo.webp'),
                       height: 60,
                     ),
 

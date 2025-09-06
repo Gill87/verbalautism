@@ -28,7 +28,7 @@ class _FoodBasePageState extends State<FoodBasePage> {
           alignment: Alignment.center,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/background_images/32442923_7895078.jpg"),
+              image: AssetImage("assets/background_images/colorful_bg.webp"),
               fit: BoxFit.cover,
             ),
           ),

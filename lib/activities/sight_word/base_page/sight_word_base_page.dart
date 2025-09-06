@@ -27,7 +27,7 @@ class _SightWordBasePageState extends State<SightWordBasePage> {
         child: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/background_images/32442923_7895078.jpg"),
+              image: AssetImage("assets/background_images/colorful_bg.webp"),
               fit: BoxFit.cover,
             ),
           ),

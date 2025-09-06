@@ -80,7 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
           
                 // logo
                 Image.asset(
-                  'assets/loginpage_images/logo.png',
+                  'assets/loginpage_images/logo.webp',
                   height: smallHeight(context) ? 115 : 150,
                 ),
           
@@ -205,7 +205,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           color:_bgColor,
                         ),
                         child: Image.asset(
-                          'assets/loginpage_images/google.png',
+                          'assets/loginpage_images/google.webp',
                           height:50,
                         )
                       ),

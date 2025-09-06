@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   // logo
                   Image.asset(
-                    'assets/loginpage_images/logo.png',
+                    'assets/loginpage_images/logo.webp',
                     height: smallHeight(context) ? 125 : 150,
                     // width: 300,
                   ),
@@ -215,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                           color:_bgColor,
                         ),
                         child: Image.asset(
-                          'assets/loginpage_images/google.png',
+                          'assets/loginpage_images/google.webp',
                           height:50,
                         )
                       ),
