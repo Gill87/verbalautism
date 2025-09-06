@@ -76,7 +76,6 @@ class _FeelingsGameState extends State<FeelingsGame> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -153,8 +152,6 @@ class _FeelingsGameState extends State<FeelingsGame> {
     if (stepStartTime != null) {
       final duration = DateTime.now().difference(stepStartTime!).inSeconds;
       stepDurations.add(duration);
-
-      print("⏱ Step $stepNumber took $duration seconds");
     }
   }
 

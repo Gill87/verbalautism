@@ -88,7 +88,6 @@ class _PlacesGameState extends State<PlacesGame> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -569,7 +568,6 @@ class _PlacesGameState extends State<PlacesGame> {
     incorrectAnswer = 0;
     correctAnswer = 0;
     stepDurations.clear(); // Clear durations for next round
-    print("✅ Round result uploaded for $gameType");
   }
 
   @override

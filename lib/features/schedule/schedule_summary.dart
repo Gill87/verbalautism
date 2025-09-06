@@ -105,7 +105,6 @@ class _ScheduleSummaryState extends State<ScheduleSummary> {
             print('✗ Event not for today - skipping');
           }
         } catch (e) {
-          print('Error parsing event ${doc.id}: $e');
           continue;
         }
       }
@@ -117,15 +116,12 @@ class _ScheduleSummaryState extends State<ScheduleSummary> {
         _todayEvents = events;
         _isLoading = false;
       });
-      
-      print('Final loaded events count: ${events.length}');
-      
+            
     } catch (e) {
       setState(() {
         _isLoading = false;
         _errorMessage = 'Failed to load schedule: ${e.toString()}';
       });
-      print('Error loading events: $e');
     }
   }
 

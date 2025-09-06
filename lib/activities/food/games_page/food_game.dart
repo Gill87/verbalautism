@@ -591,7 +591,6 @@ class _FoodGameState extends State<FoodGame> {
     incorrectAnswer = 0;
     correctAnswer = 0;
     stepDurations.clear(); // Clear durations for next round
-    print("✅ Round result uploaded for $gameType");
   }
 
   @override

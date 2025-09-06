@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/feelings/games_page/feelings_game.dart';
-import 'package:verbalautism/components/animations/animated_card.dart';
+import 'package:verbalautism/components/image_activity_card.dart';
 
 class FeelingsBasePage extends StatefulWidget {
   const FeelingsBasePage({super.key});
@@ -56,38 +55,32 @@ class _FeelingsBasePageState extends State<FeelingsBasePage> {
                   runSpacing: 20,
                   alignment: WrapAlignment.center,
                   children: [
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/feelings_images/happy.svg",
                       label: "Happy",
                       onTap: onTapCard(context, "Happy"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/feelings_images/sad.svg",
                       label: "Sad",
                       onTap: onTapCard(context, "Sad"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/feelings_images/angry.svg",
                       label: "Angry",
                       onTap: onTapCard(context, "Angry"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/feelings_images/curious.svg",
                       label: "Curious",
                       onTap: onTapCard(context, "Curious"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/feelings_images/sick.svg",
                       label: "Sick",
                       onTap: onTapCard(context, "Sick"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/feelings_images/surprised.svg",
                       label: "Surprised",
                       onTap: onTapCard(context, "Surprised"),
@@ -95,47 +88,6 @@ class _FeelingsBasePageState extends State<FeelingsBasePage> {
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-Widget _buildCard(BuildContext context,
-      {required String label, required String image, required VoidCallback onTap}) {
-    return AnimatedCard(
-      onTap: onTap,
-      child: Card(
-        elevation: 10,
-        color: Colors.black,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Container(
-          width: 200,
-          height: 230,
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-                Transform.scale(
-                  scale: 1.5,
-                  child: SvgPicture.asset(
-                    image,
-                    width: 100,
-                    height: 100,
-                  ),
-                ),   
-                
-                const SizedBox(height: 30),
-           
-                Text(
-                  label,
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                ),
-              )
             ],
           ),
         ),

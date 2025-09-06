@@ -131,8 +131,6 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
     if (stepStartTime != null) {
       final duration = DateTime.now().difference(stepStartTime!).inSeconds;
       stepDurations.add(duration);
-
-      print("⏱ Step $stepNumber took $duration seconds");
     }
   }
 
@@ -573,7 +571,6 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
     incorrectAnswer = 0;
     correctAnswer = 0;
     stepDurations.clear(); // Clear durations for next round
-    print("✅ Round result uploaded for $gameType");
   }
   
   @override

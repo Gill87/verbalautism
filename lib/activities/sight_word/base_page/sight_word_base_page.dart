@@ -214,8 +214,6 @@ class _SightWordBasePageState extends State<SightWordBasePage> {
                       label: "Use",
                       onTap: onTapCard(context, "Use"),
                     ),
-                    
-
                   ],
                 ),
               ),
@@ -253,7 +251,7 @@ class _SightWordBasePageState extends State<SightWordBasePage> {
     );
   }
 
-    void Function() onTapCard(BuildContext context, String label) {
+  void Function() onTapCard(BuildContext context, String label) {
     return () async {
       String? selected = label;
 

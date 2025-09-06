@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:verbalautism/components/animations/animated_card.dart';
 import 'package:verbalautism/activities/abc/base_page/letters_selection_page.dart';
 import 'package:verbalautism/activities/abc/games_pages/abc_mixed_game.dart';
+import 'package:verbalautism/components/image_activity_card.dart';
 
 class AbcBasePage extends StatefulWidget {
   const AbcBasePage({super.key});
@@ -42,8 +41,7 @@ class _AbcBasePageState extends State<AbcBasePage> {
               runSpacing: 20,
               alignment: WrapAlignment.center,
               children: [
-                _buildCard(
-                  context,
+                ImageActivityCard(
                   label: "Uppercase",
                   image: "assets/abc_images/Uppercase_A.svg",
                   onTap: onTapCard(
@@ -51,8 +49,7 @@ class _AbcBasePageState extends State<AbcBasePage> {
                     "Uppercase",
                   ),
                 ),
-                _buildCard(
-                  context,
+                ImageActivityCard(
                   label: "Lowercase",
                   image: "assets/abc_images/Lowercase_A.svg",
                   onTap: onTapCard(
@@ -60,8 +57,7 @@ class _AbcBasePageState extends State<AbcBasePage> {
                     "Lowercase",
                   ),
                 ),
-                _buildCard(
-                  context,
+                ImageActivityCard(
                   label: "Mixed",
                   image: "assets/abc_images/MixedLettersImage.svg",
                   onTap: () => Navigator.push(
@@ -71,44 +67,6 @@ class _AbcBasePageState extends State<AbcBasePage> {
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCard(BuildContext context,
-      {required String label, required String image, required VoidCallback onTap}) {
-    return AnimatedCard(
-      onTap: onTap,
-      child: Card(
-        elevation: 10,
-        color: Colors.black,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Container(
-          width: 200,
-          height: 230,
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-                Transform.scale(
-                  scale: 1.5,
-                  child: SvgPicture.asset(
-                    image,
-                    width: 100,
-                    height: 100,
-                  ),
-                ),              
-                Text(
-                  label,
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                ),
-              )
-            ],
           ),
         ),
       ),

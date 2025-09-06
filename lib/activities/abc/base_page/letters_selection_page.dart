@@ -17,7 +17,7 @@ class LetterSelectionPage extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
         centerTitle: true,
         title: Text(
-          "Select ${caseType} Letter",
+          "Select $caseType Letter",
           style: GoogleFonts.ubuntu(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
@@ -90,7 +90,7 @@ class LetterSelectionPage extends StatelessWidget {
         elevation: 8,
         color: isRandom ? Colors.orange : Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Container(
+        child: SizedBox(
           width: isRandom ? 100 : 80,
           height: isRandom ? 75 : 80,
           child: Center(

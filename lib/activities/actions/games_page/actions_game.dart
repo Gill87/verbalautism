@@ -162,8 +162,6 @@ class _ActionsGameState extends State<ActionsGame> {
     if (stepStartTime != null) {
       final duration = DateTime.now().difference(stepStartTime!).inSeconds;
       stepDurations.add(duration);
-
-      print("⏱ Step $stepNumber took $duration seconds");
     }
   }
 
@@ -565,7 +563,6 @@ class _ActionsGameState extends State<ActionsGame> {
     incorrectAnswer = 0;
     correctAnswer = 0;
     stepDurations.clear(); // Clear durations for next round
-    print("✅ Round result uploaded for $gameType");
   }
 
   @override

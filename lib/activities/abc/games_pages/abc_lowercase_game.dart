@@ -155,8 +155,6 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
     if (stepStartTime != null) {
       final duration = DateTime.now().difference(stepStartTime!).inSeconds;
       stepDurations.add(duration);
-
-      print("⏱ Step $stepNumber took $duration seconds");
     }
   }
 

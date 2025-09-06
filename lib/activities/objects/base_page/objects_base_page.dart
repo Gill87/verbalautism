@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/objects/games_page/object_game.dart';
-import 'package:verbalautism/components/animations/animated_card.dart';
+import 'package:verbalautism/components/image_activity_card.dart';
 
 class ObjectsBasePage extends StatefulWidget {
   const ObjectsBasePage({super.key});
@@ -59,92 +58,79 @@ class _ObjectsBasePageState extends State<ObjectsBasePage> {
                   runSpacing: 20,
                   alignment: WrapAlignment.center,
                   children: [
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Book",
                       image: "assets/objects_images/book.svg",
                       onTap: onTapCard(context, "Book"),
                     ),
                       
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Car",
                       image: "assets/objects_images/car.svg",
                       onTap: onTapCard(context, "Car"),
                     ),
                       
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Clock",
                       image: "assets/objects_images/clock.svg",
                       onTap: onTapCard(context, "Clock"),
                     ),
                       
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Computer",
                       image: "assets/objects_images/computer.svg",
                       onTap: onTapCard(context, "Computer"),
                     ),
                       
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Crayon",
                       image: "assets/objects_images/crayon.svg",
                       onTap: onTapCard(context, "Crayon"),
                     ),
                       
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Pen",
                       image: "assets/objects_images/pen.svg",
                       onTap: onTapCard(context, "Pen"),
                     ),
                       
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Pencil",
                       image: "assets/objects_images/pencil.svg",
                       onTap: onTapCard(context, "Pencil"),
                     ),
                       
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Scissors",
                       image: "assets/objects_images/scissors.svg",
                       onTap: onTapCard(context, "Scissors"),
                     ),
                       
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "TV",
                       image: "assets/objects_images/tv.svg",
                       onTap: onTapCard(context, "TV"),
                     ),
                     
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Backpack",
                       image: "assets/objects_images/backpack.svg",
                       onTap: onTapCard(context, "Backpack"),
                     ),
 
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Chair",
                       image: "assets/objects_images/chair.svg",
                       onTap: onTapCard(context, "Chair"),
                     ),
 
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Teddy Bear",
                       image: "assets/objects_images/teddy_bear.svg",
                       onTap: onTapCard(context, "Teddy Bear"),
                     ),
 
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       label: "Ruler",
                       image: "assets/objects_images/ruler.svg",
                       onTap: onTapCard(context, "Ruler"),
@@ -153,47 +139,6 @@ class _ObjectsBasePageState extends State<ObjectsBasePage> {
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCard(BuildContext context,
-      {required String label, required String image, required VoidCallback onTap}) {
-    return AnimatedCard(
-      onTap: onTap,
-      child: Card(
-        elevation: 10,
-        color: Colors.black,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Container(
-          width: 200,
-          height: 230,
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-                Transform.scale(
-                  scale: 1.5,
-                  child: SvgPicture.asset(
-                    image,
-                    width: 100,
-                    height: 100,
-                  ),
-                ),   
-      
-                const SizedBox(height: 10),
-                           
-                Text(
-                  label,
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                ),
-              )
             ],
           ),
         ),
@@ -217,5 +162,3 @@ void Function() onTapCard(BuildContext context, String label) {
 
   };
 }
-
-

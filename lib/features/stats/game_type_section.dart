@@ -43,7 +43,7 @@ class GameTypeSection extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'No ${gameType} reports found',
+                'No $gameType reports found',
                 style: GoogleFonts.ubuntu(color: Colors.grey[600]),
               ),
             ),

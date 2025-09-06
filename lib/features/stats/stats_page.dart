@@ -126,7 +126,7 @@ class _StatsPageState extends State<StatsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${MediaQuery.of(context).size.width}',
+          'Weekly Stats Overview',
           style: GoogleFonts.ubuntu(
             color: Colors.white,
             fontWeight: FontWeight.bold,

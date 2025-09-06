@@ -595,7 +595,7 @@ class _ObjectGameState extends State<ObjectGame> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("${MediaQuery.of(context).size.width} : ${MediaQuery.of(context).size.height}", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white)),
+        title: Text("Objects", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
       body: Container(

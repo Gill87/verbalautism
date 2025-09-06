@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/actions/games_page/actions_game.dart';
-import 'package:verbalautism/components/animations/animated_card.dart';
+import 'package:verbalautism/components/image_activity_card.dart';
 
 class ActionsBasePage extends StatefulWidget {
   const ActionsBasePage({super.key});
@@ -59,99 +58,84 @@ class _ActionsBasePageState extends State<ActionsBasePage> {
                   alignment: WrapAlignment.center,
                   children: [
 
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/climb.svg",
                       label: "Climb",
                       onTap: onTapCard(context, "Climb"),
                     ),
                   
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/eat.svg",
                       label: "Eat",
                       onTap: onTapCard(context, "Eat"),
                     ),
 
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/jump.svg",
                       label: "Jump",
                       onTap: onTapCard(context, "Jump"),
                     ),
 
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/kick.svg",
                       label: "Kick",
                       onTap: onTapCard(context, "Kick"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/paint.svg",
                       label: "Paint",
                       onTap: onTapCard(context, "Paint"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/read.svg",
                       label: "Read",
                       onTap: onTapCard(context, "Read"),
                     ),
 
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/run.svg",
                       label: "Run",
                       onTap: onTapCard(context, "Run"),
                     ),
 
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/throw.svg",
                       label: "Throw",
                       onTap: onTapCard(context, "Throw"),
                     ),
 
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/swim.svg",
                       label: "Swim",
                       onTap: onTapCard(context, "Swim"),
                     ),
                     
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/sleep.svg",
                       label: "Sleep",
                       onTap: onTapCard(context, "Sleep"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/dance.svg",
                       label: "Dance",
                       onTap: onTapCard(context, "Dance"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/sing.svg",
                       label: "Sing",
                       onTap: onTapCard(context, "Sing"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/dig.svg",
                       label: "Dig",
                       onTap: onTapCard(context, "Dig"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/slide.svg",
                       label: "Slide",
                       onTap: onTapCard(context, "Slide"),
                     ),
-                    _buildCard(
-                      context,
+                    ImageActivityCard(
                       image: "assets/actions_images/build.svg",
                       label: "Build",
                       onTap: onTapCard(context, "Build"),
@@ -166,48 +150,7 @@ class _ActionsBasePageState extends State<ActionsBasePage> {
     );
   }
 
-  Widget _buildCard(BuildContext context,
-      {required String label, required String image, required VoidCallback onTap}) {
-    return AnimatedCard(
-      onTap: onTap,
-      child: Card(
-        elevation: 10,
-        color: Colors.black,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Container(
-          width: 200,
-          height: 230,
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-                Transform.scale(
-                  scale: 1.5,
-                  child: SvgPicture.asset(
-                    image,
-                    width: 100,
-                    height: 100,
-                  ),
-                ),
-                
-                const SizedBox(height: 10),
-      
-                Text(
-                  label,
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-    void Function() onTapCard(BuildContext context, String label) {
+  void Function() onTapCard(BuildContext context, String label) {
     return () async {
       String? selected = label;
 
@@ -219,7 +162,6 @@ class _ActionsBasePageState extends State<ActionsBasePage> {
           ),
         );
       }
-
     };
   }
 }
