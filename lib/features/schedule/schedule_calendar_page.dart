@@ -441,27 +441,27 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
   AssetImage _getActivityImage(String gameRoute) {
     switch (gameRoute) {
       case 'abc':
-        return const AssetImage('assets/homepage_images/abc.jpg');
+        return const AssetImage('assets/homepage_images/abc.webp');
       case 'numbers':
-        return const AssetImage('assets/homepage_images/123.jpg');
+        return const AssetImage('assets/homepage_images/numbers.webp');
       case 'colors':
-        return const AssetImage('assets/homepage_images/colors.jpg');
+        return const AssetImage('assets/homepage_images/colors.webp');
       case 'shapes':
-        return const AssetImage('assets/homepage_images/shapes.jpg');
+        return const AssetImage('assets/homepage_images/shapes.webp');
       case 'objects':
-        return const AssetImage('assets/homepage_images/geography.jpg');
+        return const AssetImage('assets/homepage_images/objects.webp');
       case 'food':
-        return const AssetImage('assets/homepage_images/food.jpg');
+        return const AssetImage('assets/homepage_images/food.webp');
       case 'places':
-        return const AssetImage('assets/homepage_images/places.jpg');
+        return const AssetImage('assets/homepage_images/places.webp');
       case 'feelings':
-        return const AssetImage('assets/homepage_images/flowers.jpg');
+        return const AssetImage('assets/homepage_images/feelings.webp');
       case 'actions':
-        return const AssetImage('assets/homepage_images/verbs.jpg');
+        return const AssetImage('assets/homepage_images/action.webp');
       case 'sight_words':
-        return const AssetImage('assets/homepage_images/sight.jpg');
+        return const AssetImage('assets/homepage_images/sight.webp');
       default:
-        return const AssetImage('assets/homepage_images/abc.jpg');
+        return const AssetImage('assets/homepage_images/abc.webp');
     }
   }
 
@@ -571,14 +571,4 @@ class _ScheduleCalendarPageState extends State<ScheduleCalendarPage> {
       ),
     );
   }
-}
-
-// Updated tapFunction for ScheduleButton in HomePage
-void onScheduleButtonTap(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const ScheduleCalendarPage(),
-    ),
-  );
 }

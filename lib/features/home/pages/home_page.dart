@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
   late bool isMusicPlaying = AudioService().isMusicPlaying;
   bool adminAccess = false;
+  final GlobalKey<ScheduleSummaryState> scheduleSummaryKey = GlobalKey<ScheduleSummaryState>();
 
   // Selection state management
   bool isSelectionMode = false;
@@ -362,6 +363,19 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
+    // Updated tapFunction for ScheduleButton in HomePage
+    void onScheduleButtonTap(BuildContext context) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ScheduleCalendarPage(),
+        ),
+      ).then((_) {
+        // Optionally refresh or perform actions after returning from the schedule page
+        scheduleSummaryKey.currentState?.loadTodayEvents();
+      });
+    }
+
     
     return SafeArea(
       child: Scaffold(
@@ -587,7 +601,7 @@ class _HomePageState extends State<HomePage> {
                             
                             const SizedBox(height: 20,),
 
-                            const ScheduleSummary(),
+                            ScheduleSummary(key: scheduleSummaryKey),
                                       
                           ],
                         )

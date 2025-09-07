@@ -8,10 +8,10 @@ class ScheduleSummary extends StatefulWidget {
   const ScheduleSummary({super.key});
 
   @override
-  State<ScheduleSummary> createState() => _ScheduleSummaryState();
+  State<ScheduleSummary> createState() => ScheduleSummaryState();
 }
 
-class _ScheduleSummaryState extends State<ScheduleSummary> {
+class ScheduleSummaryState extends State<ScheduleSummary> {
   List<ScheduleEvent> _todayEvents = [];
   bool _isLoading = true;
   String _errorMessage = '';
@@ -22,7 +22,7 @@ class _ScheduleSummaryState extends State<ScheduleSummary> {
 
   @override
   void initState() {
-    _loadTodayEvents();
+    loadTodayEvents();
     super.initState();
   }
 
@@ -38,7 +38,7 @@ class _ScheduleSummaryState extends State<ScheduleSummary> {
   }
 
   // Load today's events from Firestore
-  Future<void> _loadTodayEvents() async {
+  Future<void> loadTodayEvents() async {
     try {
       setState(() {
         _isLoading = true;
@@ -177,27 +177,27 @@ class _ScheduleSummaryState extends State<ScheduleSummary> {
   AssetImage _getActivityImage(String gameRoute) {
     switch (gameRoute) {
       case 'abc':
-        return const AssetImage('assets/homepage_images/abc.jpg');
+        return const AssetImage('assets/homepage_images/abc.webp');
       case 'numbers':
-        return const AssetImage('assets/homepage_images/123.jpg');
+        return const AssetImage('assets/homepage_images/numbers.webp');
       case 'colors':
-        return const AssetImage('assets/homepage_images/colors.jpg');
+        return const AssetImage('assets/homepage_images/colors.webp');
       case 'shapes':
-        return const AssetImage('assets/homepage_images/shapes.jpg');
+        return const AssetImage('assets/homepage_images/shapes.webp');
       case 'objects':
-        return const AssetImage('assets/homepage_images/geography.jpg');
+        return const AssetImage('assets/homepage_images/objects.webp');
       case 'food':
-        return const AssetImage('assets/homepage_images/food.jpg');
+        return const AssetImage('assets/homepage_images/food.webp');
       case 'places':
-        return const AssetImage('assets/homepage_images/places.jpg');
+        return const AssetImage('assets/homepage_images/places.webp');
       case 'feelings':
-        return const AssetImage('assets/homepage_images/flowers.jpg');
+        return const AssetImage('assets/homepage_images/feelings.webp');
       case 'actions':
-        return const AssetImage('assets/homepage_images/verbs.jpg');
+        return const AssetImage('assets/homepage_images/action.webp');
       case 'sight_words':
-        return const AssetImage('assets/homepage_images/sight.jpg');
+        return const AssetImage('assets/homepage_images/sight.webp');
       default:
-        return const AssetImage('assets/homepage_images/abc.jpg');
+        return const AssetImage('assets/homepage_images/abc.webp');
     }
   }
 
@@ -366,7 +366,7 @@ class _ScheduleSummaryState extends State<ScheduleSummary> {
           ),
           const SizedBox(height: 8),
           TextButton(
-            onPressed: _loadTodayEvents,
+            onPressed: loadTodayEvents,
             style: TextButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             ),
@@ -417,7 +417,7 @@ class _ScheduleSummaryState extends State<ScheduleSummary> {
 
         // Refresh button
         IconButton(
-          onPressed: _loadTodayEvents,
+          onPressed: loadTodayEvents,
           icon: Icon(
             Icons.refresh,
             size: 16,
