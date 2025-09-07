@@ -42,37 +42,37 @@ class ButtonsColumn extends StatelessWidget {
               SizedBox(height: buttonSpacing), // Top padding
               const CircularButton(
                 text: "Hi", 
-                image: AssetImage("assets/sound_colors/gold_glitter.jpg"), 
+                image: AssetImage("assets/sound_colors/gold_glitter.webp"), 
                 audioAsset: "audio_files/hi.mp3",
               ),
               SizedBox(height: buttonSpacing),
               const CircularButton(
                 text: "Please", 
-                image: AssetImage("assets/sound_colors/pink_glitter.jpg"), 
+                image: AssetImage("assets/sound_colors/pink_glitter.webp"), 
                 audioAsset: "audio_files/please.mp3"
               ),
               SizedBox(height: buttonSpacing),
               const CircularButton(
                 text: "Thanks", 
-                image: AssetImage("assets/sound_colors/purple_glitter.jpg"), 
+                image: AssetImage("assets/sound_colors/purple_glitter.webp"), 
                 audioAsset: "audio_files/thanks.mp3"
               ),
               SizedBox(height: buttonSpacing),
               const CircularButton(
                 text: "Sorry", 
-                image: AssetImage("assets/sound_colors/blue_glitter.jpg"), 
+                image: AssetImage("assets/sound_colors/blue_glitter.webp"), 
                 audioAsset: "audio_files/sorry.mp3"
               ),
               SizedBox(height: buttonSpacing),
               const CircularButton(
                 text: "Bye", 
-                image: AssetImage("assets/sound_colors/yellow_glitter.jpg"), 
+                image: AssetImage("assets/sound_colors/yellow_glitter.webp"), 
                 audioAsset: "audio_files/bye.mp3"
               ),
               SizedBox(height: buttonSpacing),
               const CircularButton(
                 text: "Stop", 
-                image: AssetImage("assets/sound_colors/red_glitter.jpg"), 
+                image: AssetImage("assets/sound_colors/red_glitter.webp"), 
                 audioAsset: "audio_files/stop.mp3"
               ),
               SizedBox(height: buttonSpacing), // Bottom padding
