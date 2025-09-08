@@ -59,59 +59,59 @@ class _PlacesBasePageState extends State<PlacesBasePage> {
                   children: [
 
                     ImageActivityCard(
-                      image: "assets/places_images/school.svg",
+                      image: "assets/places_images/school.webp",
                       label: "School",
                       onTap: onTapCard(context, "School"),
                     ),
                   
                     ImageActivityCard(
-                      image: "assets/places_images/grocery_store.svg",
+                      image: "assets/places_images/grocery_store.webp",
                       label: "Grocery Store",
                       onTap: onTapCard(context, "Grocery Store"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/places_images/library.svg",
+                      image: "assets/places_images/library.webp",
                       label: "Library",
                       onTap: onTapCard(context, "Library"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/places_images/hospital.svg",
+                      image: "assets/places_images/hospital.webp",
                       label: "Hospital",
                       onTap: onTapCard(context, "Hospital"),
                     ),
                     ImageActivityCard(
-                      image: "assets/places_images/mall.svg",
+                      image: "assets/places_images/mall.webp",
                       label: "Mall",
                       onTap: onTapCard(context, "Mall"),
                     ),
                     ImageActivityCard(
-                      image: "assets/places_images/post_office.svg",
+                      image: "assets/places_images/post_office.webp",
                       label: "Post Office",
                       onTap: onTapCard(context, "Post Office"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/places_images/police_station.svg",
+                      image: "assets/places_images/police_station.webp",
                       label: "Police Station",
                       onTap: onTapCard(context, "Police Station"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/places_images/fire_station.svg",
+                      image: "assets/places_images/fire_station.webp",
                       label: "Fire Station",
                       onTap: onTapCard(context, "Fire Station"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/places_images/airport.svg",
+                      image: "assets/places_images/airport.webp",
                       label: "Airport",
                       onTap: onTapCard(context, "Airport"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/places_images/barn.svg",
+                      image: "assets/places_images/barn.webp",
                       label: "Barn",
                       onTap: onTapCard(context, "Barn"),
                     ),

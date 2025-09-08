@@ -45,19 +45,19 @@ class _FoodBasePageState extends State<FoodBasePage> {
                   alignment: WrapAlignment.center,
                   children: [
                     ImageActivityCard(
-                      image: "assets/food_images/cereal.svg",
+                      image: "assets/food_images/cereal.webp",
                       label: "Breakfast",
                       onTap: onTapCard(context, "Breakfast"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/food_images/rice.svg",
+                      image: "assets/food_images/rice.webp",
                       label: "Lunch/Dinner",
                       onTap: onTapCard(context, "Lunch/Dinner"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/food_images/apple.svg",
+                      image: "assets/food_images/apple.webp",
                       label: "Snacks",
                       onTap: onTapCard(context, "Snacks"),
                     ),

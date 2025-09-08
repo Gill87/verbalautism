@@ -1,6 +1,5 @@
 // TAP Feature
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/tap_animation.dart';
@@ -191,8 +190,8 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
                           );
                         },
                         child: !emptyAssetLink()
-                        ? SvgPicture.asset( 
-                          '${widget.directory}${widget.assetLink}.svg',
+                        ? Image.asset( 
+                          '${widget.directory}${widget.assetLink}.webp',
                           width: MediaQuery.of(context).size.width * 0.25,
                           height: MediaQuery.of(context).size.height * 0.25,
                           fit: BoxFit.contain,

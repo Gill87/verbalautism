@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/incorrect_animation.dart';
@@ -243,8 +242,8 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                         child: Center(
                           child: !isColor()
                           ? SizedBox(
-                            child: SvgPicture.asset(
-                              '${widget.directory}$object.svg',
+                            child: Image.asset(
+                              '${widget.directory}$object.webp',
                               width: screenWidth * 0.15 * 1.5,
                               height: screenHeight * 0.25 * 1.5,
                               fit: BoxFit.contain,

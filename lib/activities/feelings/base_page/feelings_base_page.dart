@@ -56,32 +56,32 @@ class _FeelingsBasePageState extends State<FeelingsBasePage> {
                   alignment: WrapAlignment.center,
                   children: [
                     ImageActivityCard(
-                      image: "assets/feelings_images/happy.svg",
+                      image: "assets/feelings_images/happy.webp",
                       label: "Happy",
                       onTap: onTapCard(context, "Happy"),
                     ),
                     ImageActivityCard(
-                      image: "assets/feelings_images/sad.svg",
+                      image: "assets/feelings_images/sad.webp",
                       label: "Sad",
                       onTap: onTapCard(context, "Sad"),
                     ),
                     ImageActivityCard(
-                      image: "assets/feelings_images/angry.svg",
+                      image: "assets/feelings_images/angry.webp",
                       label: "Angry",
                       onTap: onTapCard(context, "Angry"),
                     ),
                     ImageActivityCard(
-                      image: "assets/feelings_images/curious.svg",
+                      image: "assets/feelings_images/curious.webp",
                       label: "Curious",
                       onTap: onTapCard(context, "Curious"),
                     ),
                     ImageActivityCard(
-                      image: "assets/feelings_images/sick.svg",
+                      image: "assets/feelings_images/sick.webp",
                       label: "Sick",
                       onTap: onTapCard(context, "Sick"),
                     ),
                     ImageActivityCard(
-                      image: "assets/feelings_images/surprised.svg",
+                      image: "assets/feelings_images/surprised.webp",
                       label: "Surprised",
                       onTap: onTapCard(context, "Surprised"),
                     ),

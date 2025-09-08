@@ -59,84 +59,84 @@ class _ActionsBasePageState extends State<ActionsBasePage> {
                   children: [
 
                     ImageActivityCard(
-                      image: "assets/actions_images/climb.svg",
+                      image: "assets/actions_images/climb.webp",
                       label: "Climb",
                       onTap: onTapCard(context, "Climb"),
                     ),
                   
                     ImageActivityCard(
-                      image: "assets/actions_images/eat.svg",
+                      image: "assets/actions_images/eat.webp",
                       label: "Eat",
                       onTap: onTapCard(context, "Eat"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/actions_images/jump.svg",
+                      image: "assets/actions_images/jump.webp",
                       label: "Jump",
                       onTap: onTapCard(context, "Jump"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/actions_images/kick.svg",
+                      image: "assets/actions_images/kick.webp",
                       label: "Kick",
                       onTap: onTapCard(context, "Kick"),
                     ),
                     ImageActivityCard(
-                      image: "assets/actions_images/paint.svg",
+                      image: "assets/actions_images/paint.webp",
                       label: "Paint",
                       onTap: onTapCard(context, "Paint"),
                     ),
                     ImageActivityCard(
-                      image: "assets/actions_images/read.svg",
+                      image: "assets/actions_images/read.webp",
                       label: "Read",
                       onTap: onTapCard(context, "Read"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/actions_images/run.svg",
+                      image: "assets/actions_images/run.webp",
                       label: "Run",
                       onTap: onTapCard(context, "Run"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/actions_images/throw.svg",
+                      image: "assets/actions_images/throw.webp",
                       label: "Throw",
                       onTap: onTapCard(context, "Throw"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/actions_images/swim.svg",
+                      image: "assets/actions_images/swim.webp",
                       label: "Swim",
                       onTap: onTapCard(context, "Swim"),
                     ),
                     
                     ImageActivityCard(
-                      image: "assets/actions_images/sleep.svg",
+                      image: "assets/actions_images/sleep.webp",
                       label: "Sleep",
                       onTap: onTapCard(context, "Sleep"),
                     ),
                     ImageActivityCard(
-                      image: "assets/actions_images/dance.svg",
+                      image: "assets/actions_images/dance.webp",
                       label: "Dance",
                       onTap: onTapCard(context, "Dance"),
                     ),
                     ImageActivityCard(
-                      image: "assets/actions_images/sing.svg",
+                      image: "assets/actions_images/sing.webp",
                       label: "Sing",
                       onTap: onTapCard(context, "Sing"),
                     ),
                     ImageActivityCard(
-                      image: "assets/actions_images/dig.svg",
+                      image: "assets/actions_images/dig.webp",
                       label: "Dig",
                       onTap: onTapCard(context, "Dig"),
                     ),
                     ImageActivityCard(
-                      image: "assets/actions_images/slide.svg",
+                      image: "assets/actions_images/slide.webp",
                       label: "Slide",
                       onTap: onTapCard(context, "Slide"),
                     ),
                     ImageActivityCard(
-                      image: "assets/actions_images/build.svg",
+                      image: "assets/actions_images/build.webp",
                       label: "Build",
                       onTap: onTapCard(context, "Build"),
                     ),

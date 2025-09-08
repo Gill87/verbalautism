@@ -58,19 +58,19 @@ class _ShapesBasePageState extends State<ShapesBasePage> {
                   alignment: WrapAlignment.center,
                   children: [
                     ImageActivityCard(
-                      image: "assets/shapes_images/circle.svg",
+                      image: "assets/shapes_images/circle.webp",
                       label: "Circle",
                       onTap: onTapCard(context, "Circle"),
                     ),
                     
                     ImageActivityCard(
-                      image: "assets/shapes_images/triangle.svg",
+                      image: "assets/shapes_images/triangle.webp",
                       label: "Triangle",
                       onTap: onTapCard(context, "Triangle"),
                     ),
 
                     ImageActivityCard(
-                      image: "assets/shapes_images/rectangle.svg",
+                      image: "assets/shapes_images/rectangle.webp",
                       label: "Rectangle",
                       onTap: onTapCard(context, "Rectangle"),
                     ),

@@ -43,7 +43,7 @@ class _AbcBasePageState extends State<AbcBasePage> {
               children: [
                 ImageActivityCard(
                   label: "Uppercase",
-                  image: "assets/abc_images/Uppercase_A.svg",
+                  image: "assets/abc_images/Uppercase_A.webp",
                   onTap: onTapCard(
                     context,
                     "Uppercase",
@@ -51,7 +51,7 @@ class _AbcBasePageState extends State<AbcBasePage> {
                 ),
                 ImageActivityCard(
                   label: "Lowercase",
-                  image: "assets/abc_images/Lowercase_A.svg",
+                  image: "assets/abc_images/Lowercase_A.webp",
                   onTap: onTapCard(
                     context,
                     "Lowercase",
@@ -59,7 +59,7 @@ class _AbcBasePageState extends State<AbcBasePage> {
                 ),
                 ImageActivityCard(
                   label: "Mixed",
-                  image: "assets/abc_images/MixedLettersImage.svg",
+                  image: "assets/abc_images/MixedLettersImage.webp",
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const AbcMixedGame()),

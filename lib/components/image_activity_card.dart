@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/animated_card.dart';
 
@@ -38,7 +37,7 @@ class _ImageActivityCardState extends State<ImageActivityCard> {
             children: [
                 Transform.scale(
                   scale: 1.5,
-                  child: SvgPicture.asset(
+                  child: Image.asset(
                     widget.image,
                     width: 100,
                     height: 100,

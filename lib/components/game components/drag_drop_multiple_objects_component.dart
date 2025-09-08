@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/incorrect_animation.dart';
@@ -298,9 +297,9 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
     }
 
     // Define object image
-    final svg = !isColor() 
-      ? SvgPicture.asset(
-          '${widget.directory}$assetLink.svg',
+    final objectImage = !isColor() 
+      ? Image.asset(
+          '${widget.directory}$assetLink.webp',
           width: imageWidth(),
           // height: imageHeight(),
           fit: BoxFit.contain,
@@ -321,7 +320,7 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
           ),
         );
 
-    final animatedSvg = AnimatedBuilder(
+    final animatedObjectImage = AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
         return Transform.translate(
@@ -329,7 +328,7 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
           child: child,
         );
       },
-      child: svg,
+      child: objectImage,
     );
 
     return Draggable<String>(
@@ -340,14 +339,14 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
         color: Colors.transparent,  // no background
         child: Transform.scale(
           scale: isTooLarge() ? 1.25 : 1.5,
-          child: animatedSvg
+          child: animatedObjectImage
         ), // same as child -> no offset
       ),
 
       // What is shown in the original spot when dragging is occuring (in this case invisible lettter)
       childWhenDragging: Opacity(
         opacity: 0.0,
-        child: animatedSvg,
+        child: animatedObjectImage,
       ),
 
       // 👇 Stop floating when drag starts
@@ -358,7 +357,7 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
       // If correct image dropped in
       child: imageDropped
           ? const SizedBox.shrink()
-          : animatedSvg,
+          : animatedObjectImage,
 
       // If image not dropped in, resume floating animation
       onDragEnd: (details) {
@@ -424,8 +423,8 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
               },
               child: imageDropped
                   ? !isColor() 
-                      ? SvgPicture.asset(
-                          '${widget.directory}${widget.correctAssetLinks}.svg',
+                      ? Image.asset(
+                          '${widget.directory}${widget.correctAssetLinks}.webp',
                           key: const ValueKey('droppedImage'),
                           width: screenWidth * 0.3,
                           height:screenHeight * 0.4,

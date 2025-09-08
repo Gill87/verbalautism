@@ -1,7 +1,6 @@
 // DRAG AND DROP Feature
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/drag_animation.dart';
@@ -175,8 +174,8 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                       Transform.scale(
                         scale: isTooLarge() ? 1.0 : 1.5,
                         child: !emptyAssetLink()
-                          ? SvgPicture.asset(
-                            '${widget.directory}${widget.assetLink}.svg',
+                          ? Image.asset(
+                            '${widget.directory}${widget.assetLink}.webp',
                             width: isShape()
                               ? MediaQuery.of(context).size.width * 0.3
                               : MediaQuery.of(context).size.width * 0.4,
@@ -209,8 +208,8 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                 childWhenDragging: Opacity(
                   opacity: 0.0,
                   child: !emptyAssetLink()
-                    ? SvgPicture.asset(
-                      '${widget.directory}${widget.assetLink}.svg',
+                    ? Image.asset(
+                      '${widget.directory}${widget.assetLink}.webp',
                       width: isShape()
                         ? MediaQuery.of(context).size.width * 0.3
                         : MediaQuery.of(context).size.width * 0.4,
@@ -256,8 +255,8 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
 
                         // Image
                         child: !emptyAssetLink()
-                          ? SvgPicture.asset(
-                            '${widget.directory}${widget.assetLink}.svg',
+                          ? Image.asset(
+                            '${widget.directory}${widget.assetLink}.webp',
                             width: isShape()
                               ? MediaQuery.of(context).size.width * 0.3
                               : MediaQuery.of(context).size.width * 0.4,
@@ -332,8 +331,8 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                         },
                         child: imageDropped
                             ? !emptyAssetLink()
-                              ? SvgPicture.asset(
-                                '${widget.directory}${widget.assetLink}.svg',
+                              ? Image.asset(
+                                '${widget.directory}${widget.assetLink}.webp',
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 height: MediaQuery.of(context).size.height * 0.4,
                                 fit: BoxFit.contain,

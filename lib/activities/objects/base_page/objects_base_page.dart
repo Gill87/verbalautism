@@ -60,79 +60,79 @@ class _ObjectsBasePageState extends State<ObjectsBasePage> {
                   children: [
                     ImageActivityCard(
                       label: "Book",
-                      image: "assets/objects_images/book.svg",
+                      image: "assets/objects_images/book.webp",
                       onTap: onTapCard(context, "Book"),
                     ),
                       
                     ImageActivityCard(
                       label: "Car",
-                      image: "assets/objects_images/car.svg",
+                      image: "assets/objects_images/car.webp",
                       onTap: onTapCard(context, "Car"),
                     ),
                       
                     ImageActivityCard(
                       label: "Clock",
-                      image: "assets/objects_images/clock.svg",
+                      image: "assets/objects_images/clock.webp",
                       onTap: onTapCard(context, "Clock"),
                     ),
                       
                     ImageActivityCard(
                       label: "Computer",
-                      image: "assets/objects_images/computer.svg",
+                      image: "assets/objects_images/computer.webp",
                       onTap: onTapCard(context, "Computer"),
                     ),
                       
                     ImageActivityCard(
                       label: "Crayon",
-                      image: "assets/objects_images/crayon.svg",
+                      image: "assets/objects_images/crayon.webp",
                       onTap: onTapCard(context, "Crayon"),
                     ),
                       
                     ImageActivityCard(
                       label: "Pen",
-                      image: "assets/objects_images/pen.svg",
+                      image: "assets/objects_images/pen.webp",
                       onTap: onTapCard(context, "Pen"),
                     ),
                       
                     ImageActivityCard(
                       label: "Pencil",
-                      image: "assets/objects_images/pencil.svg",
+                      image: "assets/objects_images/pencil.webp",
                       onTap: onTapCard(context, "Pencil"),
                     ),
                       
                     ImageActivityCard(
                       label: "Scissors",
-                      image: "assets/objects_images/scissors.svg",
+                      image: "assets/objects_images/scissors.webp",
                       onTap: onTapCard(context, "Scissors"),
                     ),
                       
                     ImageActivityCard(
                       label: "TV",
-                      image: "assets/objects_images/tv.svg",
+                      image: "assets/objects_images/tv.webp",
                       onTap: onTapCard(context, "TV"),
                     ),
                     
                     ImageActivityCard(
                       label: "Backpack",
-                      image: "assets/objects_images/backpack.svg",
+                      image: "assets/objects_images/backpack.webp",
                       onTap: onTapCard(context, "Backpack"),
                     ),
 
                     ImageActivityCard(
                       label: "Chair",
-                      image: "assets/objects_images/chair.svg",
+                      image: "assets/objects_images/chair.webp",
                       onTap: onTapCard(context, "Chair"),
                     ),
 
                     ImageActivityCard(
                       label: "Teddy Bear",
-                      image: "assets/objects_images/teddy_bear.svg",
+                      image: "assets/objects_images/teddy_bear.webp",
                       onTap: onTapCard(context, "Teddy Bear"),
                     ),
 
                     ImageActivityCard(
                       label: "Ruler",
-                      image: "assets/objects_images/ruler.svg",
+                      image: "assets/objects_images/ruler.webp",
                       onTap: onTapCard(context, "Ruler"),
                     ),
 
