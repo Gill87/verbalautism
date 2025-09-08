@@ -184,8 +184,8 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
                       AnimatedBuilder(
                         animation: _animation,
                         builder: (context, child) {
-                          return Transform.translate(
-                            offset: Offset(0, -_animation.value),
+                          return Transform.scale(
+                            scale: 1 + (_animation.value / 100), // Slightly increase size
                             child: child,
                           );
                         },

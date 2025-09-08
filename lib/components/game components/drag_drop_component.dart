@@ -244,8 +244,8 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                       AnimatedBuilder(
                         animation: _animation, 
                         builder: (context, child) {
-                          return Transform.translate(
-                            offset: Offset(0, -_animation.value),
+                          return Transform.scale(
+                            scale: 1 + (_animation.value / 100), // Slightly increase size
                             child: Transform.scale(
                               scale: isTooLarge() ? 0.75 : 1,
                               child: child

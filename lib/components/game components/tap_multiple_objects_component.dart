@@ -70,6 +70,8 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
   }
 
   void _showIncorrectAnimation(){
+    _controller.stop();  // stop the animation
+
     // NEW: Prevent multiple calls
     if (isProcessing) return;
     
@@ -104,6 +106,8 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
 
 
   void _showCorrectAnimation() {
+    _controller.stop();  // stop the animation
+
     // NEW: Prevent multiple calls
     if (isProcessing) return;
     
@@ -221,8 +225,8 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                     child: AnimatedBuilder(
                       animation: _animation,
                       builder: (context, child) {
-                        return Transform.translate(
-                          offset: Offset(0, _animation.value),
+                        return Transform.scale(
+                          scale: 1 + (_animation.value / 100), // Slightly increase size
                           child: child,
                         );
                       },
