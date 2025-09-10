@@ -166,12 +166,9 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
             ),
           ),
 
-          // AnimatedText(text: "Tap the ${widget.objectVariation} ${widget.mainData}"),
-
           const SizedBox(height: 50),
 
           Center(
-            
             child: Transform.scale(
               scale: isLetters() ? 1.75 : 1.25,
               child: GestureDetector(

@@ -290,9 +290,7 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
                   : const SizedBox.shrink()
 
               ),
-          
-              // const SizedBox(width: 50),
-          
+                    
               // Drag Target
               AnimatedAlign(
                 alignment: imageDropped ? Alignment.center : Alignment.centerRight,

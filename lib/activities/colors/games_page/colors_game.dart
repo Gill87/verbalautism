@@ -37,6 +37,7 @@ class _ColorsGameState extends State<ColorsGame> {
   int round = 1;
   final int maxSteps = 30;
   bool isPaused = false;
+  bool randomize = false;
   DateTime? stepStartTime;
   double durationAvg = 0;
   Timer? stepTimer;
@@ -64,7 +65,7 @@ class _ColorsGameState extends State<ColorsGame> {
       "White"
     ];
 
-    if(widget.selectedColor.isNotEmpty) {
+    if(widget.selectedColor.isNotEmpty && randomize == false) {
       correctIndex = colors.indexOf(widget.selectedColor);
       randomNumber = correctIndex;
 
@@ -425,76 +426,55 @@ class _ColorsGameState extends State<ColorsGame> {
         }
       }
 
-      // 🎯 Game ends and Restart/Home Prompt
+      // 🎯 Game ends (continue to next random activity)
       else {
+        // Pause
+        setState(() {
+          isPaused = true;
+        });
+
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            backgroundColor: const Color.fromARGB(255, 33, 150, 243), // Blue background
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20), // Soft edges
-            ),
-            title: Text(
-              "Exercise Complete!",
-              style: GoogleFonts.ubuntu(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+          barrierDismissible: false, // prevent closing by tapping outside
+          builder: (context) {
+            // Schedule auto-close
+            Future.delayed(const Duration(seconds: 2), () {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+                setState(() {
+                  randomize = true;
+                  totalSteps = 1;
+                  round = 1;
+                  displaySteps = 1;
+                  stepTimer?.cancel();
+                  isPaused = false;
+                });
+                initState(); // reset the game state
+              }
+            });
+
+            return AlertDialog(
+              backgroundColor: const Color.fromARGB(255, 33, 150, 243),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
-            ),
-            actions: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color.fromARGB(255, 33, 150, 243),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  setState(() {
-                    totalSteps = 1;
-                    round = 1;
-                    displaySteps = 1;
-                  });
-                  // Reset the game state
-                  initState();
-                },
-                child: Text(
-                  "Restart",
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+              title: Text(
+                "Exercise Complete!",
+                style: GoogleFonts.ubuntu(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color.fromARGB(255, 33, 150, 243),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                  );
-                },
-                child: Text(
-                  "Home",
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+              content: Text(
+                "Good job! Moving to next activity...",
+                style: GoogleFonts.ubuntu(
+                  fontSize: 18,
+                  color: Colors.white,
                 ),
               ),
-            ],
-          ),
+            );
+          },
         );
       }
     });

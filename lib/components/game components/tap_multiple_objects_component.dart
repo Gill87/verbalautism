@@ -147,14 +147,6 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
     }
   }
 
-  // bool isTooLarge() {
-  //   if (widget.objectVariation == "Feeling" || widget.objectVariation == "Object" || widget.objectVariation == "Food" || widget.objectVariation == "Place") {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
   @override
   void dispose() {
     _ttsService.stop();
@@ -214,13 +206,6 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(20), // Rounded corners
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: Colors.black.withOpacity(0.1),
-                        //     blurRadius: 4,
-                        //     offset: const Offset(0, 4),
-                        //   ),
-                        // ],
                       ),
                     child: AnimatedBuilder(
                       animation: _animation,
@@ -235,13 +220,6 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                         height: screenHeight * 0.3,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: Colors.black.withOpacity(0.1),
-                          //     blurRadius: 8,
-                          //     offset: const Offset(0, 4),
-                          //   ),
-                          // ],
                         ),
                         child: Center(
                           child: !isColor()

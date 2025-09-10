@@ -144,14 +144,6 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
   double horizontalPadding(){
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // if(allObjectLinks.length == 3 && screenWidth <= 1050){
-    //   return 1;
-    // } else if(allObjectLinks.length == 2 && screenWidth <= 800){
-    //   return 1;
-    // } else {
-    //   return screenWidth * 0.01;
-    // }
-
     if(allObjectLinks.length > 2){
       return screenWidth * 0.05;
     } else {
@@ -161,14 +153,6 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
 
   double widthSize(){
     final screenWidth = MediaQuery.of(context).size.width;
-
-    // if(screenWidth <= 680 && allObjectLinks.length == 3){
-    //   return screenWidth * 0.005;
-    // } else if(screenWidth <= 700 && allObjectLinks.length == 2){
-    //   return screenWidth * 0.02;
-    // } else {
-    //   return screenWidth * 0.04;
-    // }
 
     if(allObjectLinks.length > 2 || screenWidth <= 700){
       return screenWidth * 0.05;
