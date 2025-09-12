@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/abc/games_pages/abc_lowercase_game.dart';
 import 'package:verbalautism/activities/abc/games_pages/abc_uppercase_game.dart';
+import 'package:verbalautism/activities/abc/games_pages/abc_mixed_game.dart'; // ✅ import mixed game
 import 'package:verbalautism/components/animations/animated_card.dart';
 
 class LetterSelectionPage extends StatelessWidget {
   final String caseType;
-  
+
   const LetterSelectionPage({super.key, required this.caseType});
 
   @override
@@ -18,7 +19,11 @@ class LetterSelectionPage extends StatelessWidget {
         centerTitle: true,
         title: Text(
           "Select $caseType Letter",
-          style: GoogleFonts.ubuntu(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          style: GoogleFonts.ubuntu(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -30,7 +35,9 @@ class LetterSelectionPage extends StatelessWidget {
             ),
           ),
           constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height - AppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+            minHeight: MediaQuery.of(context).size.height -
+                AppBar().preferredSize.height -
+                MediaQuery.of(context).padding.top,
           ),
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -43,22 +50,28 @@ class LetterSelectionPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => caseType == "Uppercase"
-                          ? const AbcUppercaseGame(selectedLetter: "")
-                          : const AbcLowercaseGame(selectedLetter: ""),
+                      builder: (context) {
+                        if (caseType == "Uppercase") {
+                          return const AbcUppercaseGame(selectedLetter: "");
+                        } else if (caseType == "Lowercase") {
+                          return const AbcLowercaseGame(selectedLetter: "");
+                        } else {
+                          return const AbcMixedGame(selectedLetter: "");
+                        }
+                      },
                     ),
                   );
                 },
                 isRandom: true,
               ),
               const SizedBox(height: 20),
+
               // Letter grid
               Wrap(
                 spacing: 15,
                 runSpacing: 15,
                 alignment: WrapAlignment.center,
-                children: List.generate(26, (index) {
-                  String letter = String.fromCharCode(index + (caseType == "Uppercase" ? 65 : 97));
+                children: _buildLetterList().map((letter) {
                   return _buildLetterCard(
                     context,
                     letter: letter,
@@ -66,14 +79,20 @@ class LetterSelectionPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => caseType == "Uppercase"
-                              ? AbcUppercaseGame(selectedLetter: letter)
-                              : AbcLowercaseGame(selectedLetter: letter),
+                          builder: (context) {
+                            if (caseType == "Uppercase") {
+                              return AbcUppercaseGame(selectedLetter: letter);
+                            } else if (caseType == "Lowercase") {
+                              return AbcLowercaseGame(selectedLetter: letter);
+                            } else {
+                              return AbcMixedGame(selectedLetter: letter);
+                            }
+                          },
                         ),
                       );
                     },
                   );
-                }),
+                }).toList(),
               ),
             ],
           ),
@@ -82,8 +101,26 @@ class LetterSelectionPage extends StatelessWidget {
     );
   }
 
+  /// Builds the list of letters depending on caseType
+  List<String> _buildLetterList() {
+    if (caseType == "Uppercase") {
+      return List.generate(26, (i) => String.fromCharCode(65 + i));
+    } else if (caseType == "Lowercase") {
+      return List.generate(26, (i) => String.fromCharCode(97 + i));
+    } else {
+      // Mixed: Aa, Bb, Cc ...
+      return List.generate(
+        26,
+        (i) =>
+            "${String.fromCharCode(65 + i)}${String.fromCharCode(97 + i)}",
+      );
+    }
+  }
+
   Widget _buildLetterCard(BuildContext context,
-      {required String letter, required VoidCallback onTap, bool isRandom = false}) {
+      {required String letter,
+      required VoidCallback onTap,
+      bool isRandom = false}) {
     return AnimatedCard(
       onTap: onTap,
       child: Card(

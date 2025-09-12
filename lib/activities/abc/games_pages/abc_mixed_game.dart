@@ -5,26 +5,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:verbalautism/components/game%20components/drag_drop_component.dart';
 import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
-import 'package:verbalautism/components/game%20components/drag_drop_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/trace_component.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class AbcMixedGame extends StatefulWidget {
-  
+  final String selectedLetter;
+
   const AbcMixedGame({
     super.key,
-  });
+    required this.selectedLetter,
+    });
 
   @override
   State<AbcMixedGame> createState() => _AbcMixedGameState();
 }
 
 class _AbcMixedGameState extends State<AbcMixedGame> {
-  
-  List <String> letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  List <String> letters = ['Aa', 'Bb', 'Cc', 'Dd', 'Ee', 'Ff', 'Gg', 'Hh', 'Ii', 'Jj', 'Kk', 'Ll', 'Mm', 'Nn', 'Oo', 'Pp', 'Qq', 'Rr', 'Ss', 'Tt', 'Uu', 'Vv', 'Ww', 'Xx', 'Yy', 'Zz'];
   List<int> stepDurations = []; // store all durations (in seconds)
 
   // Variables
@@ -42,21 +43,44 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
 
   // Random Object
   Random random = Random();
+
+  // Random Number Variables
   late int randomNumber;
   late int randomNumber2;
   late int randomNumber3;
-  late List <String> wrongLetters;
-  late String namingLetter;
-  late String namingLetter2;
-  late String namingLetter3;
   late int correctIndex;
+  late List <String> wrongLetters;
 
   @override
   void initState() {
-    setRandomNumber();
-    wrongLetters = [];
-    
+    if(widget.selectedLetter != "" && randomize == false){
+      // If a letter is selected, find its index
+      randomNumber = letters.indexOf(widget.selectedLetter);
+      correctIndex = randomNumber;
+      
+      if(randomNumber == -1){
+        randomNumber = random.nextInt(26); // Fallback to a random letter if not found
+        correctIndex = randomNumber;
+      }
+    }
+    else {
+      // If no letter is selected, choose a random letter
+      randomNumber = random.nextInt(26);
+      correctIndex = randomNumber;
+    }
+
+    // Ensure first trial gets a timer after the first frame is rendered.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startStepTimer();
+    });
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    stepTimer?.cancel(); // Cancel any active timer
+    super.dispose();
   }
 
   void screenTimeoutDialog(){
@@ -142,31 +166,17 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   }
 
   void setOneWrongNumber(){
-    int randomLetterNumber = random.nextInt(2);
     randomNumber2 = random.nextInt(26);
 
     while(randomNumber2 == randomNumber){
       randomNumber2 = random.nextInt(26);
     }
-
-    if(randomLetterNumber == 0){
-      namingLetter2 = "Uppercase_";
-    } else {
-      namingLetter2 = "Lowercase_";
-    }
     
-    wrongLetters = ["$namingLetter2${letters[randomNumber2]}"];
-  }
+    wrongLetters = ["Mixed_${letters[randomNumber2]}"];
 
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   void setTwoWrongNumbers(){
-    int randomLetterNumber = random.nextInt(2);
-    int randomLetterNumber2 = random.nextInt(2);
-
     randomNumber2 = random.nextInt(26);
     randomNumber3 = random.nextInt(26);
 
@@ -175,33 +185,8 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
       randomNumber3 = random.nextInt(26);
     }
 
-    if(randomLetterNumber == 0){
-      namingLetter2 = "Uppercase_";
-    } else {
-      namingLetter2 = "Lowercase_";
-    }
+    wrongLetters = ["Mixed_${letters[randomNumber2]}", "Mixed_${letters[randomNumber3]}"];
 
-    if(randomLetterNumber2 == 0){
-      namingLetter3 = "Uppercase_";
-    } else {
-      namingLetter3 = "Lowercase_";
-    }
-
-    wrongLetters = ["$namingLetter2${letters[randomNumber2]}", "$namingLetter3${letters[randomNumber3]}"];
-  }
-
-  void setRandomNumber(){
-    randomNumber = random.nextInt(26);
-    correctIndex = randomNumber;
-    
-    int randomLetterNumber = random.nextInt(2);
-
-    if(randomLetterNumber == 0){
-      namingLetter = "Uppercase_";
-    } else {
-      namingLetter = "Lowercase_";
-    }
-    
   }
 
   void nextRoundDialog(int roundNumber){
@@ -264,8 +249,8 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
     });
   
     // Reset Counters
-    incorrectAnswer = 0;
     correctAnswer = 0;
+    incorrectAnswer = 0;
 
     // Dialog
     showDialog(
@@ -330,7 +315,7 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
     }
   }
 
- void round2(){
+  void round2(){
     if(totalSteps == 10){
       nextRoundDialog(2);
     }
@@ -490,10 +475,12 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
       }
     });
   }
+
+  // Flashing color variable
   Color containerColor = Colors.black;
 
   void triggerCorrectFlash() {
-    ++correctAnswer;  
+    ++correctAnswer;
     
     setState(() {
       containerColor = Colors.lightGreen;
@@ -523,7 +510,7 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
       }
     });
   }
-  
+
   Future<void> uploadRoundResult({
     required String gameType, // e.g. "sightWord"
     required int correct,
@@ -551,88 +538,57 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
     incorrectAnswer = 0;
     correctAnswer = 0;
     stepDurations.clear(); // Clear durations for next round
+    print("✅ Round result uploaded for $gameType");
   }
   
   @override
   Widget build(BuildContext context) {
-    Widget currentActivity;
 
+    // Current Activity Widget
+    Widget currentActivity;
+    
+    // Set Current Activity to appropriate activity
     if (totalSteps % 3 == 1 && totalSteps <= 10) {
-      if(namingLetter == "Uppercase_"){
-        currentActivity = TapComponent(onCompleted: nextStep, assetLink: "$namingLetter${letters[randomNumber]}", mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
-      } else {
-        currentActivity = TapComponent(onCompleted: nextStep, assetLink: "$namingLetter${letters[randomNumber]}", mainData: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
-      }
+      currentActivity = TapComponent(onCompleted: nextStep, assetLink: "Mixed_${letters[randomNumber]}", mainData: letters[randomNumber][0], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
     } 
-    else if (totalSteps % 3 == 2 && totalSteps <= 10) {
-      if(namingLetter == "Uppercase_"){
-        currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: "$namingLetter${letters[randomNumber]}", mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
-      } else {
-        currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: "$namingLetter${letters[randomNumber]}", mainData: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
-      }
+    else if (totalSteps % 3 == 2 && totalSteps < 10) {
+      currentActivity = DragDropComponent(onCompleted: nextStep, assetLink: "Mixed_${letters[randomNumber]}", mainData: letters[randomNumber][0], onCorrectAction: triggerCorrectFlash, totalSteps: totalSteps, directory: "assets/abc_images/", objectVariation: "Letter",);
     } 
-    else if(totalSteps % 3 == 0 && totalSteps <= 10){
-      if(namingLetter == "Uppercase_"){
-        currentActivity = TraceComponent(
-          onCompleted: nextStep, 
-          mainData: letters[randomNumber],
-          onCorrectAction: triggerCorrectFlash,
-          objectVariation: "Letter",
-        );
-      } else {
-        currentActivity = TraceComponent(
-          onCompleted: nextStep, 
-          mainData: letters[randomNumber].toLowerCase(),
-          onCorrectAction: triggerCorrectFlash,
-          objectVariation: "Letter",
-        );
-      }   
+    else if(totalSteps % 3 == 0 && totalSteps < 10){
+      currentActivity = TraceComponent(onCompleted: nextStep, mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, objectVariation: "Letter",);
     } 
-    else if(totalSteps % 3 == 1 && totalSteps > 10){
-      if(namingLetter == "Uppercase_"){
-        currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: "$namingLetter${letters[randomNumber]}", wrongAssetLinks: wrongLetters, mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
-      } else {
-        currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: "$namingLetter${letters[randomNumber]}", wrongAssetLinks: wrongLetters, mainData: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
-      }
-    } 
-    else if(totalSteps % 3 == 2 && totalSteps > 10){
-      if(namingLetter == "Uppercase_"){
-        currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: "$namingLetter${letters[randomNumber]}", wrongAssetLinks: wrongLetters, mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
-      } else {
-        currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: "$namingLetter${letters[randomNumber]}", wrongAssetLinks: wrongLetters, mainData: letters[randomNumber].toLowerCase(), onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
-      }
+    else if(totalSteps % 3 == 1 && totalSteps >= 10){
+      currentActivity = TapMultipleObjectsComponent(onCompleted: nextStep, correctAssetLink: "Mixed_${letters[randomNumber]}", wrongAssetLinks: wrongLetters, mainData: letters[randomNumber][0], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
+    }
+    else if(totalSteps % 3 == 2 && totalSteps >= 10){
+      currentActivity = DragDropMultipleObjectsComponent(onCompleted: nextStep, correctAssetLinks: "Mixed_${letters[randomNumber]}", wrongAssetLinks: wrongLetters, mainData: letters[randomNumber][0], onCorrectAction: triggerCorrectFlash, onIncorrectAction: triggerIncorrectFlash, directory: "assets/abc_images/", objectVariation: "Letter",);
     } 
     else {
-      if(namingLetter == "Uppercase_"){
-        currentActivity = TraceComponent(
-          onCompleted: nextStep, 
-          mainData: letters[randomNumber],
-          onCorrectAction: triggerCorrectFlash,
-          objectVariation: "Letter",
-        );
-      } else {
-        currentActivity = TraceComponent(
-          onCompleted: nextStep, 
-          mainData: letters[randomNumber].toLowerCase(),
-          onCorrectAction: triggerCorrectFlash,
-          objectVariation: "Letter",
-        );
-      }    
+      currentActivity = TraceComponent(onCompleted: nextStep, mainData: letters[randomNumber], onCorrectAction: triggerCorrectFlash, objectVariation: "Letter",);
     }
 
+    // Scaffold
     return Scaffold(
+
+      // App Bar
       appBar: AppBar(
         centerTitle: true,
         title: Text("Mixed Letters", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
       ),
+
+      // Body
       body: Container(
+
+        // Background image
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/background_images/colorful_bg.webp"),
             fit: BoxFit.cover,
           )
         ),
+
+        // Middle part opacity change
         child: Center(
           child: Container(
             decoration: BoxDecoration(
@@ -645,7 +601,9 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
                   offset: const Offset(0, 4), // Position of shadow (X, Y)
                 ),
               ],
-            ),           
+            ),
+
+            // Display Activity
             child: !isPaused ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -661,4 +619,6 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
       ),
     );
   }
+
 }
+

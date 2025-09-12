@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/abc/base_page/letters_selection_page.dart';
-import 'package:verbalautism/activities/abc/games_pages/abc_mixed_game.dart';
 import 'package:verbalautism/components/image_activity_card.dart';
 
 class AbcBasePage extends StatefulWidget {
@@ -60,9 +59,9 @@ class _AbcBasePageState extends State<AbcBasePage> {
                 ImageActivityCard(
                   label: "Mixed",
                   image: "assets/abc_images/MixedLettersImage.webp",
-                  onTap: () => Navigator.push(
+                  onTap: onTapCard(
                     context,
-                    MaterialPageRoute(builder: (context) => const AbcMixedGame()),
+                    "Mixed",
                   ),
                 ),
               ],

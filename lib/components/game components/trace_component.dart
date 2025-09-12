@@ -34,7 +34,14 @@ class _TraceComponentState extends State<TraceComponent> {
 
   @override
   void initState() {
-    _ttsService.speak("Trace the ${widget.objectVariation} ${widget.mainData}");
+
+    // Check Mixed Letter
+    if(isMixedLetter()){
+      _ttsService.speak("Trace the ${widget.objectVariation} ${widget.mainData[0]}");
+    } else {
+      _ttsService.speak("Trace the ${widget.objectVariation} ${widget.mainData}");
+    }
+    
     super.initState();
   }
   
@@ -93,6 +100,14 @@ class _TraceComponentState extends State<TraceComponent> {
     return false;
   }
 
+  bool isMixedLetter(){
+    if(widget.objectVariation == "Letter" && widget.mainData.length > 1){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   bool isShape(){
     if(widget.objectVariation == "Shape"){
       shapesMap = {
@@ -115,7 +130,7 @@ class _TraceComponentState extends State<TraceComponent> {
     return Column(
       children: [
         Text(
-          "Trace the ${widget.objectVariation} ${widget.mainData}", 
+          "Trace the ${widget.objectVariation} ${isMixedLetter() ? widget.mainData[0] : widget.mainData}", 
           style: GoogleFonts.ubuntu(
             fontSize: screenWidth <= 660 ? 30 : 40, 
             color: Colors.white
