@@ -42,28 +42,58 @@ class LetterSelectionPage extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              // Random option card
-              _buildLetterCard(
-                context,
-                letter: "Random",
-                onTap: () {
-                  Navigator.push(
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Random option card
+                  _buildLetterCard(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        if (caseType == "Uppercase") {
-                          return const AbcUppercaseGame(selectedLetter: "");
-                        } else if (caseType == "Lowercase") {
-                          return const AbcLowercaseGame(selectedLetter: "");
-                        } else {
-                          return const AbcMixedGame(selectedLetter: "");
-                        }
-                      },
-                    ),
-                  );
-                },
-                isRandom: true,
+                    letter: "Random",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            if (caseType == "Uppercase") {
+                              return const AbcUppercaseGame(selectedLetter: "");
+                            } else if (caseType == "Lowercase") {
+                              return const AbcLowercaseGame(selectedLetter: "");
+                            } else {
+                              return const AbcMixedGame(selectedLetter: "");
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    isRandom: true,
+                  ),
+
+                  // Shuffle option card
+                  _buildLetterCard(
+                    context,
+                    letter: "Shuffle",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            if (caseType == "Uppercase") {
+                              return const AbcUppercaseGame(selectedLetter: "Shuffle");
+                            } else if (caseType == "Lowercase") {
+                              return const AbcLowercaseGame(selectedLetter: "Shuffle");
+                            } else {
+                              return const AbcMixedGame(selectedLetter: "Shuffle");
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    isRandom: true,
+                  ),
+                ]
               ),
+
               const SizedBox(height: 20),
 
               // Letter grid

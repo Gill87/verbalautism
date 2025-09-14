@@ -38,16 +38,34 @@ class _ColorsBasePageState extends State<ColorsBasePage> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    ),
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ColorsGame(selectedColor: "")),
-                    ),
-                    child: Text("Random Color", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        ),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ColorsGame(selectedColor: "")),
+                        ),
+                        child: Text("Random", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
+                      ),
+
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        ),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ColorsGame(selectedColor: "Shuffle")),
+                        ),
+                        child: Text("Shuffle", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
+                      ),
+                    ],
                   ),
               
                   const SizedBox(height: 20),

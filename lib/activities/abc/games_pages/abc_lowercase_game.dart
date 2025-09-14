@@ -25,8 +25,10 @@ class AbcLowercaseGame extends StatefulWidget {
 }
 
 class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
-  List <String> letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  List <String> letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
   List<int> stepDurations = []; // store all durations (in seconds)
+  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+  Set<String> usedWords = {};    // track used words to avoid repetition
 
   // Variables
   int incorrectAnswer = 0;
@@ -34,9 +36,11 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   int displaySteps = 1;
   int totalSteps = 1;
   int round = 1;
+  int gamesPlayedCount = 0;
   final int maxSteps = 30;
   bool isPaused = false;
   bool randomize = false;
+  bool isInitializing = false;
   DateTime? stepStartTime;
   double durationAvg = 0;
   Timer? stepTimer;
@@ -53,28 +57,61 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
 
   @override
   void initState() {
-    if(widget.selectedLetter != "" && randomize == false){
-      // If a letter is selected, find its index
-      randomNumber = letters.indexOf(widget.selectedLetter.toUpperCase());
-      correctIndex = randomNumber;
-      
-      if(randomNumber == -1){
-        randomNumber = random.nextInt(26); // Fallback to a random letter if not found
+    super.initState();
+    _initializeGame();
+    usedWords.add(letters[correctIndex]);
+  }
+
+  void _initializeGame() async {
+
+    // Increment games played count
+    ++gamesPlayedCount;
+
+    setState(() {
+      isInitializing = true;
+    });
+    
+    if (widget.selectedLetter == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      final words = await fetchShuffleWords();
+      print("Words: ########" + words.toString());
+
+      if (words.isNotEmpty) {
+        String chosenWord = words[random.nextInt(words.length)];
+        randomNumber = letters.indexOf(chosenWord);
+        correctIndex = randomNumber;
+      } else {
+        // Fallback if no shuffle words found
+        randomNumber = random.nextInt(26);
+        correctIndex = randomNumber;
+      }
+    } else {
+      if (widget.selectedLetter != "" && randomize == false) {
+        randomNumber = letters.indexOf(widget.selectedLetter);
+        correctIndex = randomNumber;
+        
+        if (randomNumber == -1) {
+          randomNumber = random.nextInt(26);
+          correctIndex = randomNumber;
+        }
+      } else {
+        randomNumber = random.nextInt(26);
         correctIndex = randomNumber;
       }
     }
-    else {
-      // If no letter is selected, choose a random letter
-      randomNumber = random.nextInt(26);
-      correctIndex = randomNumber;
-    }
 
-    // Ensure first trial gets a timer after the first frame is rendered.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      startStepTimer();
+    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
+    
+    setState(() {
+      isInitializing = false;
     });
 
-    super.initState();
+    // Ensure UI updates and start timer
+    if (mounted) {
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startStepTimer();
+      });
+    }
   }
 
   @override
@@ -82,6 +119,31 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
     stepTimer?.cancel(); // Cancel any active timer
     super.dispose();
   }
+
+  Future<List<String>> fetchShuffleWords() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    // read all lowercaseLettersReports for the user
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("lowercaseLettersReports")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final int incorrect = data["incorrect"] ?? 0;
+      final String word = data["word"] ?? "";
+
+      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+        shuffleWordSet.add(word);
+      }
+    }
+
+    return shuffleWordSet.toList();
+  }
+
 
   void screenTimeoutDialog(){
     // Dialog
@@ -444,8 +506,9 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                   displaySteps = 1;
                   stepTimer?.cancel();
                   isPaused = false;
+                  shuffleWordSet.remove(letters[correctIndex]);
                 });
-                initState(); // reset the game state
+                _initializeGame(); // reset the game state
               }
             });
 
@@ -543,6 +606,29 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   
   @override
   Widget build(BuildContext context) {
+    // Show loading screen during initialization
+    if (isInitializing) {
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Lowercase Letters", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white)),
+          backgroundColor: const Color.fromARGB(255, 33, 150, 243),
+        ),
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/background_images/colorful_bg.webp"),
+              fit: BoxFit.cover,
+            )
+          ),
+          child: const Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            ),
+          ),
+        ),
+      );
+    }
 
     // Current Activity Widget
     Widget currentActivity;

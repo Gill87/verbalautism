@@ -41,23 +41,49 @@ class NumberSelectionPage extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              // Random option card
-              _buildNumberCard(
-                context,
-                number: "Random",
-                onTap: () {
-                  Navigator.push(
+
+              // Random and Shuffle buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildNumberCard(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => NumbersGame(
-                        min: min,
-                        max: max,
-                        selectedNumber: -1, // -1 indicates random
-                      ),
-                    ),
-                  );
-                },
-                isRandom: true,
+                    number: "Random",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NumbersGame(
+                            min: min,
+                            max: max,
+                            selectedNumber: -1, // -1 indicates random
+                          ),
+                        ),
+                      );
+                    },
+                    isRandom: true,
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  _buildNumberCard(
+                    context,
+                    number: "Shuffle",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NumbersGame(
+                            min: min,
+                            max: max,
+                            selectedNumber: -2, // -2 indicates shuffle
+                          ),
+                        ),
+                      );
+                    },
+                    isRandom: true,
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               // Numbers grid

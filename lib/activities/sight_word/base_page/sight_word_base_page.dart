@@ -37,16 +37,35 @@ class _SightWordBasePageState extends State<SightWordBasePage> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SightWordGame(selectedSightWord: "")),
-                ),
-                child: Text("Random Sight Word", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SightWordGame(selectedSightWord: "")),
+                    ),
+                    child: Text("Random", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SightWordGame(selectedSightWord: "Shuffle")),
+                    ),
+                    child: Text("Shuffle", style: GoogleFonts.ubuntu(fontSize: 20, color: Colors.white)),
+                  ),
+                ],
               ),
 
               const SizedBox(height: 20,),
