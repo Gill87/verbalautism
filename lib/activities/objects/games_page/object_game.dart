@@ -81,7 +81,6 @@ class _ObjectGameState extends State<ObjectGame> {
   void initState() {
     super.initState();
     _initializeGame();
-    usedWords.add(objects[correctIndex]);
   }
 
   void _initializeGame() async {
@@ -111,6 +110,7 @@ class _ObjectGameState extends State<ObjectGame> {
         randomNumber = objects.indexOf(widget.selectedObject);
         correctIndex = randomNumber;
         
+        // If shuffle clicked but gamesPlayedCount is not 3rd game, pick random
         if (randomNumber == -1) {
           randomNumber = random.nextInt(objects.length);
           correctIndex = randomNumber;
@@ -126,6 +126,8 @@ class _ObjectGameState extends State<ObjectGame> {
     setState(() {
       isInitializing = false;
     });
+
+    usedWords.add(objects[correctIndex]);
 
     // Ensure UI updates and start timer
     if (mounted) {
@@ -627,7 +629,7 @@ class _ObjectGameState extends State<ObjectGame> {
   @override
   Widget build(BuildContext context) {
     if (isInitializing) {
-      const GameLoadingIndicator(titleHeader: "Objects"); 
+      return const GameLoadingIndicator(titleHeader: "Objects"); 
     }
     
     Widget currentActivity;

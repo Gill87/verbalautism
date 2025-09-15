@@ -60,7 +60,6 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   void initState() {
     super.initState();
     _initializeGame();
-    usedWords.add(letters[correctIndex]);
   }
 
   void _initializeGame() async {
@@ -105,6 +104,8 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
     setState(() {
       isInitializing = false;
     });
+
+    usedWords.add(letters[correctIndex]);
 
     // Ensure UI updates and start timer
     if (mounted) {
@@ -608,7 +609,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   Widget build(BuildContext context) {
     // Show loading screen during initialization
     if (isInitializing) {
-      const GameLoadingIndicator(titleHeader: "Lowercase Letters"); 
+      return const GameLoadingIndicator(titleHeader: "Lowercase Letters"); 
     }
 
     // Current Activity Widget

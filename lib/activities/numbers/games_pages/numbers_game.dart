@@ -66,7 +66,6 @@ class _NumbersGameState extends State<NumbersGame> {
   void initState() {
     super.initState();
     initializeGame();
-    usedNumbers.add(numbers[correctIndex]);
   }
 
   void initializeGame() async {
@@ -82,11 +81,11 @@ class _NumbersGameState extends State<NumbersGame> {
       (index) => widget.min + index, // generate
     );
 
-    if(widget.selectedNumber == -2){
+    if(widget.selectedNumber == -2 && gamesPlayedCount % 3 == 0){
       final shuffleNumbersList = await fetchShuffleNumbers();
       print("Words: ########" + shuffleNumbersList.toString());
 
-      if(shuffleNumbersList.isNotEmpty && gamesPlayedCount % 3 == 0){
+      if(shuffleNumbersList.isNotEmpty){
         int chosenNumber = shuffleNumbersList[random.nextInt(shuffleNumbersList.length)];
         randomNumber = chosenNumber;
         correctIndex = randomNumber - widget.min;
@@ -96,10 +95,16 @@ class _NumbersGameState extends State<NumbersGame> {
       }
       print("Running shuffle logic");
     } else {
-      if(widget.selectedNumber != -1 && randomize == false){
-        randomNumber = widget.selectedNumber;
-      } else {
+
+      // If shuffle clicked but not 3rd game, pick random
+      if(widget.selectedNumber == -2){
         randomNumber = generateRandomNumber(widget.min, widget.max);
+      } else {
+        if(widget.selectedNumber != -1 && randomize == false){
+          randomNumber = widget.selectedNumber;
+        } else {
+          randomNumber = generateRandomNumber(widget.min, widget.max);
+        }
       }
       correctIndex = randomNumber - widget.min;
 
@@ -111,6 +116,8 @@ class _NumbersGameState extends State<NumbersGame> {
     setState(() {
       isInitializing = false;
     });
+
+    usedNumbers.add(numbers[correctIndex]);
     
     // Ensure UI updates and start timer
     if (mounted) {
@@ -616,7 +623,7 @@ class _NumbersGameState extends State<NumbersGame> {
   @override
   Widget build(BuildContext context) {
     if (isInitializing) {
-      GameLoadingIndicator(titleHeader: "Numbers ${widget.min} - ${widget.max}"); 
+      return GameLoadingIndicator(titleHeader: "Numbers ${widget.min} - ${widget.max}"); 
     }
     
     Widget currentActivity;

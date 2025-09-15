@@ -117,6 +117,8 @@ class _ColorsGameState extends State<ColorsGame> {
       isInitializing = false;
     });
 
+    usedWords.add(colors[correctIndex]);
+
     // Ensure UI updates and start timer
     if (mounted) {
       setState(() {});
@@ -618,7 +620,7 @@ class _ColorsGameState extends State<ColorsGame> {
   Widget build(BuildContext context) {
 
     if (isInitializing) {
-      const GameLoadingIndicator(titleHeader: "Colors"); 
+      return const GameLoadingIndicator(titleHeader: "Colors"); 
     }
     
     Widget currentActivity;

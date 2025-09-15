@@ -65,7 +65,6 @@ class _ShapesGameState extends State<ShapesGame> {
   void initState() {
     super.initState();
     _initializeGame();
-    usedWords.add(shapes[correctIndex]);
   }
 
   void _initializeGame() async {
@@ -110,6 +109,8 @@ class _ShapesGameState extends State<ShapesGame> {
     setState(() {
       isInitializing = false;
     });
+
+    usedWords.add(shapes[correctIndex]);
 
     // Ensure UI updates and start timer
     if (mounted) {
@@ -611,7 +612,7 @@ class _ShapesGameState extends State<ShapesGame> {
   Widget build(BuildContext context) {
 
     if (isInitializing) {
-      const GameLoadingIndicator(titleHeader: "Shapes"); 
+      return const GameLoadingIndicator(titleHeader: "Shapes"); 
     }
 
     Widget currentActivity;

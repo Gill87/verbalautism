@@ -101,7 +101,6 @@ class _FoodGameState extends State<FoodGame> {
   void initState() {
     super.initState();
     _initializeGame();
-    usedWords.add(foods[correctIndex]);
   }
 
   void _initializeGame() async {
@@ -146,6 +145,8 @@ class _FoodGameState extends State<FoodGame> {
     setState(() {
       isInitializing = false;
     });
+
+    usedWords.add(foods[correctIndex]);
 
     // Ensure UI updates and start timer
     if (mounted) {
@@ -646,7 +647,7 @@ class _FoodGameState extends State<FoodGame> {
   @override
   Widget build(BuildContext context) {
     if (isInitializing) {
-      const GameLoadingIndicator(titleHeader: "Foods"); 
+      return const GameLoadingIndicator(titleHeader: "Foods"); 
     }
     
     Widget currentActivity;

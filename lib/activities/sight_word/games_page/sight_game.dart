@@ -61,7 +61,6 @@ class _SightWordGameState extends State<SightWordGame> {
   void initState() {
     super.initState();
     _initializeGame();
-    usedWords.add(sightWords[correctIndex]);
   }
 
   void _initializeGame() async {
@@ -106,6 +105,8 @@ class _SightWordGameState extends State<SightWordGame> {
     setState(() {
       isInitializing = false;
     });
+    
+    usedWords.add(sightWords[correctIndex]);
 
     // Ensure UI updates and start timer
     if (mounted) {
@@ -610,7 +611,7 @@ class _SightWordGameState extends State<SightWordGame> {
   Widget build(BuildContext context) {
 
     if (isInitializing) {
-      const GameLoadingIndicator(titleHeader: "Sight Words"); 
+      return const GameLoadingIndicator(titleHeader: "Sight Words"); 
     }
     
     Widget currentActivity;

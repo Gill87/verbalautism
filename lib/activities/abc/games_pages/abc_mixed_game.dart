@@ -60,7 +60,6 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   void initState() {
     super.initState();
     _initializeGame();
-    usedWords.add(letters[correctIndex]);
   }
 
   void _initializeGame() async {
@@ -105,6 +104,8 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
     setState(() {
       isInitializing = false;
     });
+
+    usedWords.add(letters[correctIndex]);
 
     // Ensure UI updates and start timer
     if (mounted) {
@@ -607,7 +608,7 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   @override
   Widget build(BuildContext context) {
     if (isInitializing) {
-      const GameLoadingIndicator(titleHeader: "Mixed Letters"); 
+      return const GameLoadingIndicator(titleHeader: "Mixed Letters"); 
     }
 
     // Current Activity Widget

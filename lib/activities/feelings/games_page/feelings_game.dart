@@ -66,7 +66,6 @@ class _FeelingsGameState extends State<FeelingsGame> {
   void initState() {
     super.initState();
     _initializeGame();
-    usedWords.add(feelings[correctIndex]);
   }
 
   void _initializeGame() async {
@@ -111,6 +110,8 @@ class _FeelingsGameState extends State<FeelingsGame> {
     setState(() {
       isInitializing = false;
     });
+
+    usedWords.add(feelings[correctIndex]);
 
     // Ensure UI updates and start timer
     if (mounted) {
@@ -611,7 +612,7 @@ class _FeelingsGameState extends State<FeelingsGame> {
   Widget build(BuildContext context) {
 
     if (isInitializing) {
-      const GameLoadingIndicator(titleHeader: "Feelings"); 
+      return const GameLoadingIndicator(titleHeader: "Feelings"); 
     }
     
     Widget currentActivity;

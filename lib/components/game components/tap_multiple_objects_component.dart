@@ -231,20 +231,18 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
                               fit: BoxFit.contain,
                             ),
                           )
-                          : Padding(      // Only for Colors Tap
-                              padding: const EdgeInsets.all(10.0),
-                              child: Container(
-                                width: screenWidth * 0.1,
-                                height: screenHeight * 0.2,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 2,
-                                  ),
-                                  color: colorMap[object.toLowerCase()],
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
+                          : Container(
+                            width: screenWidth * 0.15 * 1.5,
+                            height: screenHeight * 0.25 * 1.5,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 2,
                               ),
+                              color: colorMap[object.toLowerCase()],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            
                           )
                           ),
                       ),

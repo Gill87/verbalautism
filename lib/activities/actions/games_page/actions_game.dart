@@ -119,6 +119,8 @@ class _ActionsGameState extends State<ActionsGame> {
     setState(() {
       isInitializing = false;
     });
+    
+    usedWords.add(actions[correctIndex]);
 
     // Ensure UI updates and start timer
     if (mounted) {
@@ -618,7 +620,7 @@ class _ActionsGameState extends State<ActionsGame> {
   Widget build(BuildContext context) {
 
     if (isInitializing) {
-      const GameLoadingIndicator(titleHeader: "Actions"); 
+      return const GameLoadingIndicator(titleHeader: "Actions"); 
     }
     
     Widget currentActivity;

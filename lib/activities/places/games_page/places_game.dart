@@ -77,7 +77,6 @@ class _PlacesGameState extends State<PlacesGame> {
   void initState() {
     super.initState();
     _initializeGame();
-    usedWords.add(places[correctIndex]);
   }
 
   void _initializeGame() async {
@@ -122,6 +121,8 @@ class _PlacesGameState extends State<PlacesGame> {
     setState(() {
       isInitializing = false;
     });
+    
+    usedWords.add(places[correctIndex]);
 
     // Ensure UI updates and start timer
     if (mounted) {
@@ -623,7 +624,7 @@ class _PlacesGameState extends State<PlacesGame> {
   Widget build(BuildContext context) {
     
     if (isInitializing) {
-      const GameLoadingIndicator(titleHeader: "Places"); 
+      return const GameLoadingIndicator(titleHeader: "Places"); 
     }
 
     Widget currentActivity;

@@ -288,21 +288,18 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
           // height: imageHeight(),
           fit: BoxFit.contain,
         )
-      : Padding(      // Only for Colors Drag and Drop
-          padding: const EdgeInsets.all(10.0),
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.1,
-            height: MediaQuery.of(context).size.height * 0.2,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.white,
-                width: 2,
-              ),
-              color: colorMap[assetLink.toLowerCase()],
-              borderRadius: BorderRadius.circular(10),
-            ),
+      : Container(
+        width: imageWidth(),
+        height: MediaQuery.of(context).size.height * 0.2,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.white,
+            width: 2,
           ),
-        );
+          color: colorMap[assetLink.toLowerCase()],
+          borderRadius: BorderRadius.circular(10),
+        ),
+      );
 
     final animatedObjectImage = AnimatedBuilder(
       animation: _animation,

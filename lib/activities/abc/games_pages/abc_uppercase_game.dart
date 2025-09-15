@@ -107,6 +107,8 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
       isInitializing = false;
     });
 
+    usedWords.add(letters[correctIndex]);
+
     // Ensure UI updates and start timer
     if (mounted) {
       setState(() {});
@@ -604,7 +606,7 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
   @override
   Widget build(BuildContext context) {
     if (isInitializing) {
-      const GameLoadingIndicator(titleHeader: "Uppercase Letters"); 
+      return const GameLoadingIndicator(titleHeader: "Uppercase Letters"); 
     }
     
     Widget currentActivity;
