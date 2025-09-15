@@ -10,6 +10,7 @@ import 'package:verbalautism/components/game%20components/drag_drop_multiple_obj
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/trace_component.dart';
+import 'package:verbalautism/components/game_loading_indicator.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class AbcMixedGame extends StatefulWidget {
@@ -27,6 +28,8 @@ class AbcMixedGame extends StatefulWidget {
 class _AbcMixedGameState extends State<AbcMixedGame> {
   List <String> letters = ['Aa', 'Bb', 'Cc', 'Dd', 'Ee', 'Ff', 'Gg', 'Hh', 'Ii', 'Jj', 'Kk', 'Ll', 'Mm', 'Nn', 'Oo', 'Pp', 'Qq', 'Rr', 'Ss', 'Tt', 'Uu', 'Vv', 'Ww', 'Xx', 'Yy', 'Zz'];
   List<int> stepDurations = []; // store all durations (in seconds)
+  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+  Set<String> usedWords = {};    // track used words to avoid repetition
 
   // Variables
   int incorrectAnswer = 0;
@@ -35,8 +38,10 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   int totalSteps = 1;
   int round = 1;
   final int maxSteps = 30;
+  int gamesPlayedCount = 0;
   bool isPaused = false;
   bool randomize = false;
+  bool isInitializing = false;
   DateTime? stepStartTime;
   double durationAvg = 0;
   Timer? stepTimer;
@@ -51,30 +56,63 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   late int correctIndex;
   late List <String> wrongLetters;
 
-  @override
+ @override
   void initState() {
-    if(widget.selectedLetter != "" && randomize == false){
-      // If a letter is selected, find its index
-      randomNumber = letters.indexOf(widget.selectedLetter);
-      correctIndex = randomNumber;
-      
-      if(randomNumber == -1){
-        randomNumber = random.nextInt(26); // Fallback to a random letter if not found
+    super.initState();
+    _initializeGame();
+    usedWords.add(letters[correctIndex]);
+  }
+
+  void _initializeGame() async {
+
+    // Increment games played count
+    ++gamesPlayedCount;
+
+    setState(() {
+      isInitializing = true;
+    });
+    
+    if (widget.selectedLetter == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      final words = await fetchShuffleWords();
+      print("Words: ########" + words.toString());
+
+      if (words.isNotEmpty) {
+        String chosenWord = words[random.nextInt(words.length)];
+        randomNumber = letters.indexOf(chosenWord);
+        correctIndex = randomNumber;
+      } else {
+        // Fallback if no shuffle words found
+        randomNumber = random.nextInt(letters.length);
+        correctIndex = randomNumber;
+      }
+    } else {
+      if (widget.selectedLetter != "" && randomize == false) {
+        randomNumber = letters.indexOf(widget.selectedLetter);
+        correctIndex = randomNumber;
+        
+        if (randomNumber == -1) {
+          randomNumber = random.nextInt(letters.length);
+          correctIndex = randomNumber;
+        }
+      } else {
+        randomNumber = random.nextInt(letters.length);
         correctIndex = randomNumber;
       }
     }
-    else {
-      // If no letter is selected, choose a random letter
-      randomNumber = random.nextInt(26);
-      correctIndex = randomNumber;
-    }
 
-    // Ensure first trial gets a timer after the first frame is rendered.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      startStepTimer();
+    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
+    
+    setState(() {
+      isInitializing = false;
     });
 
-    super.initState();
+    // Ensure UI updates and start timer
+    if (mounted) {
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startStepTimer();
+      });
+    }
   }
 
   @override
@@ -82,6 +120,31 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
     stepTimer?.cancel(); // Cancel any active timer
     super.dispose();
   }
+
+  Future<List<String>> fetchShuffleWords() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    // read all lowercaseLettersReports for the user
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("mixedLettersReports")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final int incorrect = data["incorrect"] ?? 0;
+      final String word = data["word"] ?? "";
+
+      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+        shuffleWordSet.add(word);
+      }
+    }
+
+    return shuffleWordSet.toList();
+  }
+
 
   void screenTimeoutDialog(){
     // Dialog
@@ -543,6 +606,9 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   
   @override
   Widget build(BuildContext context) {
+    if (isInitializing) {
+      const GameLoadingIndicator(titleHeader: "Mixed Letters"); 
+    }
 
     // Current Activity Widget
     Widget currentActivity;

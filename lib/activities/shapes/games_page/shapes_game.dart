@@ -10,6 +10,7 @@ import 'package:verbalautism/components/game%20components/drag_drop_multiple_obj
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/trace_component.dart';
+import 'package:verbalautism/components/game_loading_indicator.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class ShapesGame extends StatefulWidget {
@@ -32,8 +33,8 @@ class _ShapesGameState extends State<ShapesGame> {
     'Rectangle',
   ];
   List<int> stepDurations = []; // store all durations (in seconds)
-
-  
+  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+  Set<String> usedWords = {};    // track used words to avoid repetition
 
   // Variables
   int displaySteps = 1;
@@ -41,9 +42,11 @@ class _ShapesGameState extends State<ShapesGame> {
   int incorrectAnswer = 0;
   int totalSteps = 1;
   int round = 1;
+  int gamesPlayedCount = 0;
   final int maxSteps = 30;
   bool isPaused = false;
   bool randomize = false;
+  bool isInitializing = false;
   DateTime? stepStartTime;
   double durationAvg = 0;
   Timer? stepTimer;
@@ -60,28 +63,91 @@ class _ShapesGameState extends State<ShapesGame> {
 
   @override
   void initState() {
-    if(widget.selectedShape != "" && randomize == false){
-      // If a shape is selected, find its index
-      randomNumber = shapes.indexOf(widget.selectedShape);
-      correctIndex = randomNumber;
+    super.initState();
+    _initializeGame();
+    usedWords.add(shapes[correctIndex]);
+  }
 
-      if(randomNumber == -1){
-        randomNumber = random.nextInt(3); // Fallback to a random shape if not found
+  void _initializeGame() async {
+
+    // Increment games played count
+    ++gamesPlayedCount;
+
+    setState(() {
+      isInitializing = true;
+    });
+    
+    if (widget.selectedShape == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      final words = await fetchShuffleWords();
+      print("Words: ########" + words.toString());
+
+      if (words.isNotEmpty) {
+        String chosenWord = words[random.nextInt(words.length)];
+        randomNumber = shapes.indexOf(chosenWord);
+        correctIndex = randomNumber;
+      } else {
+        // Fallback if no shuffle words found
+        randomNumber = random.nextInt(shapes.length);
+        correctIndex = randomNumber;
+      }
+    } else {
+      if (widget.selectedShape != "" && randomize == false) {
+        randomNumber = shapes.indexOf(widget.selectedShape);
+        correctIndex = randomNumber;
+        
+        if (randomNumber == -1) {
+          randomNumber = random.nextInt(shapes.length);
+          correctIndex = randomNumber;
+        }
+      } else {
+        randomNumber = random.nextInt(shapes.length);
         correctIndex = randomNumber;
       }
     }
-    else {
-      // If no shape is selected, choose a random shape
-      randomNumber = random.nextInt(3);
-      correctIndex = randomNumber;
-    }
+
+    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
     
-    super.initState();
+    setState(() {
+      isInitializing = false;
+    });
+
+    // Ensure UI updates and start timer
+    if (mounted) {
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startStepTimer();
+      });
+    }
   }
 
   @override
   void dispose() {
+    stepTimer?.cancel(); // Cancel any active timer
     super.dispose();
+  }
+
+  Future<List<String>> fetchShuffleWords() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    // read all lowercaseshapesReports for the user
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("shapesReports")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final int incorrect = data["incorrect"] ?? 0;
+      final String word = data["word"] ?? "";
+
+      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+        shuffleWordSet.add(word);
+      }
+    }
+
+    return shuffleWordSet.toList();
   }
 
   void screenTimeoutDialog(){
@@ -543,6 +609,11 @@ class _ShapesGameState extends State<ShapesGame> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (isInitializing) {
+      const GameLoadingIndicator(titleHeader: "Shapes"); 
+    }
+
     Widget currentActivity;
     
     if (totalSteps % 3 == 1 && totalSteps <= 10) {

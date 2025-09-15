@@ -9,6 +9,7 @@ import 'package:verbalautism/components/game%20components/drag_drop_component.da
 import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
+import 'package:verbalautism/components/game_loading_indicator.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class ColorsGame extends StatefulWidget {
@@ -26,8 +27,22 @@ class ColorsGame extends StatefulWidget {
 
 class _ColorsGameState extends State<ColorsGame> {
   // List
-  late List<String> colors;
+  List<String> colors = [
+    "Red",
+    "Blue",
+    "Green",
+    "Yellow",
+    "Orange",
+    "Purple",
+    "Pink",
+    "Brown",
+    "Black",
+    "White"
+  ];
+
   List<int> stepDurations = []; // store all durations (in seconds)
+  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+  Set<String> usedWords = {};    // track used words to avoid repetition
 
   // Variables
   int incorrectAnswer = 0;
@@ -35,7 +50,9 @@ class _ColorsGameState extends State<ColorsGame> {
   int displaySteps = 1;
   int totalSteps = 1;
   int round = 1;
+  int gamesPlayedCount = 0; // Track number of games played
   final int maxSteps = 30;
+  bool isInitializing = false; // Track if the game is initializing
   bool isPaused = false;
   bool randomize = false;
   DateTime? stepStartTime;
@@ -52,38 +69,91 @@ class _ColorsGameState extends State<ColorsGame> {
 
   @override
   void initState() {
-    colors = [
-      "Red",
-      "Blue",
-      "Green",
-      "Yellow",
-      "Orange",
-      "Purple",
-      "Pink",
-      "Brown",
-      "Black",
-      "White"
-    ];
+    super.initState();
+    _initializeGame();
+    usedWords.add(colors[correctIndex]);
+  }
 
-    if(widget.selectedColor.isNotEmpty && randomize == false) {
-      correctIndex = colors.indexOf(widget.selectedColor);
-      randomNumber = correctIndex;
+  void _initializeGame() async {
 
-      if(correctIndex == -1) {
+    // Increment games played count
+    ++gamesPlayedCount;
+
+    setState(() {
+      isInitializing = true;
+    });
+    
+    if (widget.selectedColor == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      final words = await fetchShuffleWords();
+      print("Words: ########" + words.toString());
+
+      if (words.isNotEmpty) {
+        String chosenWord = words[random.nextInt(words.length)];
+        randomNumber = colors.indexOf(chosenWord);
+        correctIndex = randomNumber;
+      } else {
+        // Fallback if no shuffle words found
         randomNumber = random.nextInt(colors.length);
         correctIndex = randomNumber;
       }
     } else {
-      randomNumber = random.nextInt(colors.length);
-      correctIndex = randomNumber;
+      if (widget.selectedColor != "" && randomize == false) {
+        randomNumber = colors.indexOf(widget.selectedColor);
+        correctIndex = randomNumber;
+        
+        if (randomNumber == -1) {
+          randomNumber = random.nextInt(colors.length);
+          correctIndex = randomNumber;
+        }
+      } else {
+        randomNumber = random.nextInt(colors.length);
+        correctIndex = randomNumber;
+      }
     }
-    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
+    
+    setState(() {
+      isInitializing = false;
+    });
+
+    // Ensure UI updates and start timer
+    if (mounted) {
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startStepTimer();
+      });
+    }
   }
 
   @override
   void dispose() {
-    // Clean up any resources
+    stepTimer?.cancel(); // Cancel any active timer
     super.dispose();
+  }
+
+  Future<List<String>> fetchShuffleWords() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    // read all lowercasecolorsReports for the user
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("colorsReports")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final int incorrect = data["incorrect"] ?? 0;
+      final String word = data["word"] ?? "";
+
+      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+        shuffleWordSet.add(word);
+      }
+    }
+
+    return shuffleWordSet.toList();
   }
 
   void screenTimeoutDialog(){
@@ -546,6 +616,10 @@ class _ColorsGameState extends State<ColorsGame> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (isInitializing) {
+      const GameLoadingIndicator(titleHeader: "Colors"); 
+    }
     
     Widget currentActivity;
     

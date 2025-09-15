@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/activities/numbers/base_page/numbers_selection_page.dart';
+import 'package:verbalautism/activities/numbers/games_pages/numbers_game.dart';
 import 'package:verbalautism/components/animations/animated_card.dart';
 
 class Numbers extends StatelessWidget {
@@ -31,71 +32,95 @@ class Numbers extends StatelessWidget {
             minHeight: MediaQuery.of(context).size.height - AppBar().preferredSize.height - MediaQuery.of(context).padding.top,
           ),
           padding: const EdgeInsets.all(16),
-          child: Center(
-            child: Wrap(
-              spacing: 20,
-              runSpacing: 20,
-              alignment: WrapAlignment.center,
-              children: [
-                _buildCard(
-                  context,
-                  label: "0 - 9",
-                  onTap: onTapCard(context, "0-9", 0, 9),
+          child: Column(
+            children: [
+
+              _buildCard(
+                context,
+                label: "Shuffle",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NumbersGame(
+                        min: 0,
+                        max: 99,
+                        selectedNumber: -2, // -2 indicates shuffle
+                      ),
+                    ),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 20),
+
+              Center(
+                child: Wrap(
+                  spacing: 20,
+                  runSpacing: 20,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    _buildCard(
+                      context,
+                      label: "0 - 9",
+                      onTap: onTapCard(context, "0-9", 0, 9),
+                    ),
+                    _buildCard(
+                      context,
+                      label: "10 - 19",
+                      onTap: onTapCard(context, "10-19", 10, 19),
+                    ),
+                    _buildCard(
+                      context,
+                      label: "20 - 29",
+                      onTap: onTapCard(context, "20-29", 20, 29),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "30 - 39",
+                      onTap: onTapCard(context, "30-39", 30, 39),
+                    ),
+                    
+                    _buildCard(
+                      context,
+                      label: "40 - 49",
+                      onTap: onTapCard(context, "40-49", 40, 49),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "50 - 59",
+                      onTap: onTapCard(context, "50-59", 50, 59),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "60 - 69",
+                      onTap: onTapCard(context, "60-69", 60, 69),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "70 - 79",
+                      onTap: onTapCard(context, "70-79", 70, 79),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "80 - 89",
+                      onTap: onTapCard(context, "80-89", 80, 89),
+                    ),
+                      
+                    _buildCard(
+                      context,
+                      label: "90 - 99",
+                      onTap: onTapCard(context, "90-99", 90, 99),
+                    ),
+                  ],
                 ),
-                _buildCard(
-                  context,
-                  label: "10 - 19",
-                  onTap: onTapCard(context, "10-19", 10, 19),
-                ),
-                _buildCard(
-                  context,
-                  label: "20 - 29",
-                  onTap: onTapCard(context, "20-29", 20, 29),
-                ),
-        
-                _buildCard(
-                  context,
-                  label: "30 - 39",
-                  onTap: onTapCard(context, "30-39", 30, 39),
-                ),
-                
-                _buildCard(
-                  context,
-                  label: "40 - 49",
-                  onTap: onTapCard(context, "40-49", 40, 49),
-                ),
-        
-                _buildCard(
-                  context,
-                  label: "50 - 59",
-                  onTap: onTapCard(context, "50-59", 50, 59),
-                ),
-        
-                _buildCard(
-                  context,
-                  label: "60 - 69",
-                  onTap: onTapCard(context, "60-69", 60, 69),
-                ),
-        
-                _buildCard(
-                  context,
-                  label: "70 - 79",
-                  onTap: onTapCard(context, "70-79", 70, 79),
-                ),
-        
-                _buildCard(
-                  context,
-                  label: "80 - 89",
-                  onTap: onTapCard(context, "80-89", 80, 89),
-                ),
-        
-                _buildCard(
-                  context,
-                  label: "90 - 99",
-                  onTap: onTapCard(context, "90-99", 90, 99),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -108,11 +133,11 @@ class Numbers extends StatelessWidget {
       onTap: onTap,
       child: Card(
         elevation: 10,
-        color: Colors.black,
+        color: label == "Shuffle" ? Colors.orange : Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
           width: 150,
-          height: 150,
+          height: label == "Shuffle" ? 65 : 150,
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

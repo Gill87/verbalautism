@@ -9,6 +9,7 @@ import 'package:verbalautism/components/game%20components/drag_drop_component.da
 import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
+import 'package:verbalautism/components/game_loading_indicator.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class PlacesGame extends StatefulWidget {
@@ -25,8 +26,21 @@ class PlacesGame extends StatefulWidget {
 
 class _PlacesGameState extends State<PlacesGame> {
   // List
-  late List<String> places;
+  List<String> places = [
+    "Airport",
+    "Fire Station",
+    "Grocery Store",
+    "Hospital",
+    "Library",
+    "Mall",
+    "Police Station",
+    "Post Office",
+    "School",
+    "Barn",
+  ];
   List<int> stepDurations = []; // store all durations (in seconds)
+  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+  Set<String> usedWords = {};    // track used words to avoid repetition
 
   // Variables
   int displaySteps = 1;
@@ -35,8 +49,10 @@ class _PlacesGameState extends State<PlacesGame> {
   int totalSteps = 1;
   int round = 1;
   final int maxSteps = 30;
+  int gamesPlayedCount = 0;
   bool isPaused = false;
   bool randomize = false;
+  bool isInitializing = false;
   DateTime? stepStartTime;
   double durationAvg = 0;
   Timer? stepTimer;
@@ -59,39 +75,92 @@ class _PlacesGameState extends State<PlacesGame> {
 
   @override
   void initState() {
-    places = [
-      "Airport",
-      "Fire Station",
-      "Grocery Store",
-      "Hospital",
-      "Library",
-      "Mall",
-      "Police Station",
-      "Post Office",
-      "School",
-      "Barn",
-    ];
+    super.initState();
+    _initializeGame();
+    usedWords.add(places[correctIndex]);
+  }
 
-    if(widget.selectedPlace.isNotEmpty && randomize == false) {
-      correctIndex = places.indexOf(widget.selectedPlace);
-      randomNumber = correctIndex;
+  void _initializeGame() async {
 
-      if(correctIndex == -1) {
+    // Increment games played count
+    ++gamesPlayedCount;
+
+    setState(() {
+      isInitializing = true;
+    });
+    
+    if (widget.selectedPlace == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      final words = await fetchShuffleWords();
+      print("Words: ########" + words.toString());
+
+      if (words.isNotEmpty) {
+        String chosenWord = words[random.nextInt(words.length)];
+        randomNumber = places.indexOf(chosenWord);
+        correctIndex = randomNumber;
+      } else {
+        // Fallback if no shuffle words found
         randomNumber = random.nextInt(places.length);
         correctIndex = randomNumber;
       }
     } else {
-      randomNumber = random.nextInt(places.length);
-      correctIndex = randomNumber;
+      if (widget.selectedPlace != "" && randomize == false) {
+        randomNumber = places.indexOf(widget.selectedPlace);
+        correctIndex = randomNumber;
+        
+        if (randomNumber == -1) {
+          randomNumber = random.nextInt(places.length);
+          correctIndex = randomNumber;
+        }
+      } else {
+        randomNumber = random.nextInt(places.length);
+        correctIndex = randomNumber;
+      }
     }
-    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
+    
+    setState(() {
+      isInitializing = false;
+    });
+
+    // Ensure UI updates and start timer
+    if (mounted) {
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startStepTimer();
+      });
+    }
   }
 
   @override
   void dispose() {
+    stepTimer?.cancel(); // Cancel any active timer
     super.dispose();
   }
 
+  Future<List<String>> fetchShuffleWords() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    // read all lowercaseplacesReports for the user
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("placesReports")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final int incorrect = data["incorrect"] ?? 0;
+      final String word = data["word"] ?? "";
+
+      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+        shuffleWordSet.add(word);
+      }
+    }
+
+    return shuffleWordSet.toList();
+  }
   void screenTimeoutDialog(){
     // Dialog
     showDialog(
@@ -553,6 +622,10 @@ class _PlacesGameState extends State<PlacesGame> {
   @override
   Widget build(BuildContext context) {
     
+    if (isInitializing) {
+      const GameLoadingIndicator(titleHeader: "Places"); 
+    }
+
     Widget currentActivity;
     
     if (totalSteps % 2 == 1 && totalSteps <= 10) {

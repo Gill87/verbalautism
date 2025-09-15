@@ -10,6 +10,7 @@ import 'package:verbalautism/components/game%20components/drag_drop_multiple_obj
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/trace_component.dart';
+import 'package:verbalautism/components/game_loading_indicator.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class AbcLowercaseGame extends StatefulWidget {
@@ -81,7 +82,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
         correctIndex = randomNumber;
       } else {
         // Fallback if no shuffle words found
-        randomNumber = random.nextInt(26);
+        randomNumber = random.nextInt(letters.length);
         correctIndex = randomNumber;
       }
     } else {
@@ -90,11 +91,11 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
         correctIndex = randomNumber;
         
         if (randomNumber == -1) {
-          randomNumber = random.nextInt(26);
+          randomNumber = random.nextInt(letters.length);
           correctIndex = randomNumber;
         }
       } else {
-        randomNumber = random.nextInt(26);
+        randomNumber = random.nextInt(letters.length);
         correctIndex = randomNumber;
       }
     }
@@ -506,7 +507,6 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
                   displaySteps = 1;
                   stepTimer?.cancel();
                   isPaused = false;
-                  shuffleWordSet.remove(letters[correctIndex]);
                 });
                 _initializeGame(); // reset the game state
               }
@@ -608,26 +608,7 @@ class _AbcLowercaseGameState extends State<AbcLowercaseGame> {
   Widget build(BuildContext context) {
     // Show loading screen during initialization
     if (isInitializing) {
-      return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("Lowercase Letters", style: GoogleFonts.ubuntu(fontSize:24, fontWeight: FontWeight.bold, color: Colors.white)),
-          backgroundColor: const Color.fromARGB(255, 33, 150, 243),
-        ),
-        body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/background_images/colorful_bg.webp"),
-              fit: BoxFit.cover,
-            )
-          ),
-          child: const Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-            ),
-          ),
-        ),
-      );
+      const GameLoadingIndicator(titleHeader: "Lowercase Letters"); 
     }
 
     // Current Activity Widget

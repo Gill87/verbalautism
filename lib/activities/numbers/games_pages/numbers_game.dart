@@ -9,6 +9,7 @@ import 'package:verbalautism/components/game%20components/drag_drop_multiple_obj
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/trace_component.dart';
+import 'package:verbalautism/components/game_loading_indicator.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class NumbersGame extends StatefulWidget {
@@ -32,6 +33,8 @@ class _NumbersGameState extends State<NumbersGame> {
   // List
   late List <int> numbers;
   List<int> stepDurations = []; // store all durations (in seconds)
+  Set<int> usedNumbers = {};
+  Set<int> shuffleNumberSet = {};
 
   // Variables
   int incorrectAnswer = 0;
@@ -39,8 +42,10 @@ class _NumbersGameState extends State<NumbersGame> {
   int displaySteps = 1;
   int totalSteps = 1;
   int round = 1;
+  int gamesPlayedCount = 0;
   final int maxSteps = 30;
   bool isPaused = false;
+  bool isInitializing = false;
   bool randomize = false;
   DateTime? stepStartTime;
   double durationAvg = 0;
@@ -59,25 +64,91 @@ class _NumbersGameState extends State<NumbersGame> {
   
   @override
   void initState() {
+    super.initState();
+    initializeGame();
+    usedNumbers.add(numbers[correctIndex]);
+  }
+
+  void initializeGame() async {
+
+    ++gamesPlayedCount;
+
+    setState(() {
+      isInitializing = true;
+    });
+
     numbers = List.generate(
       (widget.max - widget.min + 1), // length
       (index) => widget.min + index, // generate
     );
 
-    if(widget.selectedNumber != -1 && randomize == false){
-      randomNumber = widget.selectedNumber;
+    if(widget.selectedNumber == -2){
+      final shuffleNumbersList = await fetchShuffleNumbers();
+      print("Words: ########" + shuffleNumbersList.toString());
+
+      if(shuffleNumbersList.isNotEmpty && gamesPlayedCount % 3 == 0){
+        int chosenNumber = shuffleNumbersList[random.nextInt(shuffleNumbersList.length)];
+        randomNumber = chosenNumber;
+        correctIndex = randomNumber - widget.min;
+      } else {
+        randomNumber = generateRandomNumber(widget.min, widget.max);
+        correctIndex = randomNumber - widget.min;
+      }
+      print("Running shuffle logic");
     } else {
-      randomNumber = generateRandomNumber(widget.min, widget.max);
+      if(widget.selectedNumber != -1 && randomize == false){
+        randomNumber = widget.selectedNumber;
+      } else {
+        randomNumber = generateRandomNumber(widget.min, widget.max);
+      }
+      correctIndex = randomNumber - widget.min;
+
+      print("Running normal logic");
     }
 
-    correctIndex = randomNumber - widget.min;
+    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
 
-    super.initState();
+    setState(() {
+      isInitializing = false;
+    });
+    
+    // Ensure UI updates and start timer
+    if (mounted) {
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startStepTimer();
+      });
+    }
   }
 
   @override
   void dispose(){
     super.dispose();
+    stepTimer?.cancel();
+  }
+
+  Future<List<int>> fetchShuffleNumbers() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    // read all lowercaseLettersReports for the user
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("numbersReports")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final int incorrect = data["incorrect"] ?? 0;
+      final int number = data["word"] ?? -2;
+
+      if (incorrect > 2 && number != -2 && !usedNumbers.contains(number)) {
+        shuffleNumberSet.add(number);
+      }
+    }
+
+    return shuffleNumberSet.toList();
   }
 
   void screenTimeoutDialog(){
@@ -544,7 +615,10 @@ class _NumbersGameState extends State<NumbersGame> {
 
   @override
   Widget build(BuildContext context) {
-
+    if (isInitializing) {
+      GameLoadingIndicator(titleHeader: "Numbers ${widget.min} - ${widget.max}"); 
+    }
+    
     Widget currentActivity;
     
     if (totalSteps % 3 == 1 && totalSteps <= 10) {

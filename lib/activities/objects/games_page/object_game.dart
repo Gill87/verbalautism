@@ -9,6 +9,7 @@ import 'package:verbalautism/components/game%20components/drag_drop_component.da
 import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
+import 'package:verbalautism/components/game_loading_indicator.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class ObjectGame extends StatefulWidget {
@@ -25,8 +26,24 @@ class ObjectGame extends StatefulWidget {
 
 class _ObjectGameState extends State<ObjectGame> {
   // List
-  late List<String> objects;
+  List<String> objects = [
+    "Book",
+    "Backpack",
+    "Car",
+    "Clock",
+    "Computer",
+    "Crayon",
+    "Pen",
+    "Pencil",
+    "Scissors",
+    "TV",
+    "Ruler",
+    "Chair",
+    "Teddy Bear",
+  ];
   List<int> stepDurations = []; // store all durations (in seconds)
+  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+  Set<String> usedWords = {};    // track used words to avoid repetition
 
   // Variables
   int incorrectAnswer = 0;
@@ -34,7 +51,9 @@ class _ObjectGameState extends State<ObjectGame> {
   int displaySteps = 1;
   int totalSteps = 1;
   int round = 1;
+  int gamesPlayedCount = 0;
   final int maxSteps = 30;
+  bool isInitializing = true;
   bool isPaused = false;
   bool randomize = false;
   DateTime? stepStartTime;
@@ -60,40 +79,91 @@ class _ObjectGameState extends State<ObjectGame> {
 
   @override
   void initState() {
-    objects = [
-      "Book",
-      "Backpack",
-      "Car",
-      "Clock",
-      "Computer",
-      "Crayon",
-      "Pen",
-      "Pencil",
-      "Scissors",
-      "TV",
-      "Ruler",
-      "Chair",
-      "Teddy Bear",
-    ];
+    super.initState();
+    _initializeGame();
+    usedWords.add(objects[correctIndex]);
+  }
 
-    if(widget.selectedObject.isNotEmpty && randomize == false) {
-      correctIndex = objects.indexOf(widget.selectedObject);
-      randomNumber = correctIndex;
+  void _initializeGame() async {
 
-      if(correctIndex == -1) {
+    // Increment games played count
+    ++gamesPlayedCount;
+
+    setState(() {
+      isInitializing = true;
+    });
+    
+    if (widget.selectedObject == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      final words = await fetchShuffleWords();
+      print("Words: ########" + words.toString());
+
+      if (words.isNotEmpty) {
+        String chosenWord = words[random.nextInt(words.length)];
+        randomNumber = objects.indexOf(chosenWord);
+        correctIndex = randomNumber;
+      } else {
+        // Fallback if no shuffle words found
         randomNumber = random.nextInt(objects.length);
         correctIndex = randomNumber;
       }
     } else {
-      randomNumber = random.nextInt(objects.length);
-      correctIndex = randomNumber;
+      if (widget.selectedObject != "" && randomize == false) {
+        randomNumber = objects.indexOf(widget.selectedObject);
+        correctIndex = randomNumber;
+        
+        if (randomNumber == -1) {
+          randomNumber = random.nextInt(objects.length);
+          correctIndex = randomNumber;
+        }
+      } else {
+        randomNumber = random.nextInt(objects.length);
+        correctIndex = randomNumber;
+      }
     }
-    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
+    
+    setState(() {
+      isInitializing = false;
+    });
+
+    // Ensure UI updates and start timer
+    if (mounted) {
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startStepTimer();
+      });
+    }
   }
 
   @override
   void dispose() {
+    stepTimer?.cancel(); // Cancel any active timer
     super.dispose();
+  }
+
+  Future<List<String>> fetchShuffleWords() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    // read all lowercaseobjectsReports for the user
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("objectsReports")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final int incorrect = data["incorrect"] ?? 0;
+      final String word = data["word"] ?? "";
+
+      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+        shuffleWordSet.add(word);
+      }
+    }
+
+    return shuffleWordSet.toList();
   }
 
   void screenTimeoutDialog(){
@@ -556,6 +626,9 @@ class _ObjectGameState extends State<ObjectGame> {
 
   @override
   Widget build(BuildContext context) {
+    if (isInitializing) {
+      const GameLoadingIndicator(titleHeader: "Objects"); 
+    }
     
     Widget currentActivity;
     

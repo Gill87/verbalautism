@@ -8,6 +8,7 @@ import 'package:verbalautism/components/game%20components/drag_drop_component.da
 import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
+import 'package:verbalautism/components/game_loading_indicator.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class SightWordGame extends StatefulWidget {
@@ -24,8 +25,14 @@ class SightWordGame extends StatefulWidget {
 
 class _SightWordGameState extends State<SightWordGame> {
   // List
-  late List<String> sightWords;
+  List<String> sightWords = [
+    "And", "Can", "For", "Is", "It", "Me", "See", "We", "You",
+    "By", "Do", "Give", "From", "Go", "Of", "On", "This", "That",
+    "Will", "With", "Use", "Help", "Us", "Made", "Or", "Tell"
+  ];
   List<int> stepDurations = []; // store all durations (in seconds)
+  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+  Set<String> usedWords = {};    // track used words to avoid repetition
 
   // Variables
   int correctAnswer = 0;
@@ -33,9 +40,11 @@ class _SightWordGameState extends State<SightWordGame> {
   int displaySteps = 1;
   int totalSteps = 1;
   int round = 1;
+  int gamesPlayedCount = 0; 
   final int maxSteps = 30;
   bool isPaused = false;
   bool randomize = false;
+  bool isInitializing = false;
   DateTime? stepStartTime;
   double durationAvg = 0;
   Timer? stepTimer;
@@ -50,33 +59,93 @@ class _SightWordGameState extends State<SightWordGame> {
 
   @override
   void initState() {
-    sightWords = [
-      "And", "Can", "For", "Is", "It", "Me", "See", "We", "You",
-      "By", "Do", "Give", "From", "Go", "Of", "On", "This", "That",
-      "Will", "With", "Use", "Help", "Us", "Made", "Or", "Tell"
-    ];
+    super.initState();
+    _initializeGame();
+    usedWords.add(sightWords[correctIndex]);
+  }
 
-    if (widget.selectedSightWord.isNotEmpty && randomize == false) {
-      correctIndex = sightWords.indexOf(widget.selectedSightWord);
-      randomNumber = correctIndex;
+  void _initializeGame() async {
 
-      if (correctIndex == -1) {
+    // Increment games played count
+    ++gamesPlayedCount;
+
+    setState(() {
+      isInitializing = true;
+    });
+    
+    if (widget.selectedSightWord == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      final words = await fetchShuffleWords();
+      print("Words: ########" + words.toString());
+
+      if (words.isNotEmpty) {
+        String chosenWord = words[random.nextInt(words.length)];
+        randomNumber = sightWords.indexOf(chosenWord);
+        correctIndex = randomNumber;
+      } else {
+        // Fallback if no shuffle words found
         randomNumber = random.nextInt(sightWords.length);
         correctIndex = randomNumber;
       }
     } else {
-      randomNumber = random.nextInt(sightWords.length);
-      correctIndex = randomNumber;
+      if (widget.selectedSightWord != "" && randomize == false) {
+        randomNumber = sightWords.indexOf(widget.selectedSightWord);
+        correctIndex = randomNumber;
+        
+        if (randomNumber == -1) {
+          randomNumber = random.nextInt(sightWords.length);
+          correctIndex = randomNumber;
+        }
+      } else {
+        randomNumber = random.nextInt(sightWords.length);
+        correctIndex = randomNumber;
+      }
     }
 
-    super.initState();
+    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
+    
+    setState(() {
+      isInitializing = false;
+    });
+
+    // Ensure UI updates and start timer
+    if (mounted) {
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startStepTimer();
+      });
+    }
   }
 
   @override
   void dispose() {
-    // Clean up any resources
+    stepTimer?.cancel(); // Cancel any active timer
     super.dispose();
   }
+
+  Future<List<String>> fetchShuffleWords() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    // read all lowercasesightWordsReports for the user
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("sightWordReports")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final int incorrect = data["incorrect"] ?? 0;
+      final String word = data["word"] ?? "";
+
+      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+        shuffleWordSet.add(word);
+      }
+    }
+
+    return shuffleWordSet.toList();
+  }
+
 
   void screenTimeoutDialog(){
     // Dialog
@@ -539,6 +608,11 @@ class _SightWordGameState extends State<SightWordGame> {
   
   @override
   Widget build(BuildContext context) {
+
+    if (isInitializing) {
+      const GameLoadingIndicator(titleHeader: "Sight Words"); 
+    }
+    
     Widget currentActivity;
 
     if (totalSteps % 2 == 1 && totalSteps <= 10) {

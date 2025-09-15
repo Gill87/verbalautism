@@ -9,6 +9,7 @@ import 'package:verbalautism/components/game%20components/drag_drop_component.da
 import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
+import 'package:verbalautism/components/game_loading_indicator.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class ActionsGame extends StatefulWidget {
@@ -25,8 +26,26 @@ class ActionsGame extends StatefulWidget {
 
 class _ActionsGameState extends State<ActionsGame> {
   // List
-  late List<String> actions;
+  List<String> actions = [
+    "Climb",
+    "Eat",
+    "Jump",
+    "Kick",
+    "Paint",
+    "Read",
+    "Run",
+    "Sleep",
+    "Swim",
+    "Throw",
+    "Sing",
+    "Dance",
+    "Dig",
+    "Build",
+    "Slide",
+  ];
   List<int> stepDurations = []; // store all durations (in seconds)
+  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+  Set<String> usedWords = {};    // track used words to avoid repetition
 
   // Variables
   int incorrectAnswer = 0;
@@ -35,8 +54,10 @@ class _ActionsGameState extends State<ActionsGame> {
   int totalSteps = 1;
   int round = 1;
   final int maxSteps = 30;
+  int gamesPlayedCount = 0;
   bool isPaused = false;
   bool randomize = false;
+  bool isInitializing = false;
   DateTime? stepStartTime;
   double durationAvg = 0;
   Timer? stepTimer;
@@ -51,43 +72,91 @@ class _ActionsGameState extends State<ActionsGame> {
 
   @override
   void initState() {
-    actions = [
-      "Climb",
-      "Eat",
-      "Jump",
-      "Kick",
-      "Paint",
-      "Read",
-      "Run",
-      "Sleep",
-      "Swim",
-      "Throw",
-      "Sing",
-      "Dance",
-      "Dig",
-      "Build",
-      "Slide",
-    ];
+    super.initState();
+    _initializeGame();
+    usedWords.add(actions[correctIndex]);
+  }
 
-    if(widget.selectedAction.isNotEmpty && randomize == false) {
-      correctIndex = actions.indexOf(widget.selectedAction);
-      randomNumber = correctIndex;
+  void _initializeGame() async {
 
-      if(correctIndex == -1) {
+    // Increment games played count
+    ++gamesPlayedCount;
+
+    setState(() {
+      isInitializing = true;
+    });
+    
+    if (widget.selectedAction == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      final words = await fetchShuffleWords();
+      print("Words: ########" + words.toString());
+
+      if (words.isNotEmpty) {
+        String chosenWord = words[random.nextInt(words.length)];
+        randomNumber = actions.indexOf(chosenWord);
+        correctIndex = randomNumber;
+      } else {
+        // Fallback if no shuffle words found
         randomNumber = random.nextInt(actions.length);
         correctIndex = randomNumber;
       }
     } else {
-      randomNumber = random.nextInt(actions.length);
-      correctIndex = randomNumber;
+      if (widget.selectedAction != "" && randomize == false) {
+        randomNumber = actions.indexOf(widget.selectedAction);
+        correctIndex = randomNumber;
+        
+        if (randomNumber == -1) {
+          randomNumber = random.nextInt(actions.length);
+          correctIndex = randomNumber;
+        }
+      } else {
+        randomNumber = random.nextInt(actions.length);
+        correctIndex = randomNumber;
+      }
     }
-    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
+    
+    setState(() {
+      isInitializing = false;
+    });
+
+    // Ensure UI updates and start timer
+    if (mounted) {
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startStepTimer();
+      });
+    }
   }
 
   @override
   void dispose() {
-    // Clean up any resources
+    stepTimer?.cancel(); // Cancel any active timer
     super.dispose();
+  }
+
+  Future<List<String>> fetchShuffleWords() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    // read all lowercaseactionsReports for the user
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("actionsReports")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final int incorrect = data["incorrect"] ?? 0;
+      final String word = data["word"] ?? "";
+
+      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+        shuffleWordSet.add(word);
+      }
+    }
+
+    return shuffleWordSet.toList();
   }
   
   void screenTimeoutDialog(){
@@ -547,6 +616,10 @@ class _ActionsGameState extends State<ActionsGame> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (isInitializing) {
+      const GameLoadingIndicator(titleHeader: "Actions"); 
+    }
     
     Widget currentActivity;
     

@@ -43,49 +43,26 @@ class NumberSelectionPage extends StatelessWidget {
             children: [
 
               // Random and Shuffle buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildNumberCard(
+              _buildNumberCard(
+                context,
+                number: "Random",
+                onTap: () {
+                  Navigator.push(
                     context,
-                    number: "Random",
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NumbersGame(
-                            min: min,
-                            max: max,
-                            selectedNumber: -1, // -1 indicates random
-                          ),
-                        ),
-                      );
-                    },
-                    isRandom: true,
-                  ),
-
-                  const SizedBox(width: 10),
-
-                  _buildNumberCard(
-                    context,
-                    number: "Shuffle",
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NumbersGame(
-                            min: min,
-                            max: max,
-                            selectedNumber: -2, // -2 indicates shuffle
-                          ),
-                        ),
-                      );
-                    },
-                    isRandom: true,
-                  ),
-                ],
+                    MaterialPageRoute(
+                      builder: (context) => NumbersGame(
+                        min: min,
+                        max: max,
+                        selectedNumber: -1, // -1 indicates random
+                      ),
+                    ),
+                  );
+                },
+                isRandom: true,
               ),
+
               const SizedBox(height: 20),
+              
               // Numbers grid
               Wrap(
                 spacing: 15,

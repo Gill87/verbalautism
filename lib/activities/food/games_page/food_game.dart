@@ -9,6 +9,7 @@ import 'package:verbalautism/components/game%20components/drag_drop_component.da
 import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
+import 'package:verbalautism/components/game_loading_indicator.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class FoodGame extends StatefulWidget {
@@ -25,18 +26,56 @@ class FoodGame extends StatefulWidget {
 
 class _FoodGameState extends State<FoodGame> {
   // List
-  late List<String> foods;
+  List<String> foods = [
+    "Apple",
+    "Banana",
+    "Bread",
+    "Bacon",
+    "Cereal",
+    "Chips",
+    "Egg",
+    "Milk",
+    "Orange",
+    "Rice",
+    "Strawberry",
+    "Burrito",
+    "Pancakes",
+    "Pie",
+    "Pizza",
+    "Sandwich",
+    "Brownies",
+    "Chicken Wings",
+    "Corn",
+    "Dumplings",
+    "Fish and Chips",
+    "French Fries",
+    "Grapes",
+    "Hot Dog",
+    "Mac and Cheese",
+    "Ramen",
+    "Salad",
+    "Sushi",
+    "Tacos",
+    "Hash Brown",
+    "Waffles",
+    "Yogurt",
+    "Bagel"
+    ];
   List<int> stepDurations = []; // store all durations (in seconds)
-
+  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+  Set<String> usedWords = {};    // track used words to avoid repetition
+  
   // Variables
   int incorrectAnswer = 0;
   int correctAnswer = 0;
   int displaySteps = 1;
   int totalSteps = 1;
+  int gamesPlayedCount = 0;
   int round = 1;
   final int maxSteps = 30;
   bool isPaused = false;
   bool randomize = false;
+  bool isInitializing = false;
   DateTime? stepStartTime;
   double durationAvg = 0;
   Timer? stepTimer;
@@ -60,60 +99,91 @@ class _FoodGameState extends State<FoodGame> {
 
   @override
   void initState() {
-    foods = [
-      "Apple",
-      "Banana",
-      "Bread",
-      "Bacon",
-      "Cereal",
-      "Chips",
-      "Egg",
-      "Milk",
-      "Orange",
-      "Rice",
-      "Strawberry",
-      "Burrito",
-      "Pancakes",
-      "Pie",
-      "Pizza",
-      "Sandwich",
-      "Brownies",
-      "Chicken Wings",
-      "Corn",
-      "Dumplings",
-      "Fish and Chips",
-      "French Fries",
-      "Grapes",
-      "Hot Dog",
-      "Mac and Cheese",
-      "Ramen",
-      "Salad",
-      "Sushi",
-      "Tacos",
-      "Hash Brown",
-      "Waffles",
-      "Yogurt",
-      "Bagel"
-    ];
+    super.initState();
+    _initializeGame();
+    usedWords.add(foods[correctIndex]);
+  }
 
-    if(widget.selectedFood.isNotEmpty && randomize == false) {
-      correctIndex = foods.indexOf(widget.selectedFood);
-      randomNumber = correctIndex;
+  void _initializeGame() async {
 
-      if(correctIndex == -1) {
+    // Increment games played count
+    ++gamesPlayedCount;
+
+    setState(() {
+      isInitializing = true;
+    });
+    
+    if (widget.selectedFood == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      final words = await fetchShuffleWords();
+      print("Words: ########" + words.toString());
+
+      if (words.isNotEmpty) {
+        String chosenWord = words[random.nextInt(words.length)];
+        randomNumber = foods.indexOf(chosenWord);
+        correctIndex = randomNumber;
+      } else {
+        // Fallback if no shuffle words found
         randomNumber = random.nextInt(foods.length);
         correctIndex = randomNumber;
       }
     } else {
-      randomNumber = random.nextInt(foods.length);
-      correctIndex = randomNumber;
+      if (widget.selectedFood != "" && randomize == false) {
+        randomNumber = foods.indexOf(widget.selectedFood);
+        correctIndex = randomNumber;
+        
+        if (randomNumber == -1) {
+          randomNumber = random.nextInt(foods.length);
+          correctIndex = randomNumber;
+        }
+      } else {
+        randomNumber = random.nextInt(foods.length);
+        correctIndex = randomNumber;
+      }
     }
-    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
+    
+    setState(() {
+      isInitializing = false;
+    });
+
+    // Ensure UI updates and start timer
+    if (mounted) {
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startStepTimer();
+      });
+    }
   }
 
   @override
   void dispose() {
+    stepTimer?.cancel(); // Cancel any active timer
     super.dispose();
+  }
+
+  Future<List<String>> fetchShuffleWords() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    // read all lowercasefoodsReports for the user
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("foodsReports")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final int incorrect = data["incorrect"] ?? 0;
+      final String word = data["word"] ?? "";
+
+      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+        shuffleWordSet.add(word);
+      }
+    }
+
+    return shuffleWordSet.toList();
   }
 
   void screenTimeoutDialog(){
@@ -575,6 +645,9 @@ class _FoodGameState extends State<FoodGame> {
 
   @override
   Widget build(BuildContext context) {
+    if (isInitializing) {
+      const GameLoadingIndicator(titleHeader: "Foods"); 
+    }
     
     Widget currentActivity;
     

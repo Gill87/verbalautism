@@ -9,6 +9,7 @@ import 'package:verbalautism/components/game%20components/drag_drop_component.da
 import 'package:verbalautism/components/game%20components/drag_drop_multiple_objects_component.dart';
 import 'package:verbalautism/components/game%20components/tap_component.dart';
 import 'package:verbalautism/components/game%20components/tap_multiple_objects_component.dart';
+import 'package:verbalautism/components/game_loading_indicator.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart';
 
 class FeelingsGame extends StatefulWidget {
@@ -25,8 +26,18 @@ class FeelingsGame extends StatefulWidget {
 
 class _FeelingsGameState extends State<FeelingsGame> {
   // List
-  late List<String> feelings;
+  List<String> feelings = [
+    "Happy",
+    "Angry",
+    "Sad",
+    "Curious",
+    "Sick",
+    "Surprised"
+  ];
+
   List<int> stepDurations = []; // store all durations (in seconds)
+  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+  Set<String> usedWords = {};    // track used words to avoid repetition
 
   // Variables
   int incorrectAnswer = 0;
@@ -35,8 +46,10 @@ class _FeelingsGameState extends State<FeelingsGame> {
   int totalSteps = 1;
   int round = 1;
   final int maxSteps = 30;
+  int gamesPlayedCount = 0;
   bool isPaused = false;
   bool randomize = false;
+  bool isInitializing = false;
   DateTime? stepStartTime;
   double durationAvg = 0;
   Timer? stepTimer;
@@ -51,33 +64,91 @@ class _FeelingsGameState extends State<FeelingsGame> {
 
   @override
   void initState() {
-    feelings = [
-      "Happy",
-      "Angry",
-      "Sad",
-      "Curious",
-      "Sick",
-      "Surprised"
-    ];
+    super.initState();
+    _initializeGame();
+    usedWords.add(feelings[correctIndex]);
+  }
 
-    if(widget.selectedFeeling.isNotEmpty && randomize == false) {
-      correctIndex = feelings.indexOf(widget.selectedFeeling);
-      randomNumber = correctIndex;
+  void _initializeGame() async {
 
-      if(correctIndex == -1) {
+    // Increment games played count
+    ++gamesPlayedCount;
+
+    setState(() {
+      isInitializing = true;
+    });
+    
+    if (widget.selectedFeeling == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      final words = await fetchShuffleWords();
+      print("Words: ########" + words.toString());
+
+      if (words.isNotEmpty) {
+        String chosenWord = words[random.nextInt(words.length)];
+        randomNumber = feelings.indexOf(chosenWord);
+        correctIndex = randomNumber;
+      } else {
+        // Fallback if no shuffle words found
         randomNumber = random.nextInt(feelings.length);
         correctIndex = randomNumber;
       }
     } else {
-      randomNumber = random.nextInt(feelings.length);
-      correctIndex = randomNumber;
+      if (widget.selectedFeeling != "" && randomize == false) {
+        randomNumber = feelings.indexOf(widget.selectedFeeling);
+        correctIndex = randomNumber;
+        
+        if (randomNumber == -1) {
+          randomNumber = random.nextInt(feelings.length);
+          correctIndex = randomNumber;
+        }
+      } else {
+        randomNumber = random.nextInt(feelings.length);
+        correctIndex = randomNumber;
+      }
     }
-    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
+    
+    setState(() {
+      isInitializing = false;
+    });
+
+    // Ensure UI updates and start timer
+    if (mounted) {
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startStepTimer();
+      });
+    }
   }
 
   @override
   void dispose() {
+    stepTimer?.cancel(); // Cancel any active timer
     super.dispose();
+  }
+
+  Future<List<String>> fetchShuffleWords() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
+
+    // read all lowercasefeelingsReports for the user
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .collection("feelingsReports")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final int incorrect = data["incorrect"] ?? 0;
+      final String word = data["word"] ?? "";
+
+      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+        shuffleWordSet.add(word);
+      }
+    }
+
+    return shuffleWordSet.toList();
   }
 
   void screenTimeoutDialog(){
@@ -538,6 +609,10 @@ class _FeelingsGameState extends State<FeelingsGame> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (isInitializing) {
+      const GameLoadingIndicator(titleHeader: "Feelings"); 
+    }
     
     Widget currentActivity;
     
