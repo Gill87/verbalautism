@@ -326,6 +326,57 @@ async function runDeleteOldMailLogic() {
   return {deleted: docsToDelete.length};
 }
 
+/**
+ * Main logic for deleting old schedule events
+ */
+async function runDeleteOldEventsLogic() {
+  const cutoffMillis = Date.now() - 30 * 24 * 60 * 60 * 1000; // 30 days ago
+  const usersSnapshot = await db.collection("users").get();
+  let totalDeleted = 0;
+
+  for (const userDoc of usersSnapshot.docs) {
+    const userId = userDoc.id;
+    const eventsRef = db.collection("users")
+      .doc(userId).collection("schedule_events");
+
+    const oldEventsSnapshot = await eventsRef
+      .where("createdAt", "<", new Date(cutoffMillis))
+      .get();
+
+    if (oldEventsSnapshot.empty) {
+      continue;
+    }
+
+    const batch = db.batch();
+    oldEventsSnapshot.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+    await batch.commit();
+
+    totalDeleted += oldEventsSnapshot.size;
+  }
+
+  console.log(`✅ Deleted total ${totalDeleted} old events`);
+  return {deleted: totalDeleted};
+}
+
+/**
+ * Scheduled function: delete old events (older than 30 days)
+ * Runs every Sunday at 8 AM
+ */
+export const deleteOldEvents = onSchedule(
+  {
+    schedule: "0 8 * * 0", // Sunday 8:00 AM
+    timeZone: "America/Los_Angeles",
+  },
+  async () => {
+    try {
+      await runDeleteOldEventsLogic();
+    } catch (error) {
+      console.error("❌ Error deleting old events:", error);
+    }
+  }
+);
 
 // Scheduled function: runs every Sunday at 8am
 export const weeklyEmailSummary = onSchedule({
@@ -363,7 +414,8 @@ export const testWeeklyEmailSummary = onRequest(
     try {
       await runWeeklyEmailSummaryLogic();
       await runDeleteOldMailLogic();
-      res.send("✅ Weekly email summary and deletion triggered successfully!");
+      await runDeleteOldEventsLogic();
+      res.send("✅ Weekly email summary and deletions triggered successfully!");
     } catch (error) {
       console.error("Error in test function:", error);
       res.status(500).send(`❌ Error: ${error}`);
