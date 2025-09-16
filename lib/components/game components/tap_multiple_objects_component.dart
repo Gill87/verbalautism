@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/incorrect_animation.dart';
-import 'package:verbalautism/components/audio%20services/tts_service.dart';
+import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
 
 class TapMultipleObjectsComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -34,8 +34,6 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
   late List<String> allObjectLinks;
   late AnimationController _controller;
   late Animation<double> _animation;
-
-  final TtsService _ttsService = TtsService();
   
   bool isProcessing = false; // NEW: Prevent interactions during processing
 
@@ -43,7 +41,7 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
   void initState() {
     super.initState();
     
-    _ttsService.speak("Tap the ${widget.objectVariation} ${widget.mainData}");
+    DirectTtsService.speakText("Tap the ${widget.objectVariation} ${widget.mainData}");
 
     allObjectLinks = [widget.correctAssetLink, ...widget.wrongAssetLinks];
     allObjectLinks.shuffle(); // Randomize their order
@@ -149,7 +147,6 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
 
   @override
   void dispose() {
-    _ttsService.stop();
     _controller.dispose();
     _animation.removeListener(() {});
     super.dispose();

@@ -1,11 +1,9 @@
 // TAP Feature
-// import 'package:web/web.dart' as web;
-// import 'dart:js_interop';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/tap_animation.dart';
-import 'package:verbalautism/components/audio%20services/tts_service.dart';
+import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
 
 class TapComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -40,21 +38,12 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
   late AnimationController _controller;
   late Animation<double> _animation;
 
-  final TtsService _ttsService = TtsService();
-
   @override
   void initState() {
     super.initState();
-    
-    // Text to speech
-    // Ensure TTS is initialized before speaking
-    Future.microtask(() async {
-      await _ttsService.init();
-      _ttsService.speak("Tap the ${widget.objectVariation} ${widget.mainData}");
-    });
 
-    // listVoices(); // For debugging
-    // speakText("Tap the ${widget.objectVariation} ${widget.mainData}");
+    DirectTtsService.listVoices(); // For debugging
+    DirectTtsService.speakText("Tap the ${widget.objectVariation} ${widget.mainData}");
     
     // Floating Animation
     _controller = AnimationController(
@@ -73,50 +62,10 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
     }
   }
 
-  // void listVoices() {
-  //   final synth = web.window.speechSynthesis;
-  //   final voices = synth.getVoices().toDart;
-
-  //   for (var v in voices) {
-  //     print("V!oice: ${v.name}, Lang: ${v.lang}");
-  //   }
-  // }
-
-
-  // void speakText(String text) {
-  //   final synth = web.window.speechSynthesis;
-
-  //   // Cancel anything already speaking
-  //   synth.cancel();
-
-  //   // Create the utterance
-  //   final utterance = web.SpeechSynthesisUtterance(text);
-
-  //   // Optional: set voice (depends on OS/browser)
-  //   final voices = synth.getVoices().toDart;
-  //   if (voices.isNotEmpty) {
-  //     utterance.voice = voices.firstWhere(
-  //       (v) => v.lang.startsWith("en-GB"),
-  //       orElse: () => voices.first,
-  //     );
-  //   }
-
-  //   // Settings
-  //   utterance.rate = 1.0;
-  //   utterance.pitch = 1.0;
-  //   utterance.volume = 1.0;
-
-  //   // Speak it
-  //   synth.speak(utterance);
-  // }
-
-
-
   @override
   void dispose() {
     _controller.dispose();
     _animation.removeListener(() {});
-    _ttsService.stop();
     super.dispose();
   }
 

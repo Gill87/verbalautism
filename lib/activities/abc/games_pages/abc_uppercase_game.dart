@@ -83,7 +83,7 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
         correctIndex = randomNumber;
       } else {
         // Fallback if no shuffle words found
-        randomNumber = random.nextInt(26);
+        randomNumber = random.nextInt(letters.length);
         correctIndex = randomNumber;
       }
     } else {
@@ -92,11 +92,11 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
         correctIndex = randomNumber;
         
         if (randomNumber == -1) {
-          randomNumber = random.nextInt(26);
+          randomNumber = random.nextInt(letters.length);
           correctIndex = randomNumber;
         }
       } else {
-        randomNumber = random.nextInt(26);
+        randomNumber = random.nextInt(letters.length);
         correctIndex = randomNumber;
       }
     }
@@ -232,22 +232,22 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
   }
 
   void setOneWrongNumber(){
-    randomNumber2 = random.nextInt(26);
+    randomNumber2 = random.nextInt(letters.length);
 
     while(randomNumber2 == randomNumber){
-      randomNumber2 = random.nextInt(26);
+      randomNumber2 = random.nextInt(letters.length);
     }
     
     wrongLetters = ["Uppercase_${letters[randomNumber2]}"];
   }
 
   void setTwoWrongNumbers(){
-    randomNumber2 = random.nextInt(26);
-    randomNumber3 = random.nextInt(26);
+    randomNumber2 = random.nextInt(letters.length);
+    randomNumber3 = random.nextInt(letters.length);
 
     while(randomNumber == randomNumber2 || randomNumber == randomNumber3 || randomNumber2 == randomNumber3){
-      randomNumber2 = random.nextInt(26);
-      randomNumber3 = random.nextInt(26);
+      randomNumber2 = random.nextInt(letters.length);
+      randomNumber3 = random.nextInt(letters.length);
     }
 
     wrongLetters = ["Uppercase_${letters[randomNumber2]}", "Uppercase_${letters[randomNumber3]}"];

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tracing_game/tracing_game.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
-import 'package:verbalautism/components/audio%20services/tts_service.dart';
+import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
 
 class TraceComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -25,7 +25,6 @@ class TraceComponent extends StatefulWidget {
 
 class _TraceComponentState extends State<TraceComponent> {
 
-  final TtsService _ttsService = TtsService();
   bool isProcessing = false; // Prevent multiple interactions
   bool traceCompleted = false; // NEW: Track if tracing is completed
 
@@ -37,9 +36,9 @@ class _TraceComponentState extends State<TraceComponent> {
 
     // Check Mixed Letter
     if(isMixedLetter()){
-      _ttsService.speak("Trace the ${widget.objectVariation} ${widget.mainData[0]}");
+      DirectTtsService.speakText("Trace the ${widget.objectVariation} ${widget.mainData[0]}");
     } else {
-      _ttsService.speak("Trace the ${widget.objectVariation} ${widget.mainData}");
+      DirectTtsService.speakText("Trace the ${widget.objectVariation} ${widget.mainData}");
     }
     
     super.initState();
@@ -89,7 +88,6 @@ class _TraceComponentState extends State<TraceComponent> {
 
   @override
   void dispose(){
-    _ttsService.stop();
     super.dispose();
   }
 

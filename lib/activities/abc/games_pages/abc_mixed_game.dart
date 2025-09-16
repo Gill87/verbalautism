@@ -230,10 +230,10 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   }
 
   void setOneWrongNumber(){
-    randomNumber2 = random.nextInt(26);
+    randomNumber2 = random.nextInt(letters.length);
 
     while(randomNumber2 == randomNumber){
-      randomNumber2 = random.nextInt(26);
+      randomNumber2 = random.nextInt(letters.length);
     }
     
     wrongLetters = ["Mixed_${letters[randomNumber2]}"];
@@ -241,12 +241,12 @@ class _AbcMixedGameState extends State<AbcMixedGame> {
   }
 
   void setTwoWrongNumbers(){
-    randomNumber2 = random.nextInt(26);
-    randomNumber3 = random.nextInt(26);
+    randomNumber2 = random.nextInt(letters.length);
+    randomNumber3 = random.nextInt(letters.length);
 
     while(randomNumber == randomNumber2 || randomNumber == randomNumber3 || randomNumber2 == randomNumber3){
-      randomNumber2 = random.nextInt(26);
-      randomNumber3 = random.nextInt(26);
+      randomNumber2 = random.nextInt(letters.length);
+      randomNumber3 = random.nextInt(letters.length);
     }
 
     wrongLetters = ["Mixed_${letters[randomNumber2]}", "Mixed_${letters[randomNumber3]}"];

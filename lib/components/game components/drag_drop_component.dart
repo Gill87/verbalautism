@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/drag_animation.dart';
-import 'package:verbalautism/components/audio%20services/tts_service.dart';
+import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
 
 class DragDropComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -39,12 +39,10 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
   late AnimationController _controller;
   late Animation<double> _animation;
 
-  final TtsService _ttsService = TtsService();
-
   @override
   void initState() {
     super.initState();
-    _ttsService.speak("Drag and Drop the ${widget.objectVariation} ${widget.mainData}");
+    DirectTtsService.speakText("Drag and Drop the ${widget.objectVariation} ${widget.mainData}");
 
     _controller = AnimationController(
       vsync: this,
@@ -118,7 +116,6 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
 
   @override
   void dispose() {
-    _ttsService.stop();
     _controller.dispose();
     _animation.removeListener(() {}); // Remove listener to avoid memory leaks
     super.dispose();
