@@ -148,7 +148,9 @@ class _NumbersGameState extends State<NumbersGame> {
     for (var doc in snapshot.docs) {
       final data = doc.data();
       final int incorrect = data["incorrect"] ?? 0;
-      final int number = data["word"] ?? -2;
+      final String strNumber = data["word"] ?? -2;
+
+      final int number = int.parse(strNumber);
 
       if (incorrect > 2 && number != -2 && !usedNumbers.contains(number)) {
         shuffleNumberSet.add(number);

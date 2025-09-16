@@ -71,7 +71,6 @@ class _ColorsGameState extends State<ColorsGame> {
   void initState() {
     super.initState();
     _initializeGame();
-    usedWords.add(colors[correctIndex]);
   }
 
   void _initializeGame() async {

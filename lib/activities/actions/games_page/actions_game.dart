@@ -74,7 +74,6 @@ class _ActionsGameState extends State<ActionsGame> {
   void initState() {
     super.initState();
     _initializeGame();
-    usedWords.add(actions[correctIndex]);
   }
 
   void _initializeGame() async {

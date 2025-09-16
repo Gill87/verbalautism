@@ -107,11 +107,18 @@ async function runWeeklyEmailSummaryLogic() {
       let durationSum = 0;
       const roundsPlayed = reportsSnapshot.docs.length;
 
+      // 🔹 Track all difficult words (incorrect > 2)
+      const difficultWords = new Set<string>();
+
       for (const doc of reportsSnapshot.docs) {
         const data = doc.data();
         totalCorrect += data.correct || 0;
         totalIncorrect += data.incorrect || 0;
         durationSum += data.averageDuration || 0;
+        // 🔹 Collect words where incorrect > 2
+        if ((data.incorrect || 0) > 2 && data.word) {
+          difficultWords.add(data.word);
+        }
       }
 
       const averageDuration =
@@ -123,6 +130,7 @@ async function runWeeklyEmailSummaryLogic() {
         totalCorrect,
         totalIncorrect,
         averageDuration,
+        difficultWords: Array.from(difficultWords),
       };
 
       // Store collection reference for deletion after email is sent
@@ -141,11 +149,17 @@ async function runWeeklyEmailSummaryLogic() {
               roundsPlayed: number,
               totalCorrect: number,
               totalIncorrect: number,
-              averageDuration: number
+              averageDuration: number,
+              difficultWords: string[],
             };
             const rowBg = index % 2 === 0 ? "#f9f9f9" : "#ffffff";
             const gameName = formatGameType(key);
             const duration = `${data.averageDuration} seconds`;
+            const words =
+              data.difficultWords.length > 0 ?
+                data.difficultWords.join(", ") :
+                "—";
+
             return `
               <tr style="background-color: ${rowBg};">
                 <td style="padding: 12px 15px; border-bottom: 1px solid 
@@ -162,6 +176,8 @@ async function runWeeklyEmailSummaryLogic() {
                 <td style="padding: 12px 15px; text-align: center; 
                   border-bottom: 1px solid #e0e0e0; color: #555;">
                   ${duration}</td>
+                <td style="padding: 12px 15px; text-align: center;">
+                  ${words}</td>
               </tr>
             `;
           }
@@ -197,6 +213,9 @@ async function runWeeklyEmailSummaryLogic() {
                 <th style="padding: 15px; text-align: center; 
                   font-weight: 600; border-bottom: 2px solid #fff;">
                   Avg Duration</th>
+                <th style="padding: 15px; text-align: center; 
+                  font-weight: 600; border-bottom: 2px solid #fff;">
+                  Challenging Terms</th>
               </tr>
             </thead>
             <tbody>
@@ -262,6 +281,52 @@ async function runWeeklyEmailSummaryLogic() {
   console.log("Weekly email summary completed for all users.");
 }
 
+/**
+ * Main logic for deleting old mail
+ */
+async function runDeleteOldMailLogic() {
+  const cutoffMillis = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 days ago
+  console.log(`🔍 Deleting mail older than: 
+    ${new Date(cutoffMillis).toISOString()}`);
+
+  const allMailSnapshot = await db.collection("mail").get();
+  const docsToDelete: admin.firestore.QueryDocumentSnapshot[] = [];
+
+  for (const doc of allMailSnapshot.docs) {
+    const endTime = doc.get("delivery.endTime");
+    if (!endTime) {
+      console.log(`Doc ${doc.id} has no delivery.endTime, skipping`);
+      continue;
+    }
+
+    let endMillis: number | null = null;
+    if (typeof endTime.toDate === "function") {
+      // Firestore Timestamp
+      endMillis = endTime.toDate().getTime();
+    } else if (typeof endTime === "string") {
+      // In case it's stored as a string
+      endMillis = new Date(endTime).getTime();
+    }
+
+    if (endMillis !== null && endMillis < cutoffMillis) {
+      docsToDelete.push(doc);
+    }
+  }
+
+  if (docsToDelete.length === 0) {
+    console.log("No old mail to delete.");
+    return {deleted: 0};
+  }
+
+  const batch = db.batch();
+  docsToDelete.forEach((doc) => batch.delete(doc.ref));
+  await batch.commit();
+
+  console.log(`🗑️ Deleted ${docsToDelete.length} old mail documents`);
+  return {deleted: docsToDelete.length};
+}
+
+
 // Scheduled function: runs every Sunday at 8am
 export const weeklyEmailSummary = onSchedule({
   schedule: "0 8 * * 0", // Sunday 8:00 AM
@@ -274,12 +339,31 @@ export const weeklyEmailSummary = onSchedule({
   }
 });
 
+/**
+ * Scheduled function to delete old mail (older than 7 days)
+ * Runs every Sunday at 8 AM (same as summary)
+ */
+export const deleteOldMail = onSchedule(
+  {
+    schedule: "0 8 * * 0", // Sunday 8:00 AM
+    timeZone: "America/Los_Angeles",
+  },
+  async () => {
+    try {
+      await runDeleteOldMailLogic();
+    } catch (error) {
+      console.error("Error running weekly old mail deletion: ", error);
+    }
+  }
+);
+
 // Test endpoint using v2 syntax
 export const testWeeklyEmailSummary = onRequest(
   async (req, res) => {
     try {
       await runWeeklyEmailSummaryLogic();
-      res.send("✅ Weekly email summary triggered successfully!");
+      await runDeleteOldMailLogic();
+      res.send("✅ Weekly email summary and deletion triggered successfully!");
     } catch (error) {
       console.error("Error in test function:", error);
       res.status(500).send(`❌ Error: ${error}`);
