@@ -513,7 +513,7 @@ class _FeelingsGameState extends State<FeelingsGame> {
                   stepTimer?.cancel();
                   isPaused = false;
                 });
-                initState(); // reset the game state
+                _initializeGame(); // reset the game state
               }
             });
 

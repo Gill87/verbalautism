@@ -525,7 +525,7 @@ class _PlacesGameState extends State<PlacesGame> {
                   stepTimer?.cancel();
                   isPaused = false;
                 });
-                initState(); // reset the game state
+                _initializeGame(); // reset the game state
               }
             });
 

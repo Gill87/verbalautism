@@ -36,6 +36,10 @@ class _ShapesGameState extends State<ShapesGame> {
   Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
   Set<String> usedWords = {};    // track used words to avoid repetition
 
+  // Add these as state variables at the top of _ShapesGameState
+  List<String> shapeQueue = [];
+  int queueIndex = 0;
+
   // Variables
   int displaySteps = 1;
   int correctAnswer = 0;
@@ -67,59 +71,57 @@ class _ShapesGameState extends State<ShapesGame> {
     _initializeGame();
   }
 
-  void _initializeGame() async {
+  void _assignFromQueue() {
+    if (shapeQueue.isEmpty || queueIndex >= shapeQueue.length) {
+      shapeQueue = List.from(shapes)..shuffle(random);
+      queueIndex = 0;
+    }
 
-    // Increment games played count
+    print("Queue: $shapeQueue");
+
+    String chosenShape = shapeQueue[queueIndex];
+    randomNumber = shapes.indexOf(chosenShape);
+    correctIndex = randomNumber;
+
+    queueIndex++;
+  }
+
+
+  void _initializeGame() async {
     ++gamesPlayedCount;
 
-    setState(() {
-      isInitializing = true;
-    });
-    
     if (widget.selectedShape == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      setState(() => isInitializing = true);
       final words = await fetchShuffleWords();
-      print("Words: ########" + words.toString());
-
       if (words.isNotEmpty) {
         String chosenWord = words[random.nextInt(words.length)];
         randomNumber = shapes.indexOf(chosenWord);
         correctIndex = randomNumber;
       } else {
-        // Fallback if no shuffle words found
-        randomNumber = random.nextInt(shapes.length);
+        _assignFromQueue();
+      }
+      await Future.delayed(const Duration(milliseconds: 1000));
+      setState(() => isInitializing = false);
+    } else if (widget.selectedShape.isNotEmpty && !randomize) {
+      randomNumber = shapes.indexOf(widget.selectedShape);
+      if (randomNumber == -1) {
+        _assignFromQueue();
+      } else {
         correctIndex = randomNumber;
       }
     } else {
-      if (widget.selectedShape != "" && randomize == false) {
-        randomNumber = shapes.indexOf(widget.selectedShape);
-        correctIndex = randomNumber;
-        
-        if (randomNumber == -1) {
-          randomNumber = random.nextInt(shapes.length);
-          correctIndex = randomNumber;
-        }
-      } else {
-        randomNumber = random.nextInt(shapes.length);
-        correctIndex = randomNumber;
-      }
+      _assignFromQueue();
     }
-
-    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
-    
-    setState(() {
-      isInitializing = false;
-    });
 
     usedWords.add(shapes[correctIndex]);
 
-    // Ensure UI updates and start timer
     if (mounted) {
-      setState(() {});
       WidgetsBinding.instance.addPostFrameCallback((_) {
         startStepTimer();
       });
     }
   }
+
 
   @override
   void dispose() {
@@ -515,7 +517,7 @@ class _ShapesGameState extends State<ShapesGame> {
                   stepTimer?.cancel();
                   isPaused = false;
                 });
-                initState(); // reset the game state
+                _initializeGame(); // reset the game state
               }
             });
 

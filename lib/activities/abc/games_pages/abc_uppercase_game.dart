@@ -509,7 +509,7 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
                   stepTimer?.cancel();
                   isPaused = false;
                 });
-                initState(); // reset the game state
+                _initializeGame(); // reset the game state
               }
             });
 

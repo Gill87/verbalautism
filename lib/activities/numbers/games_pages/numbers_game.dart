@@ -527,7 +527,7 @@ class _NumbersGameState extends State<NumbersGame> {
                   stepTimer?.cancel();
                   isPaused = false;
                 });
-                initState(); // reset the game state
+                initializeGame(); // reset the game state
               }
             });
 

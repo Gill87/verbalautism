@@ -531,7 +531,7 @@ class _ObjectGameState extends State<ObjectGame> {
                   stepTimer?.cancel();
                   isPaused = false;
                 });
-                initState(); // reset the game state
+                _initializeGame(); // reset the game state
               }
             });
 
