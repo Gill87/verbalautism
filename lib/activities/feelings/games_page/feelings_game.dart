@@ -36,8 +36,10 @@ class _FeelingsGameState extends State<FeelingsGame> {
   ];
 
   List<int> stepDurations = []; // store all durations (in seconds)
-  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
-  Set<String> usedWords = {};    // track used words to avoid repetition
+  List<String> shuffleWordList = [];
+
+  List<String> feelingQueue = [];
+  int queueIndex = 0;
 
   // Variables
   int incorrectAnswer = 0;
@@ -68,59 +70,95 @@ class _FeelingsGameState extends State<FeelingsGame> {
     _initializeGame();
   }
 
-  void _initializeGame() async {
-
-    // Increment games played count
-    ++gamesPlayedCount;
-
+  Future<void> populateShuffleList() async {
     setState(() {
       isInitializing = true;
     });
-    
-    if (widget.selectedFeeling == "Shuffle" && gamesPlayedCount % 3 == 0) {
-      final words = await fetchShuffleWords();
-      print("Words: ########" + words.toString());
 
-      if (words.isNotEmpty) {
-        String chosenWord = words[random.nextInt(words.length)];
-        randomNumber = feelings.indexOf(chosenWord);
-        correctIndex = randomNumber;
-      } else {
-        // Fallback if no shuffle words found
-        randomNumber = random.nextInt(feelings.length);
-        correctIndex = randomNumber;
-      }
-    } else {
-      if (widget.selectedFeeling != "" && randomize == false) {
-        randomNumber = feelings.indexOf(widget.selectedFeeling);
-        correctIndex = randomNumber;
-        
-        if (randomNumber == -1) {
-          randomNumber = random.nextInt(feelings.length);
-          correctIndex = randomNumber;
-        }
-      } else {
-        randomNumber = random.nextInt(feelings.length);
-        correctIndex = randomNumber;
-      }
-    }
+    shuffleWordList = await fetchShuffleWords();
+    await Future.delayed(const Duration(milliseconds: 1000));
 
-    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
-    
     setState(() {
       isInitializing = false;
     });
+  }
 
-    usedWords.add(feelings[correctIndex]);
+  void _assignFromQueue() {
+    if (feelingQueue.isEmpty || queueIndex >= feelingQueue.length) {
+      feelingQueue = List.from(feelings)..shuffle(random);
+      queueIndex = 0;
+    }
 
-    // Ensure UI updates and start timer
+    print("Queue: $feelingQueue");
+
+    String chosenFeeling = feelingQueue[queueIndex];
+    randomNumber = feelings.indexOf(chosenFeeling);
+    correctIndex = randomNumber;
+
+    queueIndex++;
+  }
+
+
+  void _initializeGame() async {
+    ++gamesPlayedCount;
+    
+    // Initialize the queue first if it's empty
+    if (feelingQueue.isEmpty) {
+      feelingQueue = List.from(feelings)..shuffle(random);
+      queueIndex = 0;
+    }
+    
+    // Check if we should use shuffle words (every 3rd game)
+    if (widget.selectedFeeling == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      await populateShuffleList();
+      print("Shuffle Word List before removing: $shuffleWordList");
+      
+      // Only remove items if queueIndex is valid and within bounds
+      if (queueIndex > 0 && queueIndex - 1 < feelingQueue.length) {
+        shuffleWordList.remove(feelingQueue[queueIndex - 1]); // Previous
+      }
+      if (queueIndex < feelingQueue.length) {
+        shuffleWordList.remove(feelingQueue[queueIndex]); // Current
+      }
+      
+      print("Shuffle Word List after removing: $shuffleWordList");
+      
+      if (shuffleWordList.isNotEmpty) {
+        String chosenTerm = shuffleWordList[random.nextInt(shuffleWordList.length)];
+        randomNumber = feelings.indexOf(chosenTerm);
+        if (randomNumber != -1) {
+          correctIndex = randomNumber;
+          print("Using shuffle word: $chosenTerm");
+        } else {
+          // If the chosen term is not in feelings list, fall back to queue
+          _assignFromQueue();
+        }
+      } else {
+        print("Shuffle word list is empty, using queue");
+        _assignFromQueue();
+      }
+    } else if (widget.selectedFeeling.isNotEmpty && 
+              widget.selectedFeeling != "Shuffle" && 
+              !randomize) {
+      // Use specific selected feelings
+      randomNumber = feelings.indexOf(widget.selectedFeeling);
+      if (randomNumber == -1) {
+        _assignFromQueue();
+      } else {
+        correctIndex = randomNumber;
+      }
+    } else {
+      // Use queue for random selection
+      _assignFromQueue();
+    }
+
     if (mounted) {
-      setState(() {});
       WidgetsBinding.instance.addPostFrameCallback((_) {
         startStepTimer();
       });
     }
   }
+
 
   @override
   void dispose() {
@@ -139,18 +177,20 @@ class _FeelingsGameState extends State<FeelingsGame> {
         .collection("feelingsReports")
         .get();
 
+    Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+
     for (var doc in snapshot.docs) {
       final data = doc.data();
       final int incorrect = data["incorrect"] ?? 0;
       final String word = data["word"] ?? "";
 
-      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+      if (incorrect > 2 && word.isNotEmpty) {
         shuffleWordSet.add(word);
       }
     }
-
     return shuffleWordSet.toList();
   }
+
 
   void screenTimeoutDialog(){
     // Dialog
@@ -447,7 +487,7 @@ class _FeelingsGameState extends State<FeelingsGame> {
       }
 
       // ✅ Round 3 check
-      if (totalSteps >= 20) {
+      if (totalSteps >= 20 && totalSteps < 30) {
         round3();
       }
 

@@ -33,8 +33,10 @@ class _NumbersGameState extends State<NumbersGame> {
   // List
   late List <int> numbers;
   List<int> stepDurations = []; // store all durations (in seconds)
-  Set<int> usedNumbers = {};
-  Set<int> shuffleNumberSet = {};
+  List<int> shuffleNumberList = [];
+
+  List<int> numberQueue = [];
+  int queueIndex = 0;
 
   // Variables
   int incorrectAnswer = 0;
@@ -65,59 +67,102 @@ class _NumbersGameState extends State<NumbersGame> {
   @override
   void initState() {
     super.initState();
+    numbers = List.generate(
+      (widget.max - widget.min + 1), // length
+      (index) => widget.min + index, // generate
+    );
     initializeGame();
+  }
+
+  Future<void> populateShuffleList() async {
+    setState(() {
+      isInitializing = true;
+    });
+
+    shuffleNumberList = await fetchShuffleNumbers();
+    await Future.delayed(const Duration(milliseconds: 1000));
+
+    setState(() {
+      isInitializing = false;
+    });
+  }
+
+  void _assignFromQueue() {
+    if (numberQueue.isEmpty || queueIndex >= numberQueue.length) {
+      numberQueue = List.from(numbers)..shuffle(random);
+      queueIndex = 0;
+    }
+
+    print("Queue: $numberQueue");
+
+    int chosenNumber = numberQueue[queueIndex];
+    randomNumber = numbers.indexOf(chosenNumber);
+    correctIndex = randomNumber;
+
+    queueIndex++;
   }
 
   void initializeGame() async {
 
     ++gamesPlayedCount;
 
+    // Initialize the queue first if it's empty
+    if (numberQueue.isEmpty) {
+      numberQueue = List.from(numbers)..shuffle(random);
+      queueIndex = 0;
+    }
+
     setState(() {
       isInitializing = true;
     });
 
-    numbers = List.generate(
-      (widget.max - widget.min + 1), // length
-      (index) => widget.min + index, // generate
-    );
-
     if(widget.selectedNumber == -2 && gamesPlayedCount % 3 == 0){
-      final shuffleNumbersList = await fetchShuffleNumbers();
-      print("Words: ########" + shuffleNumbersList.toString());
+      await populateShuffleList();
+      print("Shuffle Number List before removing: $shuffleNumberList");
 
-      if(shuffleNumbersList.isNotEmpty){
-        int chosenNumber = shuffleNumbersList[random.nextInt(shuffleNumbersList.length)];
-        randomNumber = chosenNumber;
-        correctIndex = randomNumber - widget.min;
-      } else {
-        randomNumber = generateRandomNumber(widget.min, widget.max);
-        correctIndex = randomNumber - widget.min;
+      // Only remove items if queueIndex is valid and within bounds
+      if (queueIndex > 0 && queueIndex - 1 < numberQueue.length) {
+        shuffleNumberList.remove(numberQueue[queueIndex - 1]); // Previous
       }
-      print("Running shuffle logic");
-    } else {
-
-      // If shuffle clicked but not 3rd game, pick random
-      if(widget.selectedNumber == -2){
-        randomNumber = generateRandomNumber(widget.min, widget.max);
-      } else {
-        if(widget.selectedNumber != -1 && randomize == false){
-          randomNumber = widget.selectedNumber;
+      if (queueIndex < numberQueue.length) {
+        shuffleNumberList.remove(numberQueue[queueIndex]); // Current
+      }
+      
+      print("Shuffle Word List after removing: $shuffleNumberList");
+      
+      if (shuffleNumberList.isNotEmpty) {
+        int chosenTerm = shuffleNumberList[random.nextInt(shuffleNumberList.length)];
+        randomNumber = numbers.indexOf(chosenTerm);
+        if (randomNumber != -1) {
+          correctIndex = randomNumber;
+          print("Using shuffle word: $chosenTerm");
         } else {
-          randomNumber = generateRandomNumber(widget.min, widget.max);
+          // If the chosen term is not in shapes list, fall back to queue
+          _assignFromQueue();
         }
+      } else {
+        print("Shuffle word list is empty, using queue");
+        _assignFromQueue();
       }
-      correctIndex = randomNumber - widget.min;
 
-      print("Running normal logic");
+    } else if (widget.selectedNumber >= 0 && 
+              widget.selectedNumber != -2 && 
+              !randomize) {
+      // Use specific selected shapes
+      randomNumber = numbers.indexOf(widget.selectedNumber);
+      if (randomNumber == -1) {
+        _assignFromQueue();
+      } else {
+        correctIndex = randomNumber;
+      }
+    } else {
+      // Use queue for random selection
+      _assignFromQueue();
     }
-
-    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
 
     setState(() {
       isInitializing = false;
     });
-
-    usedNumbers.add(numbers[correctIndex]);
     
     // Ensure UI updates and start timer
     if (mounted) {
@@ -145,6 +190,8 @@ class _NumbersGameState extends State<NumbersGame> {
         .collection("numbersReports")
         .get();
 
+    Set<int> shuffleNumberSet = {};
+
     for (var doc in snapshot.docs) {
       final data = doc.data();
       final int incorrect = data["incorrect"] ?? 0;
@@ -152,7 +199,7 @@ class _NumbersGameState extends State<NumbersGame> {
 
       final int number = int.parse(strNumber);
 
-      if (incorrect > 2 && number != -2 && !usedNumbers.contains(number)) {
+      if (incorrect > 2 && number != -2) {
         shuffleNumberSet.add(number);
       }
     }
@@ -461,7 +508,7 @@ class _NumbersGameState extends State<NumbersGame> {
       }
 
       // ✅ Round 3 check
-      if (totalSteps >= 20) {
+      if (totalSteps >= 20 && totalSteps < 30) {
         round3();
       }
 

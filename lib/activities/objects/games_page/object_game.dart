@@ -42,8 +42,10 @@ class _ObjectGameState extends State<ObjectGame> {
     "Teddy Bear",
   ];
   List<int> stepDurations = []; // store all durations (in seconds)
-  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
-  Set<String> usedWords = {};    // track used words to avoid repetition
+  List<String> shuffleWordList = [];
+
+  List<String> objectQueue = [];
+  int queueIndex = 0;
 
   // Variables
   int incorrectAnswer = 0;
@@ -76,67 +78,101 @@ class _ObjectGameState extends State<ObjectGame> {
     objectName = objectName.toLowerCase();
     return objectName;
   }
-
   @override
   void initState() {
     super.initState();
     _initializeGame();
   }
 
-  void _initializeGame() async {
-
-    // Increment games played count
-    ++gamesPlayedCount;
-
+  Future<void> populateShuffleList() async {
     setState(() {
       isInitializing = true;
     });
-    
-    if (widget.selectedObject == "Shuffle" && gamesPlayedCount % 3 == 0) {
-      final words = await fetchShuffleWords();
-      print("Words: ########" + words.toString());
 
-      if (words.isNotEmpty) {
-        String chosenWord = words[random.nextInt(words.length)];
-        randomNumber = objects.indexOf(chosenWord);
-        correctIndex = randomNumber;
-      } else {
-        // Fallback if no shuffle words found
-        randomNumber = random.nextInt(objects.length);
-        correctIndex = randomNumber;
-      }
-    } else {
-      if (widget.selectedObject != "" && randomize == false) {
-        randomNumber = objects.indexOf(widget.selectedObject);
-        correctIndex = randomNumber;
-        
-        // If shuffle clicked but gamesPlayedCount is not 3rd game, pick random
-        if (randomNumber == -1) {
-          randomNumber = random.nextInt(objects.length);
-          correctIndex = randomNumber;
-        }
-      } else {
-        randomNumber = random.nextInt(objects.length);
-        correctIndex = randomNumber;
-      }
-    }
+    shuffleWordList = await fetchShuffleWords();
+    await Future.delayed(const Duration(milliseconds: 1000));
 
-    Future.delayed(const Duration(milliseconds: 1000)); // Simulate loading delay
-    
     setState(() {
       isInitializing = false;
     });
+  }
 
-    usedWords.add(objects[correctIndex]);
+  void _assignFromQueue() {
+    if (objectQueue.isEmpty || queueIndex >= objectQueue.length) {
+      objectQueue = List.from(objects)..shuffle(random);
+      queueIndex = 0;
+    }
 
-    // Ensure UI updates and start timer
+    print("Queue: $objectQueue");
+
+    String chosenObject = objectQueue[queueIndex];
+    randomNumber = objects.indexOf(chosenObject);
+    correctIndex = randomNumber;
+
+    queueIndex++;
+  }
+
+
+  void _initializeGame() async {
+    ++gamesPlayedCount;
+    
+    // Initialize the queue first if it's empty
+    if (objectQueue.isEmpty) {
+      objectQueue = List.from(objects)..shuffle(random);
+      queueIndex = 0;
+    }
+    
+    // Check if we should use shuffle words (every 3rd game)
+    if (widget.selectedObject == "Shuffle" && gamesPlayedCount % 3 == 0) {
+      await populateShuffleList();
+      print("Shuffle Word List before removing: $shuffleWordList");
+      
+      // Only remove items if queueIndex is valid and within bounds
+      if (queueIndex > 0 && queueIndex - 1 < objectQueue.length) {
+        shuffleWordList.remove(objectQueue[queueIndex - 1]); // Previous
+      }
+      if (queueIndex < objectQueue.length) {
+        shuffleWordList.remove(objectQueue[queueIndex]); // Current
+      }
+      
+      print("Shuffle Word List after removing: $shuffleWordList");
+      
+      if (shuffleWordList.isNotEmpty) {
+        String chosenTerm = shuffleWordList[random.nextInt(shuffleWordList.length)];
+        randomNumber = objects.indexOf(chosenTerm);
+        if (randomNumber != -1) {
+          correctIndex = randomNumber;
+          print("Using shuffle word: $chosenTerm");
+        } else {
+          // If the chosen term is not in objects list, fall back to queue
+          _assignFromQueue();
+        }
+      } else {
+        print("Shuffle word list is empty, using queue");
+        _assignFromQueue();
+      }
+    } else if (widget.selectedObject.isNotEmpty && 
+              widget.selectedObject != "Shuffle" && 
+              !randomize) {
+      // Use specific selected objects
+      randomNumber = objects.indexOf(widget.selectedObject);
+      if (randomNumber == -1) {
+        _assignFromQueue();
+      } else {
+        correctIndex = randomNumber;
+      }
+    } else {
+      // Use queue for random selection
+      _assignFromQueue();
+    }
+
     if (mounted) {
-      setState(() {});
       WidgetsBinding.instance.addPostFrameCallback((_) {
         startStepTimer();
       });
     }
   }
+
 
   @override
   void dispose() {
@@ -155,16 +191,17 @@ class _ObjectGameState extends State<ObjectGame> {
         .collection("objectsReports")
         .get();
 
+    Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+
     for (var doc in snapshot.docs) {
       final data = doc.data();
       final int incorrect = data["incorrect"] ?? 0;
       final String word = data["word"] ?? "";
 
-      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+      if (incorrect > 2 && word.isNotEmpty) {
         shuffleWordSet.add(word);
       }
     }
-
     return shuffleWordSet.toList();
   }
 
@@ -465,7 +502,7 @@ class _ObjectGameState extends State<ObjectGame> {
       }
 
       // ✅ Round 3 check
-      if (totalSteps >= 20) {
+      if (totalSteps >= 20 && totalSteps < 30) {
         round3();
       }
 

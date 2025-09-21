@@ -33,10 +33,8 @@ class _ShapesGameState extends State<ShapesGame> {
     'Rectangle',
   ];
   List<int> stepDurations = []; // store all durations (in seconds)
-  Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
-  Set<String> usedWords = {};    // track used words to avoid repetition
+  List<String> shuffleWordList = [];
 
-  // Add these as state variables at the top of _ShapesGameState
   List<String> shapeQueue = [];
   int queueIndex = 0;
 
@@ -71,6 +69,19 @@ class _ShapesGameState extends State<ShapesGame> {
     _initializeGame();
   }
 
+  Future<void> populateShuffleList() async {
+    setState(() {
+      isInitializing = true;
+    });
+
+    shuffleWordList = await fetchShuffleWords();
+    await Future.delayed(const Duration(milliseconds: 1000));
+
+    setState(() {
+      isInitializing = false;
+    });
+  }
+
   void _assignFromQueue() {
     if (shapeQueue.isEmpty || queueIndex >= shapeQueue.length) {
       shapeQueue = List.from(shapes)..shuffle(random);
@@ -89,20 +100,46 @@ class _ShapesGameState extends State<ShapesGame> {
 
   void _initializeGame() async {
     ++gamesPlayedCount;
-
+    
+    // Initialize the queue first if it's empty
+    if (shapeQueue.isEmpty) {
+      shapeQueue = List.from(shapes)..shuffle(random);
+      queueIndex = 0;
+    }
+    
+    // Check if we should use shuffle words (every 3rd game)
     if (widget.selectedShape == "Shuffle" && gamesPlayedCount % 3 == 0) {
-      setState(() => isInitializing = true);
-      final words = await fetchShuffleWords();
-      if (words.isNotEmpty) {
-        String chosenWord = words[random.nextInt(words.length)];
-        randomNumber = shapes.indexOf(chosenWord);
-        correctIndex = randomNumber;
+      await populateShuffleList();
+      print("Shuffle Word List before removing: $shuffleWordList");
+      
+      // Only remove items if queueIndex is valid and within bounds
+      if (queueIndex > 0 && queueIndex - 1 < shapeQueue.length) {
+        shuffleWordList.remove(shapeQueue[queueIndex - 1]); // Previous
+      }
+      if (queueIndex < shapeQueue.length) {
+        shuffleWordList.remove(shapeQueue[queueIndex]); // Current
+      }
+      
+      print("Shuffle Word List after removing: $shuffleWordList");
+      
+      if (shuffleWordList.isNotEmpty) {
+        String chosenTerm = shuffleWordList[random.nextInt(shuffleWordList.length)];
+        randomNumber = shapes.indexOf(chosenTerm);
+        if (randomNumber != -1) {
+          correctIndex = randomNumber;
+          print("Using shuffle word: $chosenTerm");
+        } else {
+          // If the chosen term is not in shapes list, fall back to queue
+          _assignFromQueue();
+        }
       } else {
+        print("Shuffle word list is empty, using queue");
         _assignFromQueue();
       }
-      await Future.delayed(const Duration(milliseconds: 1000));
-      setState(() => isInitializing = false);
-    } else if (widget.selectedShape.isNotEmpty && !randomize) {
+    } else if (widget.selectedShape.isNotEmpty && 
+              widget.selectedShape != "Shuffle" && 
+              !randomize) {
+      // Use specific selected shapes
       randomNumber = shapes.indexOf(widget.selectedShape);
       if (randomNumber == -1) {
         _assignFromQueue();
@@ -110,10 +147,9 @@ class _ShapesGameState extends State<ShapesGame> {
         correctIndex = randomNumber;
       }
     } else {
+      // Use queue for random selection
       _assignFromQueue();
     }
-
-    usedWords.add(shapes[correctIndex]);
 
     if (mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -140,16 +176,17 @@ class _ShapesGameState extends State<ShapesGame> {
         .collection("shapesReports")
         .get();
 
+    Set<String> shuffleWordSet = {};  // use a set to avoid duplicates
+
     for (var doc in snapshot.docs) {
       final data = doc.data();
       final int incorrect = data["incorrect"] ?? 0;
       final String word = data["word"] ?? "";
 
-      if (incorrect > 2 && word.isNotEmpty && !usedWords.contains(word)) {
+      if (incorrect > 2 && word.isNotEmpty) {
         shuffleWordSet.add(word);
       }
     }
-
     return shuffleWordSet.toList();
   }
 
@@ -451,7 +488,7 @@ class _ShapesGameState extends State<ShapesGame> {
       }
 
       // ✅ Round 3 check
-      if (totalSteps >= 20) {
+      if (totalSteps >= 20 && totalSteps < 30) {
         round3();
       }
 
