@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/tap_animation.dart';
-import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
+// import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
+import 'package:verbalautism/components/audio%20services/google_tts.dart';
 
 class TapComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -42,8 +43,9 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
   void initState() {
     super.initState();
 
-    DirectTtsService.listVoices(); // For debugging
-    DirectTtsService.speakText("Tap the ${widget.objectVariation} ${widget.mainData}");
+    speakText();
+    // DirectTtsService.listVoices(); // For debugging
+    // DirectTtsService.speakText("Tap the ${widget.objectVariation} ${widget.mainData}");
     
     // Floating Animation
     _controller = AnimationController(
@@ -67,6 +69,10 @@ class _TapComponentState extends State<TapComponent> with SingleTickerProviderSt
     _controller.dispose();
     _animation.removeListener(() {});
     super.dispose();
+  }
+
+  void speakText() async {
+    await GoogleTTS().speak("Tap the ${widget.objectVariation} ${widget.mainData}");
   }
 
   void _showCorrectAnimation() {

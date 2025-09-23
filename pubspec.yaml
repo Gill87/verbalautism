@@ -46,13 +46,16 @@ dependencies:
   tracing_game: ^0.0.4+1
   one_clock: ^2.0.1
   flutter_svg: ^2.2.1
-  audioplayers: ^6.4.0
+  audioplayers: ^6.5.1
   flutter_tts: ^4.2.3
   animated_text_kit: ^4.2.3
   google_sign_in_web: ^0.12.4+4
   table_calendar: ^3.2.0
   shared_preferences: ^2.5.3
   web: any
+  http: ^1.5.0
+  googleapis_auth: ^2.0.0
+  path_provider: ^2.1.5
 
 
 dev_dependencies:
@@ -94,6 +97,7 @@ flutter:
     - assets/places_images/
     - assets/actions_images/
     - assets/sight_word_images/
+    - assets/keys/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
