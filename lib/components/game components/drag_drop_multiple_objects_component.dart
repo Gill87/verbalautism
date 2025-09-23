@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/incorrect_animation.dart';
-import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
+// import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
+import 'package:verbalautism/components/audio%20services/google_tts.dart';
 
 class DragDropMultipleObjectsComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -42,7 +43,8 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
   void initState() {
     super.initState();
 
-    DirectTtsService.speakText("Drag and Drop the ${widget.objectVariation} ${widget.mainData}");
+    // DirectTtsService.speakText("Drag and Drop the ${widget.objectVariation} ${widget.mainData}");
+    speakText();
 
     allObjectLinks = [widget.correctAssetLinks, ...widget.wrongAssetLinks];
     allObjectLinks.shuffle(); // Randomize order
@@ -56,7 +58,10 @@ class _DragDropMultipleObjectsComponentState extends State<DragDropMultipleObjec
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
   }
-
+  
+  void speakText() async {
+    await GoogleTTS().speak("Drag and Drop the ${widget.objectVariation} ${widget.mainData}");
+  }
 
   void _showCorrectAnimation() {
     // NEW: Prevent multiple calls

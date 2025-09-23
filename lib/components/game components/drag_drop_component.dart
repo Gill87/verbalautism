@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/drag_animation.dart';
-import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
+// import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
+import 'package:verbalautism/components/audio%20services/google_tts.dart';
 
 class DragDropComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -42,7 +43,8 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
   @override
   void initState() {
     super.initState();
-    DirectTtsService.speakText("Drag and Drop the ${widget.objectVariation} ${widget.mainData}");
+    
+    speakText();
 
     _controller = AnimationController(
       vsync: this,
@@ -53,6 +55,10 @@ class _DragDropComponentState extends State<DragDropComponent> with SingleTicker
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
+  }
+  
+  void speakText() async {
+    await GoogleTTS().speak("Drag and Drop the ${widget.objectVariation} ${widget.mainData}");
   }
   
   void _showCorrectAnimation(){

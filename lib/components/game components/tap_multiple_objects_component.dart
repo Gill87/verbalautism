@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalautism/components/animations/correct_animation.dart';
 import 'package:verbalautism/components/animations/incorrect_animation.dart';
-import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
+// import 'package:verbalautism/components/audio%20services/direct_tts_service.dart';
+import 'package:verbalautism/components/audio%20services/google_tts.dart';
 
 class TapMultipleObjectsComponent extends StatefulWidget {
   final VoidCallback onCompleted;
@@ -40,8 +41,8 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
   @override
   void initState() {
     super.initState();
-    
-    DirectTtsService.speakText("Tap the ${widget.objectVariation} ${widget.mainData}");
+
+    speakText();
 
     allObjectLinks = [widget.correctAssetLink, ...widget.wrongAssetLinks];
     allObjectLinks.shuffle(); // Randomize their order
@@ -54,6 +55,10 @@ class _TapMultipleObjectsComponentState extends State<TapMultipleObjectsComponen
     _animation = Tween<double>(begin: 0.0, end: 10.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
+  }
+  
+  void speakText() async {
+    await GoogleTTS().speak("Tap the ${widget.objectVariation} ${widget.mainData}");
   }
 
   void _handleTap(String tappedLetter) {
