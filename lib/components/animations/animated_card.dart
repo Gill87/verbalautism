@@ -4,7 +4,7 @@ class AnimatedCard extends StatefulWidget {
   final Widget child;
   final VoidCallback onTap;
 
-  const AnimatedCard({required this.child, required this.onTap});
+  const AnimatedCard({super.key, required this.child, required this.onTap});
 
   @override
   State<AnimatedCard> createState() => AnimatedCardState();

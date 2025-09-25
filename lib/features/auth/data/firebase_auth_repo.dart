@@ -33,7 +33,13 @@ class FirebaseAuthRepo implements AuthRepo{
       return user;
 
     } catch(e){
-      throw Exception("Login failed: $e");
+      if(e.toString().contains("invalid-email")){
+        throw Exception("Login failed due to invalid email");
+      } else if(e.toString().contains("invalid-credential")){
+        throw Exception("Login failed due to invalid credentials");
+      } else {
+        throw Exception("Login Failed: $e");
+      }
     }
   }
 
@@ -61,8 +67,13 @@ class FirebaseAuthRepo implements AuthRepo{
       return user;
 
     } catch(e){
-      throw Exception("Registration failed: $e");
-    }
+      if(e.toString().contains("invalid-email")){
+        throw Exception("Registration failed due to invalid email");
+      } else if(e.toString().contains("invalid-credential")){
+        throw Exception("Registration failed due to invalid credentials");
+      } else {
+        throw Exception("Registration Failed: $e");
+      }    }
   }
 
   @override
@@ -139,7 +150,7 @@ class FirebaseAuthRepo implements AuthRepo{
       
       return user;
     } catch (e) {
-      throw Exception("Google Sign In Failed: $e");
+      throw Exception("Google Sign In Failed");
     }
   }
   

@@ -103,7 +103,7 @@ class NumberSelectionPage extends StatelessWidget {
         elevation: 8,
         color: isRandom ? Colors.orange : Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Container(
+        child: SizedBox(
           width: isRandom ? 100 : 125,
           height: isRandom ? 75 : 125,
           child: Center(
