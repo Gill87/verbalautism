@@ -573,6 +573,7 @@ class _FoodGameState extends State<FoodGame> {
           builder: (context) {
             // Schedule auto-close
             Future.delayed(const Duration(seconds: 2), () {
+              if(!mounted) return;
               if (Navigator.of(context).canPop()) {
                 Navigator.of(context).pop();
                 setState(() {
