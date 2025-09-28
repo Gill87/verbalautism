@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -93,8 +95,6 @@ class _NumbersGameState extends State<NumbersGame> {
       queueIndex = 0;
     }
 
-    print("Queue: $numberQueue");
-
     int chosenNumber = numberQueue[queueIndex];
     randomNumber = numbers.indexOf(chosenNumber);
     correctIndex = randomNumber;
@@ -118,7 +118,6 @@ class _NumbersGameState extends State<NumbersGame> {
 
     if(widget.selectedNumber == -2 && gamesPlayedCount % 3 == 0){
       await populateShuffleList();
-      print("Shuffle Number List before removing: $shuffleNumberList");
 
       // Only remove items if queueIndex is valid and within bounds
       if (queueIndex > 0 && queueIndex - 1 < numberQueue.length) {
@@ -127,21 +126,17 @@ class _NumbersGameState extends State<NumbersGame> {
       if (queueIndex < numberQueue.length) {
         shuffleNumberList.remove(numberQueue[queueIndex]); // Current
       }
-      
-      print("Shuffle Word List after removing: $shuffleNumberList");
-      
+            
       if (shuffleNumberList.isNotEmpty) {
         int chosenTerm = shuffleNumberList[random.nextInt(shuffleNumberList.length)];
         randomNumber = numbers.indexOf(chosenTerm);
         if (randomNumber != -1) {
           correctIndex = randomNumber;
-          print("Using shuffle word: $chosenTerm");
         } else {
           // If the chosen term is not in shapes list, fall back to queue
           _assignFromQueue();
         }
       } else {
-        print("Shuffle word list is empty, using queue");
         _assignFromQueue();
       }
 
@@ -280,8 +275,6 @@ class _NumbersGameState extends State<NumbersGame> {
     if (stepStartTime != null) {
       final duration = DateTime.now().difference(stepStartTime!).inSeconds;
       stepDurations.add(duration);
-
-      print("⏱ Step $stepNumber took $duration seconds");
     }
   }
 
@@ -564,6 +557,7 @@ class _NumbersGameState extends State<NumbersGame> {
           builder: (context) {
             // Schedule auto-close
             Future.delayed(const Duration(seconds: 2), () {
+              if(!mounted) return;
               if (Navigator.of(context).canPop()) {
                 Navigator.of(context).pop();
                 setState(() {
@@ -666,7 +660,6 @@ class _NumbersGameState extends State<NumbersGame> {
     incorrectAnswer = 0;
     correctAnswer = 0;
     stepDurations.clear(); // Clear durations for next round
-    print("✅ Round result uploaded for $gameType");
   }
 
   @override
@@ -718,7 +711,7 @@ class _NumbersGameState extends State<NumbersGame> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.5), // Shadow color
+                  color: Colors.white.withValues(alpha: 0.5), // Shadow color
                   blurRadius: 10, // Spread of shadow
                   offset: const Offset(0, 4), // Position of shadow (X, Y)
                 ),

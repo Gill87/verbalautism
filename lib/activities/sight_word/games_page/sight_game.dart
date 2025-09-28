@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -84,8 +86,6 @@ class _SightWordGameState extends State<SightWordGame> {
       queueIndex = 0;
     }
 
-    print("Queue: $sightWordQueue");
-
     String chosenSightWord = sightWordQueue[queueIndex];
     randomNumber = sightWords.indexOf(chosenSightWord);
     correctIndex = randomNumber;
@@ -106,7 +106,6 @@ class _SightWordGameState extends State<SightWordGame> {
     // Check if we should use shuffle words (every 3rd game)
     if (widget.selectedSightWord == "Shuffle" && gamesPlayedCount % 3 == 0) {
       await populateShuffleList();
-      print("Shuffle Word List before removing: $shuffleWordList");
       
       // Only remove items if queueIndex is valid and within bounds
       if (queueIndex > 0 && queueIndex - 1 < sightWordQueue.length) {
@@ -115,21 +114,17 @@ class _SightWordGameState extends State<SightWordGame> {
       if (queueIndex < sightWordQueue.length) {
         shuffleWordList.remove(sightWordQueue[queueIndex]); // Current
       }
-      
-      print("Shuffle Word List after removing: $shuffleWordList");
-      
+            
       if (shuffleWordList.isNotEmpty) {
         String chosenTerm = shuffleWordList[random.nextInt(shuffleWordList.length)];
         randomNumber = sightWords.indexOf(chosenTerm);
         if (randomNumber != -1) {
           correctIndex = randomNumber;
-          print("Using shuffle word: $chosenTerm");
         } else {
           // If the chosen term is not in sightWords list, fall back to queue
           _assignFromQueue();
         }
       } else {
-        print("Shuffle word list is empty, using queue");
         _assignFromQueue();
       }
     } else if (widget.selectedSightWord.isNotEmpty && 
@@ -259,8 +254,6 @@ class _SightWordGameState extends State<SightWordGame> {
     if (stepStartTime != null) {
       final duration = DateTime.now().difference(stepStartTime!).inSeconds;
       stepDurations.add(duration);
-
-      print("⏱ Step $stepNumber took $duration seconds");
     }
   }
 
@@ -642,7 +635,6 @@ class _SightWordGameState extends State<SightWordGame> {
     incorrectAnswer = 0;
     correctAnswer = 0;
     stepDurations.clear(); // Clear durations for next round
-    print("✅ Round result uploaded for $gameType");
   }
   
   @override
@@ -729,7 +721,7 @@ class _SightWordGameState extends State<SightWordGame> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),

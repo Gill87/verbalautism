@@ -65,7 +65,6 @@ class _StatsPageState extends State<StatsPage> {
         isLoadingGameTypes = false;
       });
     } catch (e) {
-      print('Error discovering game types: $e');
       setState(() {
         isLoadingGameTypes = false;
       });

@@ -116,7 +116,7 @@ class _CircularButtonState extends State<CircularButton> {
                     Shadow(
                       offset: const Offset(1.5, 1.5),
                       blurRadius: 3,
-                      color: Colors.black.withOpacity(0.7),
+                      color: Colors.white.withValues(alpha: 0.7),
                     ),
                   ],
                 ),

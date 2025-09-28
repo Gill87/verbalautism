@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:math';
 
@@ -84,8 +86,6 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
       queueIndex = 0;
     }
 
-    print("Queue: $letterQueue");
-
     String chosenLetter = letterQueue[queueIndex];
     randomNumber = letters.indexOf(chosenLetter);
     correctIndex = randomNumber;
@@ -106,7 +106,6 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
     // Check if we should use shuffle words (every 3rd game)
     if (widget.selectedLetter == "Shuffle" && gamesPlayedCount % 3 == 0) {
       await populateShuffleList();
-      print("Shuffle Word List before removing: $shuffleWordList");
       
       // Only remove items if queueIndex is valid and within bounds
       if (queueIndex > 0 && queueIndex - 1 < letterQueue.length) {
@@ -116,20 +115,17 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
         shuffleWordList.remove(letterQueue[queueIndex]); // Current
       }
       
-      print("Shuffle Word List after removing: $shuffleWordList");
       
       if (shuffleWordList.isNotEmpty) {
         String chosenTerm = shuffleWordList[random.nextInt(shuffleWordList.length)];
         randomNumber = letters.indexOf(chosenTerm);
         if (randomNumber != -1) {
           correctIndex = randomNumber;
-          print("Using shuffle word: $chosenTerm");
         } else {
           // If the chosen term is not in letters list, fall back to queue
           _assignFromQueue();
         }
       } else {
-        print("Shuffle word list is empty, using queue");
         _assignFromQueue();
       }
     } else if (widget.selectedLetter.isNotEmpty && 
@@ -689,7 +685,7 @@ class _AbcUppercaseGameState extends State<AbcUppercaseGame> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.5), // Shadow color
+                  color: Colors.white.withValues(alpha: 0.5), // Shadow color
                   blurRadius: 10, // Spread of shadow
                   offset: const Offset(0, 4), // Position of shadow (X, Y)
                 ),

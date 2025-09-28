@@ -56,10 +56,8 @@ class ScheduleSummaryState extends State<ScheduleSummary> {
 
       // Debug: Check if collection exists and has documents
       final querySnapshot = await collection.get();
-      print('Total documents in collection: ${querySnapshot.docs.length}');
       
       if (querySnapshot.docs.isEmpty) {
-        print('No schedule events found in Firestore');
         setState(() {
           _todayEvents = [];
           _isLoading = false;
@@ -70,13 +68,10 @@ class ScheduleSummaryState extends State<ScheduleSummary> {
       final List<ScheduleEvent> events = [];
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
-      
-      print('Looking for events on: ${today.toString()}');
-      
+            
       for (var doc in querySnapshot.docs) {
         try {
           final data = doc.data() as Map<String, dynamic>;
-          print('Processing document ${doc.id}: ${data.toString()}');
           
           // Check if required fields exist
           if (!data.containsKey('gameTitle') || 
@@ -84,7 +79,6 @@ class ScheduleSummaryState extends State<ScheduleSummary> {
               !data.containsKey('timeMinute') ||
               !data.containsKey('gameRoute') ||
               !data.containsKey('date')) {
-            print('Document ${doc.id} missing required fields');
             continue;
           }
           
@@ -93,17 +87,12 @@ class ScheduleSummaryState extends State<ScheduleSummary> {
           
           // Check if this event is for today
           final eventDate = DateTime(event.date.year, event.date.month, event.date.day);
-          
-          print('Comparing dates - Event: ${eventDate.year}-${eventDate.month}-${eventDate.day}, Today: ${today.year}-${today.month}-${today.day}');
-          
+                    
           if (eventDate.year == today.year && 
               eventDate.month == today.month && 
               eventDate.day == today.day) {
             events.add(event);
-            print('✓ Added event: ${event.gameTitle} at ${event.time.hour}:${event.time.minute}');
-          } else {
-            print('✗ Event not for today - skipping');
-          }
+          } 
         } catch (e) {
           continue;
         }
@@ -230,7 +219,7 @@ class ScheduleSummaryState extends State<ScheduleSummary> {
                 image: image,
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.3),
+                  Colors.black.withValues(alpha: 0.3),
                   BlendMode.darken,
                 ),
               ),
@@ -244,7 +233,7 @@ class ScheduleSummaryState extends State<ScheduleSummary> {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.7),
+                    Colors.black.withValues(alpha: 0.7),
                   ],
                 ),
               ),

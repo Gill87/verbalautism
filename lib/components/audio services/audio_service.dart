@@ -19,7 +19,7 @@ class AudioService {
           volume: 0.5,
         );
       } catch (e) {
-        print('Error playing background music: $e');
+        throw Exception(e);
       }
     }
   }
@@ -28,7 +28,7 @@ class AudioService {
     try {
       await _player.stop();
     } catch (e) {
-      print('Error stopping music: $e');
+      throw Exception(e);
     }
   }
 

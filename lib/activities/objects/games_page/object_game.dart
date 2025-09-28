@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:math';
 
@@ -103,8 +105,6 @@ class _ObjectGameState extends State<ObjectGame> {
       queueIndex = 0;
     }
 
-    print("Queue: $objectQueue");
-
     String chosenObject = objectQueue[queueIndex];
     randomNumber = objects.indexOf(chosenObject);
     correctIndex = randomNumber;
@@ -125,7 +125,6 @@ class _ObjectGameState extends State<ObjectGame> {
     // Check if we should use shuffle words (every 3rd game)
     if (widget.selectedObject == "Shuffle" && gamesPlayedCount % 3 == 0) {
       await populateShuffleList();
-      print("Shuffle Word List before removing: $shuffleWordList");
       
       // Only remove items if queueIndex is valid and within bounds
       if (queueIndex > 0 && queueIndex - 1 < objectQueue.length) {
@@ -134,21 +133,17 @@ class _ObjectGameState extends State<ObjectGame> {
       if (queueIndex < objectQueue.length) {
         shuffleWordList.remove(objectQueue[queueIndex]); // Current
       }
-      
-      print("Shuffle Word List after removing: $shuffleWordList");
-      
+            
       if (shuffleWordList.isNotEmpty) {
         String chosenTerm = shuffleWordList[random.nextInt(shuffleWordList.length)];
         randomNumber = objects.indexOf(chosenTerm);
         if (randomNumber != -1) {
           correctIndex = randomNumber;
-          print("Using shuffle word: $chosenTerm");
         } else {
           // If the chosen term is not in objects list, fall back to queue
           _assignFromQueue();
         }
       } else {
-        print("Shuffle word list is empty, using queue");
         _assignFromQueue();
       }
     } else if (widget.selectedObject.isNotEmpty && 
@@ -279,7 +274,6 @@ class _ObjectGameState extends State<ObjectGame> {
       final duration = DateTime.now().difference(stepStartTime!).inSeconds;
       stepDurations.add(duration);
 
-      print("⏱ Step $stepNumber took $duration seconds");
     }
   }
 
@@ -660,7 +654,6 @@ class _ObjectGameState extends State<ObjectGame> {
     incorrectAnswer = 0;
     correctAnswer = 0;
     stepDurations.clear(); // Clear durations for next round
-    print("✅ Round result uploaded for $gameType");
   }
 
   @override
@@ -704,7 +697,7 @@ class _ObjectGameState extends State<ObjectGame> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.5), // Shadow color
+                  color: Colors.white.withValues(alpha: 0.5), // Shadow color
                   blurRadius: 10, // Spread of shadow
                   offset: const Offset(0, 4), // Position of shadow (X, Y)
                 ),

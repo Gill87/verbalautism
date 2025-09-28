@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:math';
 
@@ -97,8 +99,6 @@ class _ActionsGameState extends State<ActionsGame> {
       queueIndex = 0;
     }
 
-    print("Queue: $actionQueue");
-
     String chosenAction = actionQueue[queueIndex];
     randomNumber = actions.indexOf(chosenAction);
     correctIndex = randomNumber;
@@ -119,8 +119,7 @@ class _ActionsGameState extends State<ActionsGame> {
     // Check if we should use shuffle words (every 3rd game)
     if (widget.selectedAction == "Shuffle" && gamesPlayedCount % 3 == 0) {
       await populateShuffleList();
-      print("Shuffle Word List before removing: $shuffleWordList");
-      
+
       // Only remove items if queueIndex is valid and within bounds
       if (queueIndex > 0 && queueIndex - 1 < actionQueue.length) {
         shuffleWordList.remove(actionQueue[queueIndex - 1]); // Previous
@@ -128,21 +127,17 @@ class _ActionsGameState extends State<ActionsGame> {
       if (queueIndex < actionQueue.length) {
         shuffleWordList.remove(actionQueue[queueIndex]); // Current
       }
-      
-      print("Shuffle Word List after removing: $shuffleWordList");
-      
+            
       if (shuffleWordList.isNotEmpty) {
         String chosenTerm = shuffleWordList[random.nextInt(shuffleWordList.length)];
         randomNumber = actions.indexOf(chosenTerm);
         if (randomNumber != -1) {
           correctIndex = randomNumber;
-          print("Using shuffle word: $chosenTerm");
         } else {
           // If the chosen term is not in actions list, fall back to queue
           _assignFromQueue();
         }
       } else {
-        print("Shuffle word list is empty, using queue");
         _assignFromQueue();
       }
     } else if (widget.selectedAction.isNotEmpty && 
@@ -695,7 +690,7 @@ class _ActionsGameState extends State<ActionsGame> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.5), // Shadow color
+                  color: Colors.white.withValues(alpha: 0.5), // Shadow color
                   blurRadius: 10, // Spread of shadow
                   offset: const Offset(0, 4), // Position of shadow (X, Y)
                 ),

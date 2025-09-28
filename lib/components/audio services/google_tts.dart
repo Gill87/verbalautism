@@ -70,7 +70,7 @@ class GoogleTTS {
       try {
         await _generateAndCacheAudio(phrase);
       } catch (e) {
-        print("Failed to preload phrase '$phrase': $e");
+        throw Exception(e);
       }
     }
   }
@@ -151,7 +151,6 @@ class GoogleTTS {
         _audioQueue.add(audioBytes);
       }
     } catch (e) {
-      print("TTS Error: $e");
       rethrow;
     }
   }
