@@ -30,6 +30,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+/assets/keys/tts_service.json
 
 # Symbolication related
 app.*.symbols
