@@ -41,14 +41,11 @@ dependencies:
   google_sign_in: ^6.2.1
   flutter_bloc: ^9.0.0
   cloud_firestore: ^5.6.1
-  whiteboard: ^1.0.0
   lottie: ^3.2.0
   tracing_game: ^0.0.4+1
   one_clock: ^2.0.1
-  flutter_svg: ^2.2.1
   audioplayers: ^6.5.1
   flutter_tts: ^4.2.3
-  animated_text_kit: ^4.2.3
   google_sign_in_web: ^0.12.4+4
   table_calendar: ^3.2.0
   shared_preferences: ^2.5.3

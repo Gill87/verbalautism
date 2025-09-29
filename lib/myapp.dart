@@ -4,7 +4,7 @@ import 'package:verbalautism/features/auth/data/firebase_auth_repo.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_states.dart';
 import 'package:verbalautism/features/auth/presentation/pages/auth_page.dart';
-import 'package:verbalautism/features/home/pages/home_page.dart';
+import 'package:verbalautism/features/home/pages/home_page.dart' deferred as home;
 
 class MyApp extends StatelessWidget {
 
@@ -34,9 +34,19 @@ class MyApp extends StatelessWidget {
               return const AuthPage();
             } 
 
-            // Authenticated
-            if(authState is Authenticated){
-              return const HomePage();
+            if (authState is Authenticated) {
+              return FutureBuilder(
+                future: home.loadLibrary(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return home.HomePage();
+                  } else {
+                    return const Scaffold(
+                      body: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                },
+              );
             }
 
             // Loading

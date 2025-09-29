@@ -13,6 +13,7 @@ import 'package:verbalautism/activities/places/base_page/places_base_page.dart';
 import 'package:verbalautism/activities/shapes/base_page/shapes_base_page.dart';
 import 'package:verbalautism/activities/sight_word/base_page/sight_word_base_page.dart';
 import 'package:verbalautism/components/audio%20services/audio_service.dart';
+import 'package:verbalautism/components/audio%20services/google_tts.dart';
 import 'package:verbalautism/components/home%20page%20components/buttons_column.dart';
 import 'package:verbalautism/components/home%20page%20components/schedule_button.dart';
 import 'package:verbalautism/features/schedule/schedule_summary.dart';
@@ -120,7 +121,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     AudioService().playBackgroundMusic(); // play music
+    initializeGoogleTTS(); // Initialize TTS
     super.initState();
+  }
+
+  // Initialize Google TTS
+  void initializeGoogleTTS() async {
+    final tts = GoogleTTS();
+    await tts.init('assets/keys/tts_service.json');
   }
 
   // Sign out method
