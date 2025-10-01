@@ -132,10 +132,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Sign out method
-  void signUserOut(){
+  void signUserOut() async {
     final authCubit = context.read<AuthCubit>();
     AudioService().stopMusic();
-    authCubit.logout();
+    await authCubit.logout();
   }
 
   // Selection mode methods
@@ -630,6 +630,7 @@ class _HomePageState extends State<HomePage> {
 
     return activitiesToShow.map((activity) {
       return SelectableSubjectWidget(
+        key: ValueKey(activity['name']),  // 👈 this forces Flutter to rebuild correctly
         tapFunction: isSelectionMode 
           ? () => toggleActivitySelection(activity['name'])
           : getNavigationFunction(activity['onTap']),

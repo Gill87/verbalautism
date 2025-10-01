@@ -403,17 +403,6 @@ class ScheduleSummaryState extends State<ScheduleSummary> {
                 borderColor: Colors.blue,
               )
             : _buildEmptyCard('No Next\nActivity Today', Icons.event_note),
-
-        // Refresh button
-        IconButton(
-          onPressed: loadTodayEvents,
-          icon: Icon(
-            Icons.refresh,
-            size: 16,
-            color: Colors.grey.shade600,
-          ),
-          tooltip: 'Refresh Schedule',
-        ),
       ],
     );
   }

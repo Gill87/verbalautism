@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
       providers: [
         // Auth Cubit
         BlocProvider <AuthCubit> (create: (context) => AuthCubit(authRepo: firebaseAuthRepo)..checkAuth()),
-        
       ], 
 
       child: MaterialApp(
