@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
 
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-
+        title: 'VERBAL Autism',
+        
         // Check Auth State and Guide to correct page
         home: BlocConsumer <AuthCubit, AuthState>(
           builder:(context, authState) {
