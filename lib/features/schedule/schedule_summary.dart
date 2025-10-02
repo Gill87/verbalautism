@@ -302,7 +302,7 @@ class ScheduleSummaryState extends State<ScheduleSummary> {
                 title,
                 style: GoogleFonts.ubuntu(
                   color: Colors.grey.shade600,
-                  fontSize: 10,
+                  fontSize: 9,
                   fontWeight: FontWeight.w500,
                 ),
                 textAlign: TextAlign.center,

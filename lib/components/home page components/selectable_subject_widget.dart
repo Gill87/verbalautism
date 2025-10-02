@@ -116,7 +116,7 @@ class _SelectableSubjectWidgetState extends State<SelectableSubjectWidget> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      width: 100,
+                      width: isSmallWidth(context) ? 75 : 100,
                       color: Colors.white38.withValues(alpha: 0.8),
                       child: Text(
                         widget.text,

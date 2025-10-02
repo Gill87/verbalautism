@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:verbalautism/components/unsupported_screen_size_page.dart';
 import 'package:verbalautism/features/auth/data/firebase_auth_repo.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:verbalautism/features/auth/presentation/cubits/auth_states.dart';
@@ -7,8 +8,8 @@ import 'package:verbalautism/features/auth/presentation/pages/auth_page.dart';
 import 'package:verbalautism/features/home/pages/home_page.dart' deferred as home;
 
 class MyApp extends StatelessWidget {
-
   final firebaseAuthRepo = FirebaseAuthRepo();
+  final Future<void> _homeLibraryFuture = home.loadLibrary(); // 👈 cached
   
   MyApp({super.key});
 
@@ -28,6 +29,12 @@ class MyApp extends StatelessWidget {
         home: BlocConsumer <AuthCubit, AuthState>(
           builder:(context, authState) {
             
+            // ✅ Screen size check comes first
+            final size = MediaQuery.of(context).size;
+            if (size.width < 600 || size.height < 450) {
+              return const UnsupportedScreenSizePage();
+            }
+
             // Unauthenticated
             if(authState is Unauthenticated){
               return const AuthPage();
@@ -35,7 +42,7 @@ class MyApp extends StatelessWidget {
 
             if (authState is Authenticated) {
               return FutureBuilder(
-                future: home.loadLibrary(),
+                future: _homeLibraryFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     return home.HomePage();
