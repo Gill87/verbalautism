@@ -57,7 +57,7 @@ class _ObjectGameState extends State<ObjectGame> {
   int round = 1;
   int gamesPlayedCount = 0;
   final int maxSteps = 30;
-  bool isInitializing = true;
+  bool isInitializing = false;
   bool isPaused = false;
   bool randomize = false;
   DateTime? stepStartTime;
