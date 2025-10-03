@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
     },
     {
       'name': 'Numbers',
-      'text': '1 2 3',
+      'text': 'Numbers',
       'image': 'assets/homepage_images/numbers.webp',
       'onTap': 'onToNumbers'
     },

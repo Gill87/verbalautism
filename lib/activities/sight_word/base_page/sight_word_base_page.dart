@@ -18,7 +18,7 @@ class _SightWordBasePageState extends State<SightWordBasePage> {
         backgroundColor: const Color.fromARGB(255, 33, 150, 243),
         centerTitle: true,
         title: Text(
-          "Places",
+          "Sight Words",
           style: GoogleFonts.ubuntu(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
