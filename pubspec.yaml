@@ -52,7 +52,7 @@ dependencies:
   googleapis_auth: ^2.0.0
   path_provider: ^2.1.5
   crypto: ^3.0.6
-  web: ^0.1.5
+  web: ^1.1.1
 
 
 dev_dependencies:

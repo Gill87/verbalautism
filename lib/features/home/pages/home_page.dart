@@ -229,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (controller.text == user.email) {
+                    if (controller.text.toLowerCase() == user.email!.toLowerCase()) {
                       setState(() {
                         adminAccess = true;
                       });
