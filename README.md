@@ -1,16 +1,29 @@
-# verbalautism
+Verbal AUTISM Academic Support – Educational Learning App
 
-A new Flutter project.
+Verbal Autism is an accessible, engaging educational app designed to support children on the autism spectrum as they learn essential early-learning skills. Built with a user-first focus, the app emphasizes clarity, simplicity, and interactive learning to help children develop comfort and confidence while learning.
 
-## Getting Started
+🧠 Designed for Neurodiverse Learners
 
-This project is a starting point for a Flutter application.
+Simple, distraction-free UI
 
-A few resources to get you started if this is your first Flutter project:
+High-contrast visuals and clear color usage
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Intuitive navigation appropriate for children and parents
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+📚 Foundational Learning Modules
+
+Letters & Alphabet Recognition
+
+Numbers & Basic Counting
+
+Colors & Visual Identification
+
+And many other topics
+
+🎮 Engaging Experience
+
+Interactive elements to reinforce learning
+
+Gentle feedback and positive reinforcement
+
+Parent-friendly design — easy to use alongside children
