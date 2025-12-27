@@ -1,3 +1,5 @@
+## Verbal AUTISM Academic Support
+
 **Verbal AUTISM Academic Support – Educational Learning App**
 
 Verbal Autism is an accessible, engaging educational app designed to support children on the autism spectrum as they learn essential early-learning skills. Built with a user-first focus, the app emphasizes clarity, simplicity, and interactive learning to help children develop comfort and confidence while learning.
